@@ -11,7 +11,9 @@ class IdCardController extends Controller
     {
         $user = Auth::user();
         // Load the profile so we don't hit null errors here.
-        $user->load('profile');
+        if (method_exists($user, 'profile')) {
+            $user->load('profile');
+        }
 
         return view('id-card.show', compact('user'));
     }

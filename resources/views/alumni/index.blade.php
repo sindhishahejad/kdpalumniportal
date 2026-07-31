@@ -140,7 +140,11 @@
                             
                             <!-- Profile Details -->
                             <div class="p-4 flex-grow flex flex-col">
-                                <h3 class="text-[15px] font-medium text-gray-900 mb-1 truncate" title="{{ $alum->name }}">{{ $alum->name }}</h3>
+                                <h3 class="text-[15px] font-medium text-gray-900 mb-1 truncate" title="{{ $alum->name }}">
+                                    <a href="{{ route('alumni.show', $alum->id) }}" class="hover:text-[#8b0000] transition-colors">
+                                        {{ $alum->name }}
+                                    </a>
+                                </h3>
                                 
                                 @if($alum->graduation_year)
                                     <p class="text-[11px] text-gray-500 mb-1">Class of {{ $alum->graduation_year }}</p>

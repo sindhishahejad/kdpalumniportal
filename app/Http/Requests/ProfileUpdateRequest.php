@@ -16,23 +16,21 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
-            ],
-            // New custom fields added below:
-            'phone' => ['nullable', 'string', 'max:20'],
-            'degree' => ['nullable', 'string', 'max:255'],
-            'department' => ['nullable', 'string', 'max:255'],
-            'year_joining' => ['nullable', 'string'],
-            'graduation_year' => ['nullable', 'string'],
-            'entry_no' => ['nullable', 'string', 'max:255'],
-        ];
+    return [
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+        
+        // Add all your new fields here:
+        'phone' => ['nullable', 'string', 'max:20'],
+        'entry_no' => ['nullable', 'string', 'max:255'],
+        'degree' => ['nullable', 'string', 'max:255'],
+        'department' => ['nullable', 'string', 'max:255'],
+        'year_joining' => ['nullable', 'string', 'max:4'],
+        'graduation_year' => ['nullable', 'string', 'max:4'],
+        'company' => ['nullable', 'string', 'max:255'],
+        'designation' => ['nullable', 'string', 'max:255'],
+        'work_industry' => ['nullable', 'string', 'max:255'],
+        'skills' => ['nullable', 'string', 'max:500'],
+    ];
     }
 }

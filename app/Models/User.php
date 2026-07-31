@@ -16,6 +16,17 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'phone',
+        'degree',
+        'department',
+        'year_joining',
+        'graduation_year',
+        'entry_no',
+        'company',
+        'designation',
+        'work_industry',
+        'skills',
+        'photo_path',
     ];
 
     protected $hidden = [
@@ -61,6 +72,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(MentorshipListing::class);
     }
+    
     // Helper method to check admin status
     public function isAdmin()
     {

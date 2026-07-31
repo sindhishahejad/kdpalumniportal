@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OnboardingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // Standard User Routes
 Route::middleware('auth')->group(function () {
@@ -45,6 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::get('/alumni', [AlumniDirectoryController::class, 'index'])->name('alumni.index');
+    Route::get('/alumni/{user}', [AlumniDirectoryController::class, 'show'])->name('alumni.show');
+    Route::get('/inbox', [MessageController::class, 'inbox'])->name('messages.inbox');
+    Route::post('/alumni/{user}/message', [MessageController::class, 'store'])->name('alumni.message');
 
     Route::get('/feed', [PostController::class, 'index'])->name('posts.index');
     Route::post('/feed', [PostController::class, 'store'])->name('posts.store');
@@ -73,12 +77,3 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 require __DIR__.'/auth.php';
-
-// OVERRIDE: Custom Register Routes (Placed at the bottom to take absolute precedence)
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
-Route::middleware(['auth'])->group(function () {
-    Route::post('/register', [OnboardingController::class, 'store'])->name('register.store');
-});

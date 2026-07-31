@@ -27,44 +27,33 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        // 1. Update basic user info (Name, Email)
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // 1. Fill the User model with ALL validated data 
+        // (This automatically includes name, email, phone, company, skills, etc.)
+        $user->fill($request->validated());
+
+        // 2. Handle Email Verification if the email was changed
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
-
-        // 2. Handle Profile Photo Upload
-        $photoPath = $request->user()->profile->photo_path ?? null;
-
+        // 3. Handle Profile Photo Upload (Optional: If you add a photo_path column to the users table later)
         if ($request->hasFile('photo')) {
             $request->validate([
                 'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             ]);
             
             // Delete old photo from storage if a new one is uploaded
-            if ($photoPath && Storage::disk('public')->exists($photoPath)) {
-                Storage::disk('public')->delete($photoPath);
+            if (isset($user->photo_path) && Storage::disk('public')->exists($user->photo_path)) {
+                Storage::disk('public')->delete($user->photo_path);
             }
 
-            $photoPath = $request->file('photo')->store('profile-photos', 'public');
+            $user->photo_path = $request->file('photo')->store('profile-photos', 'public');
         }
 
-        // 3. Update or Create the custom Profile data
-        $request->user()->profile()->updateOrCreate(
-            ['user_id' => $request->user()->id],
-            [
-                'degree' => $request->degree,
-                'department' => $request->department,
-                'graduation_year' => $request->graduation_year,
-                'current_company' => $request->current_company,
-                'job_title' => $request->job_title,
-                'location' => $request->location,
-                'photo_path' => $photoPath,
-            ]
-        );
+        // 4. Save everything directly to the users table
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -81,8 +70,8 @@ class ProfileController extends Controller
         $user = $request->user();
 
         // Delete profile photo from storage before deleting user
-        if (isset($user->profile->photo_path) && Storage::disk('public')->exists($user->profile->photo_path)) {
-            Storage::disk('public')->delete($user->profile->photo_path);
+        if (isset($user->photo_path) && Storage::disk('public')->exists($user->photo_path)) {
+            Storage::disk('public')->delete($user->photo_path);
         }
 
         Auth::logout();

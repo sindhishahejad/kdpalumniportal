@@ -34,12 +34,34 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'in:alumni,student,faculty'],
+            'phone' => ['required', 'string', 'max:255'],
+            'entry_no' => ['required', 'string', 'max:255'],
+            'degree' => ['required', 'string', 'max:255'],
+            'department' => ['required', 'string', 'max:255'],
+            'year_joining' => ['required', 'integer'],
+            'graduation_year' => ['required', 'integer'],
+            'company' => ['required', 'string', 'max:255'],
+            'designation' => ['required', 'string', 'max:255'],
+            'work_industry' => ['required', 'string', 'max:255'],
+            'skills' => ['required', 'string', 'max:255'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'phone' => $request->phone,
+            'entry_no' => $request->entry_no,
+            'degree' => $request->degree,
+            'department' => $request->department,
+            'year_joining' => $request->year_joining,
+            'graduation_year' => $request->graduation_year,
+            'company' => $request->company,
+            'designation' => $request->designation,
+            'work_industry' => $request->work_industry,
+            'skills' => $request->skills,
         ]);
 
         event(new Registered($user));

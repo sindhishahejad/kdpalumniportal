@@ -1,105 +1,131 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Digital Identity Card') }}
+@extends('layouts.app')
+
+@section('content')
+<div class="py-12 bg-gray-50 min-h-screen">
+    <!-- Added id-card-wrapper for targeted print centering -->
+    <div id="id-card-wrapper" class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-6">
+        
+        <!-- Action Button Above Card -->
+        <div class="w-full max-w-sm flex justify-between items-center px-2">
+            <h2 class="font-serif font-bold text-xl text-[#1C3661]">
+                Digital Identity Card
             </h2>
-            <button onclick="window.print()" class="px-4 py-2 bg-gray-800 text-white rounded text-sm font-semibold hover:bg-gray-700">
+            <button onclick="window.print()" class="px-4 py-2 bg-[#8b0000] hover:bg-[#6b0d0d] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow transition-colors">
                 Print ID Card
             </button>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <!-- Added id-card-wrapper for targeted print centering -->
-        <div id="id-card-wrapper" class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-center">
+        <!-- ID Card Container (Exact Physical Card Replica) -->
+        <div class="bg-white w-80 md:w-96 rounded-xl shadow-xl overflow-hidden border border-gray-300 print:shadow-none print:border-gray-400 relative">
             
-            <!-- ID Card Container -->
-            <div class="bg-white w-80 md:w-96 rounded-xl shadow-2xl overflow-hidden border border-gray-200 print:shadow-none print:border-gray-400">
-                
-                <!-- Header / Branding -->
-                <div class="bg-indigo-700 p-4 text-center text-white">
-                    <h3 class="font-bold text-lg tracking-wider">KDP ALUMNI ASSOCIATION</h3>
-                    <p class="text-xs text-indigo-200">GIDC, Mehsana, Gujarat</p>
+            <!-- Card Header -->
+            <div class="pt-5 pb-3 px-4 text-center bg-white border-b border-gray-100 relative">
+                <!-- College Logo Placeholder -->
+                <div class="absolute left-4 top-4 w-12 h-12 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-xs shadow-inner">
+                    KDP
                 </div>
+                
+                <h3 class="font-sans font-extrabold text-lg text-blue-900 tracking-tight leading-none">K. D. POLYTECHNIC</h3>
+                <h4 class="font-sans font-bold text-base text-blue-900 tracking-tight leading-snug mt-0.5">PATAN</h4>
+                <p class="text-[10px] font-bold text-[#8b0000] italic mt-0.5">(GOVERNMENT OF GUJARAT)</p>
+                <p class="text-[10px] text-gray-600 font-medium leading-tight mt-1">Opp. T.B. Hospital, HNGU Road,<br>Patan-384265</p>
+            </div>
 
-                <!-- Body -->
-                <div class="p-6 flex flex-col items-center relative">
-                    <!-- Fake Barcode / Identifier at top right -->
-                    <div class="absolute top-4 right-4 text-[10px] text-gray-400 font-mono tracking-widest">
-                        ID: {{ str_pad($user->id, 6, '0', STR_PAD_LEFT) }}
-                    </div>
+            <!-- Curved Ribbon Divider with Photo -->
+            <div class="relative bg-white pt-2 pb-4 flex flex-col items-center">
+                <!-- Decorative Blue/Maroon Ribbon Graphic Area -->
+                <div class="w-full h-8 bg-gradient-to-r from-blue-900 via-red-800 to-blue-900 absolute top-0 opacity-90 transform skew-y-1"></div>
 
-                    <!-- Profile Photo or Fallback Placeholder -->
+                <!-- Profile Photo Box -->
+                <div class="relative z-10 w-28 h-32 bg-gray-100 rounded-sm border-2 border-amber-400 shadow-md overflow-hidden mt-2">
                     @if(optional($user->profile)->photo_path)
-                        <img src="{{ asset('storage/' . $user->profile->photo_path) }}" alt="Profile Photo" class="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover mb-4">
+                        <img src="{{ asset('storage/' . $user->profile->photo_path) }}" alt="Profile Photo" class="w-full h-full object-cover">
                     @else
-                        <div class="w-24 h-24 bg-gray-200 rounded-full border-4 border-white shadow-md flex items-center justify-center text-3xl font-bold text-gray-500 mb-4 overflow-hidden">
+                        <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 font-serif font-bold text-2xl uppercase">
                             {{ strtoupper(substr($user->name, 0, 1)) }}
                         </div>
                     @endif
-
-                    <!-- User Details -->
-                    <h2 class="text-2xl font-bold text-gray-900 text-center">{{ $user->name }}</h2>
-                    <p class="text-sm font-semibold text-indigo-600 mt-1 uppercase">{{ optional($user->profile)->degree ?? 'Alumnus' }}</p>
-                    
-                    <div class="w-full mt-6 space-y-2 border-t pt-4">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500 font-medium">Department:</span>
-                            <span class="text-gray-900 font-bold text-right">{{ optional($user->profile)->department ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500 font-medium">Batch Year:</span>
-                            <span class="text-gray-900 font-bold text-right">{{ optional($user->profile)->graduation_year ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500 font-medium">Blood Group:</span>
-                            <span class="text-red-600 font-bold text-right">O+</span>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Footer -->
-                <div class="bg-gray-100 p-3 text-center border-t">
-                    <p class="text-xs text-gray-500">This is a system-generated digital identity card.</p>
-                    <p class="text-[10px] text-gray-400 font-mono mt-1">* KDP-{{ date('Y') }}-{{ $user->id }} *</p>
+                <!-- Full Name in Bold Red -->
+                <h2 class="text-sm font-bold text-[#8b0000] uppercase tracking-wide text-center mt-3 px-4">
+                    {{ $user->name }}
+                </h2>
+            </div>
+
+            <!-- Details Section -->
+            <div class="px-6 pb-4 text-xs space-y-1.5 text-gray-800 font-medium">
+                <div class="grid grid-cols-12 gap-1">
+                    <span class="col-span-4 text-gray-600 font-semibold">Programme</span>
+                    <span class="col-span-8 font-bold text-black uppercase">: {{ optional($user->profile)->department ?? ($user->department ?? 'COMPUTER ENGINEERING') }}</span>
+                </div>
+                <div class="grid grid-cols-12 gap-1">
+                    <span class="col-span-4 text-gray-600 font-semibold">Enrollment No</span>
+                    <span class="col-span-8 font-bold text-black uppercase">: {{ $user->enrollment_no ?? '24631030' . str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</span>
+                </div>
+                <div class="grid grid-cols-12 gap-1">
+                    <span class="col-span-4 text-gray-600 font-semibold">Mobile</span>
+                    <span class="col-span-8 font-bold text-black">: {{ $user->phone ?? '9316751056' }}</span>
+                </div>
+                <div class="grid grid-cols-12 gap-1">
+                    <span class="col-span-4 text-gray-600 font-semibold">Date of Birth</span>
+                    <span class="col-span-8 font-bold text-black">: {{ optional($user->profile)->dob ?? '23-09-2008' }}</span>
+                </div>
+                <div class="grid grid-cols-12 gap-1">
+                    <span class="col-span-4 text-gray-600 font-semibold">Blood Group</span>
+                    <span class="col-span-8 font-bold text-red-600">: O+</span>
+                </div>
+                <div class="grid grid-cols-12 gap-1 items-start">
+                    <span class="col-span-4 text-gray-600 font-semibold">Address</span>
+                    <span class="col-span-8 font-bold text-black leading-tight">: {{ optional($user->profile)->address ?? '6/A HARSIDDHNAGAR SOCIETY, VISNAGAR ROAD, MAHESANA' }}</span>
                 </div>
             </div>
 
+            <!-- Signatures Footer -->
+            <div class="px-6 pb-6 pt-4 flex justify-between items-end text-[10px] text-gray-700 font-bold border-t border-gray-100">
+                <div>
+                    <div class="h-6"></div>
+                    <span>Student Sign</span>
+                </div>
+                <div class="text-center">
+                    <!-- Simulated Principal Signature -->
+                    <div class="font-serif italic text-blue-900 text-sm tracking-widest transform -rotate-6">Sign</div>
+                    <span>Sign of Principal</span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <style>
-        @media print {
-            /* This removes the default browser headers and footers (date, localhost URL) */
-            @page {
-                margin: 0mm; 
-                size: portrait;
-            }
-            body {
-                margin: 0;
-                background-color: white;
-            }
-            body * {
-                visibility: hidden;
-            }
-            /* Only show the ID card wrapper and its contents */
-            #id-card-wrapper, #id-card-wrapper * {
-                visibility: visible;
-            }
-            /* Center the wrapper exactly in the middle of the printed page */
-            #id-card-wrapper {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            button {
-                display: none !important;
-            }
+    </div>
+</div>
+
+<style>
+    @media print {
+        @page {
+            margin: 0mm; 
+            size: portrait;
         }
-    </style>
-</x-app-layout>
+        body {
+            margin: 0;
+            background-color: white;
+        }
+        body * {
+            visibility: hidden;
+        }
+        #id-card-wrapper, #id-card-wrapper * {
+            visibility: visible;
+        }
+        #id-card-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        button {
+            display: none !important;
+        }
+    }
+</style>
+@endsection

@@ -53,7 +53,6 @@
                     <h3 class="font-serif font-bold text-lg mb-1">Resource Vault</h3>
                     <p class="text-xs mb-4 text-gray-200">Access exclusive academic resources, past papers, and continuous learning.</p>
                     <a href="{{ route('resources.index') }}" class="bg-white text-[#8b0000] text-xs font-bold py-2 px-5 inline-block w-max rounded-sm shadow-sm hover:bg-gray-100">VIEW</a>
-                </div>
             </div>
 
         </div>

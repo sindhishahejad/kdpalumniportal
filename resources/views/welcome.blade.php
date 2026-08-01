@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Hero Section -->
+    <!-- Hero Section here -->
     <header class="relative w-full h-[600px] flex items-center justify-center bg-cover bg-center" style="background-image: url('https://source.unsplash.com/random/1920x600/?university,campus');">
         <div class="absolute inset-0 bg-brand-navy bg-opacity-60 mix-blend-multiply"></div>
         <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">

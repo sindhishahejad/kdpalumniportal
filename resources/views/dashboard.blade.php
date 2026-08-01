@@ -6,7 +6,7 @@
     <!-- ============================================== -->
     <div x-data="heroSlider()" x-init="start()" class="relative w-full flex flex-col shadow-2xl">
         
-        <!-- Slider Images Container -->
+        <!-- Slider Images Container here -->
         <div class="relative w-full h-[400px] md:h-[550px] overflow-hidden group">
             <template x-for="(slide, index) in slides" :key="index">
                 <div x-show="activeSlide === index" 

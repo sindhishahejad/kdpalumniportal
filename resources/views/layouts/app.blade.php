@@ -46,11 +46,11 @@
             <div class="flex items-center space-x-6">
                 <a href="tel:02766220419" class="flex items-center hover:text-gray-200 transition-colors">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"></path></svg>
-                    02766220419
+                    9265105831
                 </a>
                 <a href="mailto:kdp-patan-dte@gujarat.gov.in" class="flex items-center hover:text-gray-200 transition-colors">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
-                    kdp-patan-dte@gujarat.gov.in
+                    sindhishahejad@gmail.com
                 </a>
             </div>
 
@@ -71,7 +71,7 @@
             <!-- Desktop Header -->
             <div class="hidden md:flex justify-between items-center w-full max-w-7xl mx-auto">
                 <div class="w-1/4 flex justify-start">
-                    <img class="h-24 w-auto" src="{{ asset('images/logo1_1766135259.png') }}" alt="College Logo" onerror="this.src='https://picsum.photos/id/147/100/100'">
+                    <img class="h-24 w-auto" src="{{ asset('images/five.png') }}" alt="College Logo" onerror="this.src='https://picsum.photos/id/147/100/100'">
                 </div>
                 
                 <div class="w-2/4 text-center flex flex-col justify-center">
@@ -84,7 +84,7 @@
                 </div>
                 
                 <div class="w-1/4 flex justify-end items-center space-x-6">
-                    <img class="h-24 w-auto hidden lg:block" src="{{ asset('images/logo2_1766574395.jpg') }}" alt="Affiliation Logo" onerror="this.src='https://picsum.photos/id/148/100/100'">
+                    <img class="h-24 w-auto hidden lg:block" src="{{ asset('images/six.jpg') }}" alt="Affiliation Logo" onerror="this.src='https://picsum.photos/id/148/100/100'">
                 </div>
             </div>
 
@@ -218,10 +218,7 @@
                 <h5 class="text-lg font-bold mb-4 text-white">Quick Links</h5>
                 <ul class="space-y-2 text-sm text-gray-400">
                     <li><a href="#" class="hover:text-white transition-colors">About</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Admission</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Academic Calendar</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Gallery</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Student Notice Board</a></li>
                 </ul>
             </div>
 
@@ -247,11 +244,11 @@
                     </li>
                     <li class="flex items-center">
                         <svg class="w-5 h-5 mr-3 text-kdp-orange shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                        <a href="tel:02766220419" class="hover:text-white">02766220419</a>
+                        <a href="tel:02766220419" class="hover:text-white">9265105831</a>
                     </li>
                     <li class="flex items-center">
                         <svg class="w-5 h-5 mr-3 text-kdp-orange shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
-                        <a href="mailto:kdp-patan-dte@gujarat.gov.in" class="hover:text-white">kdp-patan-dte@gujarat.gov.in</a>
+                        <a href="mailto:kdp-patan-dte@gujarat.gov.in" class="hover:text-white">sindhishahejad@gmail.com</a>
                     </li>
                 </ul>
             </div>
@@ -259,7 +256,7 @@
 
         <div class="max-w-7xl mx-auto px-4 mt-12 pt-6 border-t border-gray-700 text-center text-sm text-gray-400">
             <p class="mb-1">&copy; 2026 K. D. POLYTECHNIC, PATAN. All Rights Reserved.</p>
-            <p>Designed &amp; Developed for Excellence in Education</p>
+            <p>Designed &amp; Developed by Sindhi Shahejad, Shekh Juned, Pathan Anas</p>
         </div>
 
         <!-- Floating Scroll to Top Button (Alpine controlled) -->

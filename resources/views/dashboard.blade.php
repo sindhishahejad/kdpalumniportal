@@ -1,331 +1,550 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- 1. Hero Image & Welcome Ribbon (IITDAA Style) -->
-    <div class="relative w-full">
-        <img src="https://picsum.photos/id/1073/1920/500" class="w-full h-[350px] md:h-[500px] object-cover" alt="Alumni Event">
-        <div class="bg-brand-maroon text-white text-center py-6 px-4 shadow-md">
-            <h2 class="text-xl md:text-2xl font-bold mb-2 tracking-wide">Welcome to KDP Alumni Association Network, {{ Auth::user()->name ?? 'Alumnus' }}</h2>
-            <p class="text-sm max-w-4xl mx-auto font-light leading-relaxed">
-                A world that is teeming with talent, brilliance, diversity, and adventure. A world where you can strengthen current connections, make new ones, explore myriad opportunities, and create many more.
+    <!-- ============================================== -->
+    <!-- 1. HERO SLIDER & WELCOME RIBBON                -->
+    <!-- ============================================== -->
+    <div x-data="heroSlider()" x-init="start()" class="relative w-full flex flex-col shadow-2xl">
+        
+        <!-- Slider Images Container -->
+        <div class="relative w-full h-[400px] md:h-[550px] overflow-hidden group">
+            <template x-for="(slide, index) in slides" :key="index">
+                <div x-show="activeSlide === index" 
+                     x-transition:enter="transition ease-out duration-1000 transform"
+                     x-transition:enter-start="opacity-0 scale-105"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-1000 absolute inset-0"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="absolute inset-0 w-full h-full">
+                    <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover">
+                    <!-- Premium dark gradient overlay for depth -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/10"></div>
+                </div>
+            </template>
+
+            <!-- Elegant Dash Indicators -->
+            <div class="absolute bottom-8 left-0 right-0 flex justify-center space-x-3 z-20">
+                <template x-for="(slide, index) in slides" :key="index">
+                    <button @click="goTo(index)" 
+                            :class="{'w-10 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]': activeSlide === index, 'w-4 bg-white/40 hover:bg-white/80': activeSlide !== index}"
+                            class="h-1.5 rounded-full transition-all duration-500 focus:outline-none"
+                            :aria-label="'Slide ' + (index + 1)"></button>
+                </template>
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button @click="prev()" class="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/20 hover:bg-black/50 hover:scale-110 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button @click="next()" class="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/20 hover:bg-black/50 hover:scale-110 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+
+        <!-- Premium Welcome Ribbon -->
+        <div class="bg-gradient-to-r from-kdp-textblue via-[#1a2f5c] to-kdp-textblue text-white text-center py-8 px-6 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] border-t-2 border-kdp-orange relative z-30">
+            <h2 class="text-2xl md:text-3xl font-serif font-bold mb-3 tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 drop-shadow-sm">Welcome to KDP Alumni Association Network, {{ Auth::user()->name ?? 'Alumnus' }}</h2>
+            <p class="text-sm md:text-base max-w-4xl mx-auto font-light leading-relaxed text-gray-200">
+                A world that is teeming with talent, brilliance, diversity, and adventure. A world where you can strengthen current connections, make new ones, explore myriad opportunities, and create many more to support the future of K. D. Polytechnic, Patan.
             </p>
         </div>
     </div>
 
-    <!-- 2. The 4-Card Action Grid -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- ============================================== -->
+    <!-- 2. PREMIUM ALUMNI SERVICES GRID                -->
+    <!-- ============================================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            <!-- Card 1: Profile -->
-            <div class="bg-brand-navy text-white rounded-sm shadow-md overflow-hidden relative h-56 flex flex-col justify-end group transition-transform duration-300 hover:-translate-y-1">
-                <img src="https://picsum.photos/id/1011/400/300" class="opacity-30 group-hover:opacity-40 transition-opacity w-full h-full object-cover absolute inset-0 z-0" alt="Profile Background" />
-                <div class="relative z-10 p-5 bg-gradient-to-t from-brand-navy via-brand-navy/80 to-transparent h-full flex flex-col justify-end">
-                    <h3 class="font-serif font-bold text-lg mb-1">Your Alumni Profile</h3>
-                    <p class="text-xs mb-4 text-gray-200">Stay Connected with Your Alumni Community by Keeping Your Profile Updated.</p>
-                    <a href="{{ route('profile.edit') }}" class="bg-white text-brand-navy text-xs font-bold py-2 px-5 inline-block w-max rounded-sm shadow-sm hover:bg-gray-100">VIEW</a>
+            <!-- Card 1: Profile (Professional Working) -->
+            <a href="{{ route('profile.edit') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Alumni Working" />
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue via-kdp-textblue/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Your Alumni Profile</h3>
+                    <p class="text-sm mb-5 text-blue-100 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Keep your details updated to stay connected with the KDP community.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-orange-300 transition-colors">
+                        View Profile <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Card 2: Batchmates / Mentorship -->
-            <div class="bg-[#8b0000] text-white rounded-sm shadow-md overflow-hidden relative h-56 flex flex-col justify-end group transition-transform duration-300 hover:-translate-y-1">
-                <img src="https://picsum.photos/id/1012/400/300" class="opacity-30 group-hover:opacity-40 transition-opacity w-full h-full object-cover absolute inset-0 z-0" alt="Batchmates Background" />
-                <div class="relative z-10 p-5 bg-gradient-to-t from-[#8b0000] via-[#8b0000]/80 to-transparent h-full flex flex-col justify-end">
-                    <h3 class="font-serif font-bold text-lg mb-1">Mentorship</h3>
-                    <p class="text-xs mb-4 text-gray-200">Reconnect with your batchmates and guide the next generation of students.</p>
-                    <a href="{{ route('mentorship.index') }}" class="bg-white text-[#8b0000] text-xs font-bold py-2 px-5 inline-block w-max rounded-sm shadow-sm hover:bg-gray-100">VIEW</a>
+            <!-- Card 2: Mentorship (Guiding/Discussion) -->
+            <a href="{{ route('mentorship.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Mentorship Meeting" />
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange via-kdp-orange/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Mentorship</h3>
+                    <p class="text-sm mb-5 text-orange-50 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Guide the next generation of KDP students or seek expert advice.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-blue-900 transition-colors">
+                        Connect <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Card 3: Directory -->
-            <div class="bg-brand-navy text-white rounded-sm shadow-md overflow-hidden relative h-56 flex flex-col justify-end group transition-transform duration-300 hover:-translate-y-1">
-                <img src="https://picsum.photos/id/1013/400/300" class="opacity-30 group-hover:opacity-40 transition-opacity w-full h-full object-cover absolute inset-0 z-0" alt="Directory Background" />
-                <div class="relative z-10 p-5 bg-gradient-to-t from-brand-navy via-brand-navy/80 to-transparent h-full flex flex-col justify-end">
-                    <h3 class="font-serif font-bold text-lg mb-1">Alumni Directory</h3>
-                    <p class="text-xs mb-4 text-gray-200">Explore the alumni directory and connect with professionals across industries.</p>
-                    <a href="{{ route('alumni.index') }}" class="bg-white text-brand-navy text-xs font-bold py-2 px-5 inline-block w-max rounded-sm shadow-sm hover:bg-gray-100">VIEW</a>
+            <!-- Card 3: Directory (Graduates/Networking) -->
+            <a href="{{ route('alumni.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Students Networking" />
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue via-kdp-textblue/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Alumni Directory</h3>
+                    <p class="text-sm mb-5 text-blue-100 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Explore the directory and network with professionals across industries.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-orange-300 transition-colors">
+                        Search <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Card 4: Resources / Network -->
-            <div class="bg-[#8b0000] text-white rounded-sm shadow-md overflow-hidden relative h-56 flex flex-col justify-end group transition-transform duration-300 hover:-translate-y-1">
-                <img src="https://picsum.photos/id/1014/400/300" class="opacity-30 group-hover:opacity-40 transition-opacity w-full h-full object-cover absolute inset-0 z-0" alt="Resources Background" />
-                <div class="relative z-10 p-5 bg-gradient-to-t from-[#8b0000] via-[#8b0000]/80 to-transparent h-full flex flex-col justify-end">
-                    <h3 class="font-serif font-bold text-lg mb-1">Resource Vault</h3>
-                    <p class="text-xs mb-4 text-gray-200">Access exclusive academic resources, past papers, and continuous learning.</p>
-                    <a href="{{ route('resources.index') }}" class="bg-white text-[#8b0000] text-xs font-bold py-2 px-5 inline-block w-max rounded-sm shadow-sm hover:bg-gray-100">VIEW</a>
-            </div>
+            <!-- Card 4: Resource Vault (Library/Books) -->
+            <a href="{{ route('resources.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Library Books" />
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange via-kdp-orange/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Resource Vault</h3>
+                    <p class="text-sm mb-5 text-orange-50 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Access exclusive academic materials, past papers, and learning resources.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-blue-900 transition-colors">
+                        Access <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
+                </div>
+            </a>
 
         </div>
     </div>
 
-    <!-- 3. Showcase Your Business / Jobs Banner -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div class="flex flex-col md:flex-row shadow-lg rounded-sm overflow-hidden bg-white">
-            <div class="bg-brand-maroon text-white p-8 md:w-1/3 flex flex-col justify-center border-r-4 border-brand-gold">
-                <h3 class="font-serif text-2xl font-bold mb-4 leading-tight">Showcase Your Business.<br>Inspire Your Network.</h3>
-                <p class="text-sm mb-8 text-gray-200">Let your alumni community discover opportunities, support your ventures, and hire top talent from the KDP network.</p>
-                <a href="{{ route('jobs.index') }}" class="bg-white text-brand-maroon text-sm font-bold py-3 px-6 rounded-sm w-max shadow-md hover:bg-gray-100 transition-colors">List Your Business / Job</a>
+    <!-- ============================================== -->
+    <!-- 3. SHOWCASE YOUR BUSINESS / JOBS               -->
+    <!-- ============================================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div class="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden bg-white border border-gray-100 transform transition-transform hover:-translate-y-1 duration-300">
+            
+            <!-- Left Side: Call to Action -->
+            <div class="bg-gradient-to-br from-kdp-textblue to-[#1a2f5c] text-white p-10 md:w-5/12 flex flex-col justify-center relative overflow-hidden">
+                <!-- Subtle Decorative Shapes -->
+                <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-bl-full z-0"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-tr-full z-0"></div>
+                
+                <h3 class="font-serif text-3xl font-bold mb-4 leading-tight relative z-10 drop-shadow-sm">Showcase Your Business.<br>Inspire Your Network.</h3>
+                <p class="text-sm md:text-base mb-8 text-blue-100 font-light relative z-10 leading-relaxed">Let your alumni community discover opportunities, support your ventures, and hire top talent from the prestigious KDP network.</p>
+                
+                <a href="{{ route('jobs.index') }}" class="group bg-white text-kdp-textblue text-sm font-bold py-3.5 px-8 rounded-full w-max shadow-lg hover:shadow-xl hover:bg-gray-50 transform hover:-translate-y-0.5 transition-all uppercase tracking-wider relative z-10 flex items-center">
+                    List Your Business / Job
+                    <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
             </div>
-            <div class="md:w-2/3 h-64 md:h-auto grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-gray-200">
-                <img src="https://picsum.photos/id/1015/200/200" class="w-full h-full object-cover">
-                <img src="https://picsum.photos/id/1016/200/200" class="w-full h-full object-cover">
-                <img src="https://picsum.photos/id/1018/200/200" class="w-full h-full object-cover hidden sm:block">
-                <img src="https://picsum.photos/id/1019/200/200" class="w-full h-full object-cover hidden sm:block">
+            
+            <!-- Right Side: Custom Network Images -->
+            <div class="md:w-7/12 h-64 md:h-auto grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-gray-50">
+                
+                <!-- Image 1: Cristiano Ronaldo -->
+                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full">
+                    <img src="{{ asset('images/seven.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Cristiano Ronaldo">
+                </div>
+                
+                <!-- Image 2: Chico Lachowski -->
+                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full">
+                    <img src="{{ asset('images/chico.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Chico Lachowski">
+                </div>
+                
+                <!-- Image 3: Jordan Barrett (Hidden on very small screens) -->
+                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full hidden sm:block">
+                    <img src="{{ asset('images/jordan.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Jordan Barrett">
+                </div>
+                
+                <!-- Image 4: Business Handshake / Networking (Hidden on very small screens) -->
+                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full hidden sm:block">
+                    <!-- You can swap this URL out with another asset like {{ asset('fourth-person.jpg') }} if you prefer! -->
+                    <img src="{{ asset('images/hernan.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Business Networking">
+                </div>
+                
             </div>
         </div>
     </div>
 
+<!-- ============================================== -->
+    <!-- 4. EVENTS SECTION                              -->
     <!-- ============================================== -->
-    <!-- EVENTS SECTION                                 -->
-    <!-- ============================================== -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-transparent">
-        
-        <!-- Section Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="font-serif text-3xl font-bold text-gray-900">Events</h2>
-            <a href="#" class="text-sm font-semibold text-brand-navy border border-gray-300 bg-white px-4 py-2 rounded-sm shadow-sm hover:bg-gray-50 transition-colors">
-                View All
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-transparent">
+        <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
+            <div>
+                <h2 class="font-serif text-4xl font-extrabold text-gray-900 tracking-tight">Events & Gatherings</h2>
+                <p class="text-gray-500 mt-2 font-medium">Stay updated with the latest campus activities and reunions.</p>
+            </div>
+            <a href="#" class="text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
+                View All Events
             </a>
         </div>
-
-        <!-- Event Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            {{-- Assuming your controller passes an $events variable --}}
-            @forelse($events ?? [1, 2, 3] as $event)
-                <!-- Individual Event Card -->
-                <div class="bg-white border border-gray-200 rounded-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
-                    
-                    <!-- Event Image (Placeholder for now) -->
-                    <div class="relative h-48 bg-gray-100 border-b border-gray-200">
-                        <!-- Replace with $event->image_url in production -->
-                        <img src="https://picsum.photos/id/{{ 1040 + $loop->index }}/400/300" alt="Event Image" class="w-full h-full object-cover">
+            <!-- Event Card 1: Annual Meet -->
+            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2">
+                <div class="relative h-56 bg-gray-100 overflow-hidden z-0">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80" alt="Auditorium Event" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                
+                <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
+                    <!-- Floating Date Badge (FIXED PLACEMENT) -->
+                    <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
+                        <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">DEC</span>
+                        <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">15</span>
+                    </div>
+
+                    <div>
+                        <span class="inline-block bg-orange-50 text-kdp-orange text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-3 border border-orange-100">
+                            Upcoming Event
+                        </span>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-kdp-textblue transition-colors">
+                            KDP Annual Alumni Meet & Greet 2026
+                        </h3>
+                        <div class="flex items-center text-sm text-gray-500 font-medium mb-4">
+                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>05:30 PM Onwards</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <a href="#" class="text-kdp-textblue text-sm font-bold flex items-center hover:text-kdp-orange transition-colors uppercase tracking-wide">
+                            View Details <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 2: Tech Symposium -->
+            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2">
+                <div class="relative h-56 bg-gray-100 overflow-hidden z-0">
+                    <img src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=800&q=80" alt="Tech Workshop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                
+                <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
+                    <!-- Floating Date Badge (FIXED PLACEMENT) -->
+                    <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
+                        <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">OCT</span>
+                        <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">22</span>
+                    </div>
+
+                    <div>
+                        <span class="inline-block bg-blue-50 text-kdp-textblue text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-3 border border-blue-100">
+                            Workshop
+                        </span>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-kdp-textblue transition-colors">
+                            National Level Tech Symposium & Hackathon
+                        </h3>
+                        <div class="flex items-center text-sm text-gray-500 font-medium mb-4">
+                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>10:00 AM - 04:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <a href="#" class="text-kdp-textblue text-sm font-bold flex items-center hover:text-kdp-orange transition-colors uppercase tracking-wide">
+                            View Details <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Card 3: Mentorship Mixer -->
+            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2">
+                <div class="relative h-56 bg-gray-100 overflow-hidden z-0">
+                    <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=800&q=80" alt="Networking Event" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                
+                <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
+                    <!-- Floating Date Badge (FIXED PLACEMENT) -->
+                    <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
+                        <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">NOV</span>
+                        <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">05</span>
+                    </div>
+
+                    <div>
+                        <span class="inline-block bg-orange-50 text-kdp-orange text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-3 border border-orange-100">
+                            Networking
+                        </span>
+                        <h3 class="font-serif font-bold text-xl text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-kdp-textblue transition-colors">
+                            Alumni-Student Mentorship Mixer
+                        </h3>
+                        <div class="flex items-center text-sm text-gray-500 font-medium mb-4">
+                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>04:00 PM - 07:00 PM</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <a href="#" class="text-kdp-textblue text-sm font-bold flex items-center hover:text-kdp-orange transition-colors uppercase tracking-wide">
+                            View Details <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 5. SMART I-CARD BANNER                         -->
+    <!-- ============================================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex flex-col md:flex-row shadow-2xl rounded-3xl overflow-hidden bg-white transform transition-transform hover:-translate-y-1 duration-500 border border-gray-100">
+            
+            <!-- Left Side: Content & CTA -->
+            <div class="bg-gradient-to-br from-kdp-textblue via-[#1a2f5c] to-kdp-textblue text-white p-10 md:p-14 md:w-1/2 flex flex-col justify-center border-b-4 md:border-b-0 md:border-r-4 border-kdp-orange relative overflow-hidden">
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-overlay"></div>
+                <div class="absolute -top-20 -left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+                
+                <div class="relative z-10">
+                    <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 mb-6 shadow-sm">
+                        <svg class="w-4 h-4 text-kdp-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                        <span class="text-xs font-bold uppercase tracking-widest text-orange-50">Digital Identity</span>
                     </div>
                     
-                    <!-- Event Content -->
-                    <div class="p-5 flex-grow flex flex-col justify-between">
-                        <div>
-                            <!-- Title -->
-                            <h3 class="font-sans font-bold text-base text-brand-navy mb-3 line-clamp-2 leading-snug hover:text-brand-maroon cursor-pointer transition-colors">
-                                {{ is_object($event) ? $event->title : 'Invitation: IIT Delhi Alumni Greater New York Summer Alumni Mixer | 2026' }}
-                            </h3>
-                            
-                            <!-- Upcoming Event Badge -->
-                            <span class="inline-block bg-[#f8e6e6] text-brand-maroon text-[11px] font-bold uppercase tracking-wider py-1 px-2.5 rounded-sm mb-4 border border-[#e6b3b3]">
-                                Upcoming Event
-                            </span>
-                            
-                            <!-- Date & Time -->
-                            <div class="flex items-start text-sm text-gray-600 mb-2 font-medium">
-                                <svg class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                <span>
-                                    {{ is_object($event) ? \Carbon\Carbon::parse($event->start_date)->format('M d, Y') : 'Jul 30, 2026' }} - 
-                                    {{ is_object($event) ? $event->time : '05:30 PM' }}
-                                </span>
+                    <h3 class="font-serif text-3xl md:text-4xl font-extrabold mb-5 uppercase tracking-wide drop-shadow-md leading-tight">
+                        Connecting Generations of Excellence
+                    </h3>
+                    
+                    <p class="text-base mb-10 text-blue-100 font-light leading-relaxed max-w-md">
+                        Unlock a world of benefits with your official Alumni Smart Card. Gain seamless campus access, library privileges, and exclusive invitations to global KDP events.
+                    </p>
+                    
+                    <a href="{{ route('id-card.show') }}" class="group inline-flex justify-center items-center bg-kdp-orange text-white text-sm font-bold py-4 px-8 rounded-full shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:shadow-[0_0_30px_rgba(234,88,12,0.6)] hover:bg-orange-600 transition-all uppercase tracking-wider relative z-10 w-max">
+                        Get Your Smart Card Now
+                        <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right Side: Floating Glassmorphic ID Card Mockup -->
+            <div class="md:w-1/2 min-h-[350px] relative overflow-hidden bg-gray-900 flex items-center justify-center p-8 group">
+                <!-- Blurred background image (FIXED: Using your local campus photo) -->
+                <img src="{{ asset('images/three.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 group-hover:opacity-40 transition-all duration-1000 blur-sm" alt="Campus Background">
+                
+                <!-- Floating I-Card Design -->
+                <div class="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transform rotate-3 md:rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500 flex flex-col">
+                    
+                    <!-- Card Header -->
+                    <div class="bg-gradient-to-r from-[#1a2f5c] to-kdp-textblue p-5 flex items-center justify-between border-b border-white/10">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold text-kdp-textblue text-sm shadow-inner">
+                            KDP
+                        </div>
+                        <div class="text-right text-white">
+                            <div class="text-[10px] uppercase tracking-widest opacity-80 mb-0.5">Alumni Association</div>
+                            <div class="font-bold text-base tracking-wide">SMART I-CARD</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Body -->
+                    <div class="p-6 flex items-center gap-5 relative bg-gradient-to-br from-white/5 to-transparent">
+                        <!-- Dynamic User Avatar -->
+                        <div class="relative">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Alumnus') }}&background=ea580c&color=fff&size=120" class="w-20 h-20 rounded-xl shadow-lg border-2 border-white/30">
+                            <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 border-2 border-[#203154] rounded-full flex items-center justify-center shadow-sm">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </div>
                         </div>
                         
-                        <!-- Action Button -->
-                        <div class="mt-6">
-                            <a href="#" class="inline-block bg-brand-maroon text-white text-sm font-bold py-2.5 px-6 rounded-sm shadow-sm hover:bg-red-900 transition-colors">
-                                View Event
-                            </a>
+                        <!-- Dynamic User Details -->
+                        <div class="text-white flex-1">
+                            <h4 class="font-bold text-xl leading-tight mb-1">{{ Auth::user()->name ?? 'Alumnus Name' }}</h4>
+                            <p class="text-xs text-blue-200 font-mono tracking-wider mb-2">ID: KDP-{{ str_pad(Auth::user()->id ?? '128', 4, '0', STR_PAD_LEFT) }}</p>
+                            <span class="inline-block px-2 py-1 bg-white/20 rounded text-[10px] font-bold uppercase tracking-widest border border-white/10">
+                                Verified Member
+                            </span>
                         </div>
                     </div>
+                    
+                    <!-- NFC / Digital Chip visual -->
+                    <div class="bg-black/20 p-3 px-6 flex justify-between items-center">
+                        <p class="text-[9px] text-gray-400 uppercase tracking-widest">Tap or Scan for Access</p>
+                        <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
                 </div>
-            @empty
-                <!-- Fallback state if no events are listed -->
-                <div class="col-span-3 text-center py-12 bg-white border border-gray-200 rounded-sm">
-                    <p class="text-gray-500 font-medium">No upcoming events at the moment. Please check back later!</p>
-                </div>
-            @endforelse
-
-        </div>
-    </section>
-
-    <!-- 4. The Smart I-Card Banner -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div class="flex flex-col md:flex-row shadow-lg rounded-sm overflow-hidden bg-white">
-            <div class="bg-brand-maroon text-white p-8 md:w-1/3 flex flex-col justify-center border-r-4 border-brand-gold">
-                <h3 class="font-serif text-xl font-bold mb-3 uppercase tracking-wider">Connecting Generations of Excellence</h3>
-                <p class="text-sm mb-8 text-gray-200">Unlock a World of Benefits for You and Your Family with the Official Alumni Smart Card.</p>
-                <a href="{{ route('id-card.show') }}" class="bg-white text-brand-maroon text-sm font-bold py-3 px-6 rounded-sm w-max shadow-md hover:bg-gray-100 transition-colors">Get Your Smart Card Now</a>
             </div>
-            <div class="md:w-2/3 h-48 md:h-auto">
-                <img src="https://picsum.photos/id/1020/800/300" class="w-full h-full object-cover" alt="Graduation">
-            </div>
+            
         </div>
     </div>
 
+<!-- ============================================== -->
+    <!-- 6. MEMORIES & GALLERY SECTION                  -->
     <!-- ============================================== -->
-    <!-- GALLERY SECTION                                -->
-    <!-- ============================================== -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-transparent">
-        
-        <!-- Section Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-sans font-medium text-gray-900">Gallery</h2>
-            <a href="#" class="text-sm font-medium text-brand-maroon border border-brand-maroon px-6 py-1.5 rounded-sm hover:bg-brand-maroon hover:text-white transition-colors">
-                View All
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-gray-200 pb-4">
+            <div>
+                <h2 class="font-serif text-4xl font-extrabold text-gray-900 tracking-tight">Memories & Gallery</h2>
+                <p class="text-gray-500 mt-2 font-medium">Relive the golden days at K. D. Polytechnic.</p>
+            </div>
+            <!-- Note: Make sure you have a route named 'gallery.index' or change the href below -->
+            <a href="#" class="mt-4 md:mt-0 text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
+                Explore Full Gallery
             </a>
         </div>
 
-        <!-- Gallery Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Bento Box / Masonry Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
             
-            {{-- In a real scenario, use a loop like @foreach($galleries as $gallery) --}}
+            <!-- Large Feature Photo (FIXED URL) -->
+            <div class="md:col-span-2 md:row-span-2 relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
+                <img src="{{ asset('images/four.png') }}" alt="Graduation Day" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                    <h3 class="text-white font-bold text-2xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Annual Convocation Ceremony</h3>
+                    <p class="text-blue-100 text-sm mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Celebrating the Batch of 2025</p>
+                </div>
+            </div>
+
+            <!-- Standard Photo 1 (Using your local campus gate image) -->
+            <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
+                <img src="{{ asset('images/one.jpg') }}" alt="Main Gate" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange/90 via-kdp-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">KDP Main Campus</h3>
+                </div>
+            </div>
+
+            <!-- Standard Photo 2 -->
+            <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=400&q=80" alt="Campus Life" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Tech Fest Hackathon</h3>
+                </div>
+            </div>
+
+            <!-- Standard Photo 3 -->
+            <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
+                <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=400&q=80" alt="Alumni Meet" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange/90 via-kdp-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Alumni Reunion</h3>
+                </div>
+            </div>
+
+             <!-- Wide Photo 4 (Takes up 2 columns on desktop) -->
+            <div class="md:col-span-2 relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Students Studying" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <!-- Hover Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Engineering Workshop</h3>
+                    <p class="text-blue-100 text-sm mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Department of Computer Engineering</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- 7. STAY CONNECTED / SOCIAL MEDIA WIDGET        -->
+    <!-- ============================================== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-8">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0f2042] via-kdp-textblue to-[#1a2f5c] shadow-2xl border border-blue-900/50">
             
-            <!-- Gallery Album 1 -->
-            <a href="#" class="group flex flex-col cursor-pointer">
-                <!-- Image Container -->
-                <div class="relative w-full h-56 rounded-md overflow-hidden mb-3 shadow-sm border border-gray-100">
-                    <img src="https://picsum.photos/id/1015/600/400" alt="Executive Meeting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out">
-                    <!-- Optional: Overlay to replicate the slightly darkened edge effect in your screenshot -->
-                    <div class="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] pointer-events-none"></div>
-                </div>
-                <!-- Text Container -->
-                <div class="flex justify-between items-start mt-1">
-                    <h3 class="text-[15px] font-medium text-gray-900 leading-snug pr-4 group-hover:text-brand-maroon transition-colors">
-                        IITDAA 1st Executive Meeting held on 23rd May, 2026
-                    </h3>
-                    <span class="text-[13px] text-gray-600 whitespace-nowrap pt-0.5">
-                        61 Items
-                    </span>
-                </div>
-            </a>
+            <!-- Background Decorative Elements -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-kdp-orange/10 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
 
-            <!-- Gallery Album 2 -->
-            <a href="#" class="group flex flex-col cursor-pointer">
-                <!-- Image Container -->
-                <div class="relative w-full h-56 rounded-md overflow-hidden mb-3 shadow-sm border border-gray-100">
-                    <img src="https://picsum.photos/id/1018/600/400" alt="Farewell Batch" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out">
-                    <div class="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12 p-10 md:p-16">
+                
+                <!-- Left Side: Text Content -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left flex flex-col justify-center">
+                    <div class="mb-4">
+                        <span class="inline-block bg-white/10 backdrop-blur-sm text-orange-400 text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-4 rounded-full border border-white/20">
+                            Join The Inner Circle
+                        </span>
+                    </div>
+                    <h2 class="font-serif text-3xl md:text-4xl font-extrabold text-white mb-6 drop-shadow-sm tracking-wide">
+                        Stay Connected
+                    </h2>
+                    <p class="text-blue-100 text-sm md:text-base font-light leading-relaxed max-w-md mx-auto lg:mx-0">
+                        Follow K. D. Polytechnic across our official social channels to get the latest campus news, job opportunities, and upcoming reunion event details straight to your feed.
+                    </p>
                 </div>
-                <!-- Text Container -->
-                <div class="flex justify-between items-start mt-1">
-                    <h3 class="text-[15px] font-medium text-gray-900 leading-snug pr-4 group-hover:text-brand-maroon transition-colors">
-                        Farewell to IIT Delhi Alumni Graduating Batch 2026
-                    </h3>
-                    <span class="text-[13px] text-gray-600 whitespace-nowrap pt-0.5">
-                        429 Items
-                    </span>
-                </div>
-            </a>
 
-            <!-- Gallery Album 3 -->
-            <a href="#" class="group flex flex-col cursor-pointer">
-                <!-- Image Container -->
-                <div class="relative w-full h-56 rounded-md overflow-hidden mb-3 shadow-sm border border-gray-100">
-                    <img src="https://picsum.photos/id/1020/600/400" alt="Annual General Meeting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out">
-                    <div class="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] pointer-events-none"></div>
-                </div>
-                <!-- Text Container -->
-                <div class="flex justify-between items-start mt-1">
-                    <h3 class="text-[15px] font-medium text-gray-900 leading-snug pr-4 group-hover:text-brand-maroon transition-colors">
-                        Annual General Meeting 2026
-                    </h3>
-                    <span class="text-[13px] text-gray-600 whitespace-nowrap pt-0.5">
-                        341 Items
-                    </span>
-                </div>
-            </a>
+                <!-- Right Side: Social Media Cards -->
+                <div class="w-full lg:w-1/2 grid grid-cols-2 gap-4">
+                    
+                    <!-- LinkedIn Card -->
+                    <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
+                        <div class="absolute inset-0 bg-[#0A66C2] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                        <div class="relative z-10 flex flex-col items-center">
+                            <svg class="w-8 h-8 text-white mb-3 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            <span class="text-white font-bold text-sm tracking-wide">LinkedIn</span>
+                            <span class="text-white/60 group-hover:text-white/90 text-xs mt-1 transition-colors">Professional Network</span>
+                        </div>
+                    </a>
 
+                    <!-- Instagram Card -->
+                    <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                        <div class="relative z-10 flex flex-col items-center">
+                            <svg class="w-8 h-8 text-white mb-3 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            <span class="text-white font-bold text-sm tracking-wide">Instagram</span>
+                            <span class="text-white/60 group-hover:text-white/90 text-xs mt-1 transition-colors">Campus Memories</span>
+                        </div>
+                    </a>
+
+                    <!-- Facebook Card -->
+                    <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
+                        <div class="absolute inset-0 bg-[#1877F2] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                        <div class="relative z-10 flex flex-col items-center">
+                            <svg class="w-8 h-8 text-white mb-3 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                            <span class="text-white font-bold text-sm tracking-wide">Facebook</span>
+                            <span class="text-white/60 group-hover:text-white/90 text-xs mt-1 transition-colors">Alumni Groups</span>
+                        </div>
+                    </a>
+
+                    <!-- Twitter / X Card -->
+                    <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
+                        <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                        <div class="relative z-10 flex flex-col items-center">
+                            <svg class="w-8 h-8 text-white mb-3 transform group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            <span class="text-white font-bold text-sm tracking-wide">X (Twitter)</span>
+                            <span class="text-white/60 group-hover:text-white/90 text-xs mt-1 transition-colors">Daily Updates</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
         </div>
     </section>
     
-    <!-- ============================================== -->
-    <!-- SOCIAL MEDIA SECTION                           -->
-    <!-- ============================================== -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-transparent">
-        
-        <!-- Section Header -->
-        <div class="mb-6">
-            <h2 class="text-2xl font-sans font-medium text-gray-900 tracking-wide">Social Media</h2>
-        </div>
-
-        <!-- Social Media Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- ========================================== -->
-            <!-- 1. FACEBOOK WIDGET CONTAINER               -->
-            <!-- ========================================== -->
-            <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col h-[600px]">
-                <!-- Widget Header -->
-                <div class="px-4 py-3 border-b border-gray-100 flex items-center bg-gray-50/50">
-                    <svg class="w-5 h-5 text-[#1877F2] mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg>
-                    <span class="text-sm font-semibold text-gray-800">KDP on Facebook</span>
-                </div>
-                
-                <!-- Widget Body / Embed Area -->
-                <div class="flex-grow overflow-y-auto relative bg-white">
-                    <!-- TODO: Replace this block with your actual Facebook Page Plugin <iframe> -->
-                    <div class="p-4">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <img src="https://picsum.photos/id/147/50/50" class="w-10 h-10 rounded-full border border-gray-200" alt="Page Logo">
-                            <div>
-                                <h4 class="font-bold text-sm text-[#1877F2]">KDP Alumni Association</h4>
-                                <p class="text-xs text-gray-500">25K followers</p>
-                            </div>
-                        </div>
-                        <img src="https://picsum.photos/id/1050/400/400" class="w-full object-cover rounded-sm mb-3" alt="FB Post Placeholder">
-                        <p class="text-xs text-gray-700">Join us for the upcoming Board Game Meet-Up! Play, connect, unwind. #KDPAlumni</p>
-                    </div>
-                    <!-- End Placeholder -->
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- 2. INSTAGRAM WIDGET CONTAINER              -->
-            <!-- ========================================== -->
-            <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col h-[600px]">
-                <!-- Widget Header -->
-                <div class="px-4 py-3 border-b border-gray-100 flex items-center bg-gray-50/50">
-                    <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="url(#ig-grad)"><defs><linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433" /><stop offset="25%" stop-color="#e6683c" /><stop offset="50%" stop-color="#dc2743" /><stop offset="75%" stop-color="#cc2366" /><stop offset="100%" stop-color="#bc1888" /></linearGradient></defs><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path></svg>
-                    <span class="text-sm font-semibold text-gray-800">KDP on Instagram</span>
-                </div>
-                
-                <!-- Widget Body / Embed Area -->
-                <div class="flex-grow overflow-y-auto relative bg-white">
-                    <!-- TODO: Replace this block with your actual Instagram Embed script/iframe -->
-                    <div class="p-4">
-                        <div class="flex items-center space-x-4 mb-6">
-                            <img src="https://picsum.photos/id/147/60/60" class="w-14 h-14 rounded-full border p-0.5 border-gray-300" alt="IG Avatar">
-                            <div>
-                                <h4 class="font-bold text-sm text-gray-900">kdp_alumni</h4>
-                                <p class="text-xs text-gray-500">KDP Alumni Association</p>
-                                <p class="text-xs text-gray-800 mt-1"><span class="font-bold">607</span> posts &nbsp;•&nbsp; <span class="font-bold">3,277</span> followers</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-1">
-                            <img src="https://picsum.photos/id/1051/200/200" class="w-full aspect-square object-cover" alt="IG 1">
-                            <img src="https://picsum.photos/id/1052/200/200" class="w-full aspect-square object-cover" alt="IG 2">
-                            <img src="https://picsum.photos/id/1053/200/200" class="w-full aspect-square object-cover" alt="IG 3">
-                            <img src="https://picsum.photos/id/1054/200/200" class="w-full aspect-square object-cover" alt="IG 4">
-                        </div>
-                    </div>
-                    <!-- End Placeholder -->
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- 3. TWITTER / X WIDGET CONTAINER            -->
-            <!-- ========================================== -->
-            <div class="bg-white border border-gray-200 rounded shadow-sm overflow-hidden flex flex-col h-[600px]">
-                <!-- Widget Header -->
-                <div class="px-4 py-3 border-b border-gray-100 flex items-center bg-gray-50/50">
-                    <svg class="w-5 h-5 text-black mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-                    <span class="text-sm font-semibold text-gray-800">KDP on Twitter</span>
-                </div>
-                
-                <!-- Widget Body / Embed Area -->
-                <div class="flex-grow overflow-y-auto relative bg-white p-4">
-                    <!-- TODO: Drop your official Twitter Timeline Widget embed code here -->
-                    
-                    <!-- Simulating the broken/loading state from your screenshot -->
-                    <a href="#" class="text-brand-maroon text-sm hover:underline">Tweets By @KDP_Alumni</a>
-                </div>
-            </div>
-
-        </div>
-    </section>
+    <!-- Alpine Logic for Hero Slider -->
+    <!-- Alpine Logic for Hero Slider -->
+    <script>
+        function heroSlider() {
+            return {
+                activeSlide: 0,
+                interval: null,
+                slides: [
+                    { image: '{{ asset("images/one.jpg") }}', title: 'KDP Campus Main Gate' },
+                    { image: '{{ asset("images/two.jpg") }}', title: 'Academic Block' },
+                    { image: '{{ asset("images/three.jpg") }}', title: 'Campus Greenery' },
+                    { image: '{{ asset("images/four.png") }}', title: 'Computer Engineering Department' }
+                    ],
+                start() {
+                    this.interval = setInterval(() => {
+                        this.next();
+                    }, 5000);
+                },
+                next() {
+                    this.activeSlide = this.activeSlide === this.slides.length - 1 ? 0 : this.activeSlide + 1;
+                    this.resetInterval();
+                },
+                prev() {
+                    this.activeSlide = this.activeSlide === 0 ? this.slides.length - 1 : this.activeSlide - 1;
+                    this.resetInterval();
+                },
+                goTo(index) {
+                    this.activeSlide = index;
+                    this.resetInterval();
+                },
+                resetInterval() {
+                    clearInterval(this.interval);
+                    this.start();
+                }
+            }
+        }
+    </script>
 @endsection

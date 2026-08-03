@@ -161,9 +161,33 @@
                             {{ Auth::user()->name }}
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
+                        
                         <div x-show="open" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-sm shadow-xl border border-gray-100 py-1">
                             <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">Dashboard</a>
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">Your Profile</a>
+                            
+                            <!-- Dynamic Inbox Option -->
+                            @php
+                                // Presentation Safe: This checks if the relationship exists before attempting to count.
+                                // NOTE FOR DEMO: If you want to force a number to show up during your presentation 
+                                // simply change the line below to: $unreadCount = 3;
+                                $unreadCount = auth()->check() && method_exists(auth()->user(), 'unreadMessages') 
+                                               ? auth()->user()->unreadMessages()->count() 
+                                               : 0;
+                            @endphp
+
+                            <!-- Ensure the route name matches what is in your web.php -->
+                            <a href="{{ route('messages.inbox') }}" class="flex justify-between items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800 group transition-colors">
+                            <span>Inbox</span>
+                            @if($unreadCount > 0)
+                            <span class="inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-bold text-white bg-red-500 rounded-full shadow-sm group-hover:bg-red-600">
+                            {{ $unreadCount }}
+                            </span>
+                            @endif
+                            </a>
+                            
+                            <hr class="border-gray-100 my-1">
+
                             <form method="POST" action="{{ route('logout') }}" class="block">
                                 @csrf
                                 <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">Log Out</button>

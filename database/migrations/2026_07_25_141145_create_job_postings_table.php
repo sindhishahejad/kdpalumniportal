@@ -1,5 +1,3 @@
-<?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,12 +8,12 @@ return new class extends Migration
     {
         Schema::create('job_postings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // The alumni posting the job
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->string('company');
             $table->string('location')->nullable();
-            $table->enum('employment_type', ['full-time', 'part-time', 'apprenticeship', 'internship', 'contract'])->default('full-time');
-            $table->text('description');
+            $table->string('employment_type')->nullable(); // e.g., Full-time, Internship
+            $table->text('description')->nullable();
             $table->string('application_link_or_email')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

@@ -112,56 +112,75 @@
         </div>
     </div>
 
+<!-- ============================================== -->
+    <!-- DYNAMIC JOB SHOWCASE SECTION                   -->
     <!-- ============================================== -->
-    <!-- 3. SHOWCASE YOUR BUSINESS / JOBS               -->
-    <!-- ============================================== -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div class="flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden bg-white border border-gray-100 transform transition-transform hover:-translate-y-1 duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mb-8">
+        
+        @if(session('success'))
+            <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl shadow-sm text-sm font-medium">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Clean White Outer Container (Matches image_bd7a90.png) -->
+        <div class="bg-white p-2.5 rounded-[24px] shadow-[0_2px_15px_rgba(0,0,0,0.04)] border border-gray-100 flex flex-col lg:flex-row gap-2.5">
             
-            <!-- Left Side: Call to Action -->
-            <div class="bg-gradient-to-br from-kdp-textblue to-[#1a2f5c] text-white p-10 md:w-5/12 flex flex-col justify-center relative overflow-hidden">
-                <!-- Subtle Decorative Shapes -->
-                <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-bl-full z-0"></div>
-                <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-tr-full z-0"></div>
+            <!-- Left Side: Solid Dark Blue Banner -->
+            <div class="w-full lg:w-[40%] bg-[#0B132B] rounded-[18px] p-8 md:p-10 flex flex-col justify-center">
+                <h2 class="font-serif text-3xl md:text-[32px] font-bold text-white mb-4 leading-tight">
+                    Share Opportunities.<br>Hire Top Talent.
+                </h2>
+                <p class="text-blue-50/80 text-sm mb-10 leading-relaxed pr-4">
+                    Post job openings and internships directly to the alumni network. Find qualified candidates from the prestigious KDP community.
+                </p>
                 
-                <h3 class="font-serif text-3xl font-bold mb-4 leading-tight relative z-10 drop-shadow-sm">Showcase Your Business.<br>Inspire Your Network.</h3>
-                <p class="text-sm md:text-base mb-8 text-blue-100 font-light relative z-10 leading-relaxed">Let your alumni community discover opportunities, support your ventures, and hire top talent from the prestigious KDP network.</p>
-                
-                <a href="{{ route('jobs.index') }}" class="group bg-white text-kdp-textblue text-sm font-bold py-3.5 px-8 rounded-full w-max shadow-lg hover:shadow-xl hover:bg-gray-50 transform hover:-translate-y-0.5 transition-all uppercase tracking-wider relative z-10 flex items-center">
-                    List Your Business / Job
-                    <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <!-- Redirects directly to the jobs page -->
+                <a href="{{ route('jobs.index') }}" class="w-max bg-white text-[#0B132B] hover:bg-gray-100 text-[11px] font-bold uppercase tracking-widest py-3.5 px-6 rounded-full transition-colors flex items-center gap-2">
+                    POST A JOB 
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
                 </a>
             </div>
-            
-            <!-- Right Side: Custom Network Images -->
-            <div class="md:w-7/12 h-64 md:h-auto grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-gray-50">
-                
-                <!-- Image 1: Cristiano Ronaldo -->
-                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full">
-                    <img src="{{ asset('images/seven.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Cristiano Ronaldo">
-                </div>
-                
-                <!-- Image 2: Chico Lachowski -->
-                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full">
-                    <img src="{{ asset('images/chico.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Chico Lachowski">
-                </div>
-                
-                <!-- Image 3: Jordan Barrett (Hidden on very small screens) -->
-                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full hidden sm:block">
-                    <img src="{{ asset('images/jordan.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Jordan Barrett">
-                </div>
-                
-                <!-- Image 4: Business Handshake / Networking (Hidden on very small screens) -->
-                <div class="overflow-hidden rounded-xl shadow-sm h-full w-full hidden sm:block">
-                    <!-- You can swap this URL out with another asset like {{ asset('fourth-person.jpg') }} if you prefer! -->
-                    <img src="{{ asset('images/hernan.jpg') }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Business Networking">
-                </div>
-                
+
+            <!-- Right Side: 4 Slots Grid -->
+            <div class="w-full lg:w-[60%] grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                @if(isset($showcases) && $showcases->count() > 0)
+                    @foreach($showcases as $showcase)
+                        <!-- Occupied Job Slot -->
+                        <div class="rounded-[18px] overflow-hidden bg-[#0B132B] relative group border border-gray-100 flex flex-col justify-end min-h-[220px]">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($showcase->company) }}&background=random&color=fff&size=400" class="absolute inset-0 w-full h-full object-cover opacity-40">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/60 to-transparent"></div>
+                            
+                            <div class="relative z-10 p-5">
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-green-400 mb-1 block">{{ $showcase->employment_type ?? 'Role' }}</span>
+                                <h4 class="text-white text-sm font-bold truncate leading-tight">{{ $showcase->title }}</h4>
+                                <p class="text-gray-300 text-xs truncate mt-1">{{ $showcase->company }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                    
+                    <!-- Pad remaining with empty slots -->
+                    @for($i = $showcases->count(); $i < 4; $i++)
+                        <div class="rounded-[18px] border-[1.5px] border-dashed border-gray-200 bg-[#F9FAFB] flex items-center justify-center min-h-[220px]">
+                            <span class="text-[#9CA3AF] text-[13px] font-medium">Spot Available</span>
+                        </div>
+                    @endfor
+                @else
+                    <!-- All 4 Empty Slots -->
+                    @for ($i = 0; $i < 4; $i++)
+                        <div class="rounded-[18px] border-[1.5px] border-dashed border-gray-200 bg-[#F9FAFB] flex items-center justify-center min-h-[220px]">
+                            <span class="text-[#9CA3AF] text-[13px] font-medium">Spot Available</span>
+                        </div>
+                    @endfor
+                @endif
             </div>
+            
         </div>
     </div>
 
-<!-- ============================================== -->
+    <!-- ============================================== -->
     <!-- 4. EVENTS SECTION                              -->
     <!-- ============================================== -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-transparent">
@@ -185,7 +204,7 @@
                 </div>
                 
                 <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
-                    <!-- Floating Date Badge (FIXED PLACEMENT) -->
+                    <!-- Floating Date Badge -->
                     <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
                         <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">DEC</span>
                         <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">15</span>
@@ -219,7 +238,7 @@
                 </div>
                 
                 <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
-                    <!-- Floating Date Badge (FIXED PLACEMENT) -->
+                    <!-- Floating Date Badge -->
                     <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
                         <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">OCT</span>
                         <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">22</span>
@@ -253,7 +272,7 @@
                 </div>
                 
                 <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
-                    <!-- Floating Date Badge (FIXED PLACEMENT) -->
+                    <!-- Floating Date Badge -->
                     <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
                         <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">NOV</span>
                         <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">05</span>
@@ -290,7 +309,6 @@
             
             <!-- Left Side: Content & CTA -->
             <div class="bg-gradient-to-br from-kdp-textblue via-[#1a2f5c] to-kdp-textblue text-white p-10 md:p-14 md:w-1/2 flex flex-col justify-center border-b-4 md:border-b-0 md:border-r-4 border-kdp-orange relative overflow-hidden">
-                <!-- Decorative background elements -->
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-overlay"></div>
                 <div class="absolute -top-20 -left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
                 
@@ -317,13 +335,10 @@
             
             <!-- Right Side: Floating Glassmorphic ID Card Mockup -->
             <div class="md:w-1/2 min-h-[350px] relative overflow-hidden bg-gray-900 flex items-center justify-center p-8 group">
-                <!-- Blurred background image (FIXED: Using your local campus photo) -->
                 <img src="{{ asset('images/three.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 group-hover:opacity-40 transition-all duration-1000 blur-sm" alt="Campus Background">
                 
-                <!-- Floating I-Card Design -->
                 <div class="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transform rotate-3 md:rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500 flex flex-col">
                     
-                    <!-- Card Header -->
                     <div class="bg-gradient-to-r from-[#1a2f5c] to-kdp-textblue p-5 flex items-center justify-between border-b border-white/10">
                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold text-kdp-textblue text-sm shadow-inner">
                             KDP
@@ -334,9 +349,7 @@
                         </div>
                     </div>
                     
-                    <!-- Card Body -->
                     <div class="p-6 flex items-center gap-5 relative bg-gradient-to-br from-white/5 to-transparent">
-                        <!-- Dynamic User Avatar -->
                         <div class="relative">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Alumnus') }}&background=ea580c&color=fff&size=120" class="w-20 h-20 rounded-xl shadow-lg border-2 border-white/30">
                             <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 border-2 border-[#203154] rounded-full flex items-center justify-center shadow-sm">
@@ -344,7 +357,6 @@
                             </div>
                         </div>
                         
-                        <!-- Dynamic User Details -->
                         <div class="text-white flex-1">
                             <h4 class="font-bold text-xl leading-tight mb-1">{{ Auth::user()->name ?? 'Alumnus Name' }}</h4>
                             <p class="text-xs text-blue-200 font-mono tracking-wider mb-2">ID: KDP-{{ str_pad(Auth::user()->id ?? '128', 4, '0', STR_PAD_LEFT) }}</p>
@@ -354,7 +366,6 @@
                         </div>
                     </div>
                     
-                    <!-- NFC / Digital Chip visual -->
                     <div class="bg-black/20 p-3 px-6 flex justify-between items-center">
                         <p class="text-[9px] text-gray-400 uppercase tracking-widest">Tap or Scan for Access</p>
                         <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -365,7 +376,7 @@
         </div>
     </div>
 
-<!-- ============================================== -->
+    <!-- ============================================== -->
     <!-- 6. MEMORIES & GALLERY SECTION                  -->
     <!-- ============================================== -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -374,56 +385,44 @@
                 <h2 class="font-serif text-4xl font-extrabold text-gray-900 tracking-tight">Memories & Gallery</h2>
                 <p class="text-gray-500 mt-2 font-medium">Relive the golden days at K. D. Polytechnic.</p>
             </div>
-            <!-- Note: Make sure you have a route named 'gallery.index' or change the href below -->
             <a href="#" class="mt-4 md:mt-0 text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
                 Explore Full Gallery
             </a>
         </div>
 
-        <!-- Bento Box / Masonry Grid Layout -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px]">
             
-            <!-- Large Feature Photo (FIXED URL) -->
             <div class="md:col-span-2 md:row-span-2 relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="{{ asset('images/four.png') }}" alt="Graduation Day" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <!-- Hover Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
                     <h3 class="text-white font-bold text-2xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Annual Convocation Ceremony</h3>
                     <p class="text-blue-100 text-sm mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Celebrating the Batch of 2025</p>
                 </div>
             </div>
 
-            <!-- Standard Photo 1 (Using your local campus gate image) -->
             <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="{{ asset('images/one.jpg') }}" alt="Main Gate" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <!-- Hover Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange/90 via-kdp-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                     <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">KDP Main Campus</h3>
                 </div>
             </div>
 
-            <!-- Standard Photo 2 -->
             <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=400&q=80" alt="Campus Life" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <!-- Hover Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                     <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Tech Fest Hackathon</h3>
                 </div>
             </div>
 
-            <!-- Standard Photo 3 -->
             <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=400&q=80" alt="Alumni Meet" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <!-- Hover Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange/90 via-kdp-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                     <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Alumni Reunion</h3>
                 </div>
             </div>
 
-             <!-- Wide Photo 4 (Takes up 2 columns on desktop) -->
             <div class="md:col-span-2 relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Students Studying" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <!-- Hover Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                     <h3 class="text-white font-bold text-xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Engineering Workshop</h3>
                     <p class="text-blue-100 text-sm mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Department of Computer Engineering</p>
@@ -433,21 +432,18 @@
         </div>
     </section>
 
-
     <!-- ============================================== -->
     <!-- 7. STAY CONNECTED / SOCIAL MEDIA WIDGET        -->
     <!-- ============================================== -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-8">
         <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0f2042] via-kdp-textblue to-[#1a2f5c] shadow-2xl border border-blue-900/50">
             
-            <!-- Background Decorative Elements -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
             <div class="absolute bottom-0 left-0 w-80 h-80 bg-kdp-orange/10 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
 
             <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12 p-10 md:p-16">
                 
-                <!-- Left Side: Text Content -->
                 <div class="w-full lg:w-1/2 text-center lg:text-left flex flex-col justify-center">
                     <div class="mb-4">
                         <span class="inline-block bg-white/10 backdrop-blur-sm text-orange-400 text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-4 rounded-full border border-white/20">
@@ -462,10 +458,8 @@
                     </p>
                 </div>
 
-                <!-- Right Side: Social Media Cards -->
                 <div class="w-full lg:w-1/2 grid grid-cols-2 gap-4">
                     
-                    <!-- LinkedIn Card -->
                     <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
                         <div class="absolute inset-0 bg-[#0A66C2] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
                         <div class="relative z-10 flex flex-col items-center">
@@ -475,7 +469,6 @@
                         </div>
                     </a>
 
-                    <!-- Instagram Card -->
                     <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
                         <div class="absolute inset-0 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
                         <div class="relative z-10 flex flex-col items-center">
@@ -485,7 +478,6 @@
                         </div>
                     </a>
 
-                    <!-- Facebook Card -->
                     <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
                         <div class="absolute inset-0 bg-[#1877F2] opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
                         <div class="relative z-10 flex flex-col items-center">
@@ -495,7 +487,6 @@
                         </div>
                     </a>
 
-                    <!-- Twitter / X Card -->
                     <a href="#" class="group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl overflow-hidden hover:border-transparent transition-all duration-300 text-center flex flex-col items-center justify-center transform hover:-translate-y-1">
                         <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
                         <div class="relative z-10 flex flex-col items-center">
@@ -510,7 +501,6 @@
         </div>
     </section>
     
-    <!-- Alpine Logic for Hero Slider -->
     <!-- Alpine Logic for Hero Slider -->
     <script>
         function heroSlider() {

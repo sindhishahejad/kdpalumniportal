@@ -35,10 +35,25 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', function (Illuminate\Http\Request $request) {
+    $role = $request->user()->role;
 
+    if ($role === 'admin') {
+        return view('dashboards.admin');
+    } elseif ($role === 'faculty') {
+        return view('dashboards.faculty');
+    } elseif ($role === 'student') {
+        return view('dashboards.student');
+    } elseif ($role === 'alumni') {
+        // The Alumni Dashboard (Your main beautifully designed page)
+        $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
+        return view('dashboard', compact('showcases'));
+    }
+
+    // Safety fallback: if they somehow have no role, send them to the homepage
+    return redirect('/');
+    
+})->middleware(['auth', 'verified'])->name('dashboard');
 // Standard User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -64,7 +64,7 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         return view('dashboard', compact('showcases', 'events'));
     }
 
-    // Safety fallback
+    // Safety fallback codeline
     return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -83,7 +83,7 @@ Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'sh
 Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
 Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy'); // Add this!
 
-// Standard User Routes
+// Standard User Routes code
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -110,7 +110,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/id-card', [IdCardController::class, 'show'])->name('id-card.show');
 });
 
-// Admin Only Routes
+// Admin Only Routes 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');

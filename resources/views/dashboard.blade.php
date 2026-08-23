@@ -116,7 +116,17 @@
     <!-- DYNAMIC JOB SHOWCASE SECTION                   -->
     <!-- ============================================== -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mb-8">
-        
+        <!-- Section Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+            <div>
+                <h2 class="text-3xl font-serif font-extrabold text-[#0f172a]">Job Showcase</h2>
+                <p class="text-gray-500 mt-2">Explore the latest career opportunities shared by the KDP network.</p>
+            </div>
+            <a href="{{ route('jobs.index') }}" class="w-max bg-white border border-gray-200 text-[#0f172a] text-sm font-bold uppercase tracking-wider py-2.5 px-6 rounded-full hover:border-[#294c9b] hover:text-[#294c9b] transition-colors shadow-sm">
+                View Job Board
+            </a>
+        </div>
+
         @if(session('success'))
             <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl shadow-sm text-sm font-medium">
                 {{ session('success') }}
@@ -265,8 +275,16 @@
     <!-- 5. SMART I-CARD BANNER                         -->
     <!-- ============================================== -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="flex flex-col md:flex-row shadow-2xl rounded-3xl overflow-hidden bg-white transform transition-transform hover:-translate-y-1 duration-500 border border-gray-100">
-            
+        
+        <!-- Section Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+            <div>
+                <h2 class="text-3xl font-serif font-extrabold text-[#0f172a]">Alumni Smart Card</h2>
+                <p class="text-gray-500 mt-2">Access your official digital identity and unlock exclusive network privileges.</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row shadow-2xl rounded-3xl overflow-hidden bg-white transform transition-transform hover:-translate-y-1 duration-500 border border-gray-100">     
             <!-- Left Side: Content & CTA -->
             <div class="bg-gradient-to-br from-kdp-textblue via-[#1a2f5c] to-kdp-textblue text-white p-10 md:p-14 md:w-1/2 flex flex-col justify-center border-b-4 md:border-b-0 md:border-r-4 border-kdp-orange relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-overlay"></div>

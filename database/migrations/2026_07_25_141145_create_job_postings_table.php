@@ -12,7 +12,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('company');
             $table->string('location')->nullable();
-            $table->string('employment_type')->nullable(); // e.g., Full-time, Internship
+            $table->string('employment_type')->nullable(); // e.g., Full-time, Internship here.
             $table->text('description')->nullable();
             $table->string('application_link_or_email')->nullable();
             $table->boolean('is_active')->default(true);

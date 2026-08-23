@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
+    public function show(Event $event)
+    {
+        return view('events.show', compact('event'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([

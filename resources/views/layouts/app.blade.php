@@ -50,7 +50,7 @@
                 </a>
                 <a href="mailto:kdp-patan-dte@gujarat.gov.in" class="flex items-center hover:text-gray-200 transition-colors">
                     <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
-                    sindhishahejad@gmail.com
+                    sindhishahejad@gmail.com / junedshaikh235235@gmail.com
                 </a>
             </div>
 
@@ -149,7 +149,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">GALLERY</a>
+                <a href="{{ route('gallery.index') }}" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">GALLERY</a>
                 <a href="#" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">CONTACT</a>
             </div>
 

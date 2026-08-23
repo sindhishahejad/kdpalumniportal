@@ -69,14 +69,15 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
 
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
-// Add this new line:
 Route::post('/gallery/upload', [\App\Http\Controllers\GalleryController::class, 'store'])->name('gallery.store')->middleware(['auth']);
 Route::get('/gallery/{album}/edit', [\App\Http\Controllers\GalleryController::class, 'edit'])->name('gallery.edit')->middleware(['auth']);
 Route::put('/gallery/{album}', [\App\Http\Controllers\GalleryController::class, 'update'])->name('gallery.update')->middleware(['auth']);
 Route::delete('/gallery/photos/{photo}', [\App\Http\Controllers\GalleryController::class, 'destroyPhoto'])->name('gallery.photos.destroy')->middleware(['auth']);
 Route::post('/gallery/{album}/photos', [\App\Http\Controllers\GalleryController::class, 'addPhotos'])->name('gallery.photos.store')->middleware(['auth']);
+
 Route::post('/events', [\App\Http\Controllers\EventController::class, 'store'])->name('events.store')->middleware(['auth']);
 Route::delete('/events/{event}', [\App\Http\Controllers\EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
+Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show')->middleware(['auth']);
 
 // Standard User Routes
 Route::middleware('auth')->group(function () {

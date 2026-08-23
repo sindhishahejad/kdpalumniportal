@@ -10,7 +10,7 @@ class Event extends Model
         'title', 'category', 'image_path', 'event_date', 'time_display', 'description'
     ];
     
-    // Automatically cast the event_date to a Carbon instance so we can format it easily code
+    // Automatically cast the event_date to a Carbon instance so we can format it easily code here.
     protected $casts = [
         'event_date' => 'date',
     ];

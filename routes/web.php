@@ -39,8 +39,11 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     $role = $request->user()->role;
 
     if ($role === 'admin') {
-        return view('dashboards.admin');
-    } elseif ($role === 'faculty') {
+        // Fetch albums with their photo count to display in the list
+        $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
+        return view('dashboards.admin', compact('albums'));
+    }
+     elseif ($role === 'faculty') {
         return view('dashboards.faculty');
     } elseif ($role === 'student') {
         return view('dashboards.student');
@@ -58,6 +61,9 @@ Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index']
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 // Add this new line:
 Route::post('/gallery/upload', [\App\Http\Controllers\GalleryController::class, 'store'])->name('gallery.store')->middleware(['auth']);
+Route::get('/gallery/{album}/edit', [\App\Http\Controllers\GalleryController::class, 'edit'])->name('gallery.edit')->middleware(['auth']);
+Route::put('/gallery/{album}', [\App\Http\Controllers\GalleryController::class, 'update'])->name('gallery.update')->middleware(['auth']);
+Route::delete('/gallery/photos/{photo}', [\App\Http\Controllers\GalleryController::class, 'destroyPhoto'])->name('gallery.photos.destroy')->middleware(['auth']);
 // Standard User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

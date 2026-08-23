@@ -43,12 +43,12 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
-        // Delete the image file from storage if it exists
+        // Delete the image file from storage if it exists code
         if ($event->image_path) {
             Storage::disk('public')->delete($event->image_path);
         }
         
-        // Delete the database record
+        // Delete the database record code
         $event->delete();
         
         return back()->with('event_status', 'Event deleted successfully!');

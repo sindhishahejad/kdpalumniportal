@@ -54,6 +54,7 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     return redirect('/');
     
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 // Standard User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

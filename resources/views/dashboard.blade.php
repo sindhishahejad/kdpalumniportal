@@ -385,7 +385,7 @@
                 <h2 class="font-serif text-4xl font-extrabold text-gray-900 tracking-tight">Memories & Gallery</h2>
                 <p class="text-gray-500 mt-2 font-medium">Relive the golden days at K. D. Polytechnic.</p>
             </div>
-            <a href="#" class="mt-4 md:mt-0 text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
+            <a href="{{ route('gallery.index') }}" class="mt-4 md:mt-0 text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
                 Explore Full Gallery
             </a>
         </div>

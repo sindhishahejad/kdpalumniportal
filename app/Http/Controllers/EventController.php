@@ -15,6 +15,7 @@ class EventController extends Controller
             'category' => 'required|string|max:50',
             'event_date' => 'required|date',
             'time_display' => 'required|string|max:255',
+            'description' => 'nullable|string', // Added description validation
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
@@ -28,6 +29,7 @@ class EventController extends Controller
             'category' => strtoupper($request->category),
             'event_date' => $request->event_date,
             'time_display' => $request->time_display,
+            'description' => $request->description, // Save the description
             'image_path' => $imagePath,
         ]);
 

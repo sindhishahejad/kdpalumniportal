@@ -31,7 +31,7 @@
                     <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Active Students</h3>
                     <p class="text-2xl font-bold text-[#0f172a]">432</p>
                 </div>
-            </div> <!-- ✨ THIS IS THE DIV YOU WERE MISSING! ✨ -->
+            </div>
 
             <!-- Gallery Manager -->
             <div class="mt-10 p-8 bg-gray-50 rounded-[20px] border border-gray-200">
@@ -134,6 +134,12 @@
                             <div>
                                 <label class="block text-sm font-bold text-[#0f172a] mb-1">Time Display</label>
                                 <input type="text" name="time_display" required placeholder="e.g. 10:00 AM - 04:00 PM" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm">
+                            </div>
+
+                            <!-- ✨ HERE IS THE DESCRIPTION FIELD YOU MISSED ✨ -->
+                            <div>
+                                <label class="block text-sm font-bold text-[#0f172a] mb-1">Event Description (Optional)</label>
+                                <textarea name="description" rows="2" placeholder="Brief details about the event..." class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm"></textarea>
                             </div>
 
                             <div>

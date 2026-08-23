@@ -49,8 +49,13 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         return view('dashboards.student');
     } elseif ($role === 'alumni') {
         // The Alumni Dashboard (Your main beautifully designed page)
-        $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
-        return view('dashboard', compact('showcases'));
+        // Fetch the 3 closest upcoming events
+        $events = \App\Models\Event::where('event_date', '>=', now())
+                                   ->orderBy('event_date', 'asc')
+                                   ->take(3)
+                                   ->get();
+                                   
+        return view('dashboard', compact('showcases', 'events'));
     }
 
     // Safety fallback: if they somehow have no role, send them to the homepage

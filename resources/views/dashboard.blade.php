@@ -181,125 +181,84 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- 4. EVENTS SECTION                              -->
-    <!-- ============================================== -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-transparent">
-        <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
+<!-- EVENTS & GATHERINGS SECTION -->
+<!-- ============================================== -->
+<div class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4">
             <div>
-                <h2 class="font-serif text-4xl font-extrabold text-gray-900 tracking-tight">Events & Gatherings</h2>
-                <p class="text-gray-500 mt-2 font-medium">Stay updated with the latest campus activities and reunions.</p>
+                <h2 class="text-3xl font-serif font-extrabold text-[#0f172a]">Events & Gatherings</h2>
+                <p class="text-gray-500 mt-2">Stay updated with the latest campus activities and reunions.</p>
             </div>
-            <a href="#" class="text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
+            <a href="#" class="w-max bg-white border border-gray-200 text-[#0f172a] text-sm font-bold uppercase tracking-wider py-2.5 px-6 rounded-full hover:border-[#294c9b] hover:text-[#294c9b] transition-colors shadow-sm">
                 View All Events
             </a>
         </div>
-        
+
+        <!-- Events Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- Event Card 1: Annual Meet -->
-            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2">
-                <div class="relative h-56 bg-gray-100 overflow-hidden z-0">
-                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80" alt="Auditorium Event" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                
-                <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
-                    <!-- Floating Date Badge -->
-                    <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
-                        <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">DEC</span>
-                        <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">15</span>
-                    </div>
+            @forelse($events as $event)
+                <div class="bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-gray-100 flex flex-col relative transition-transform hover:-translate-y-1 duration-300">
+                    
+                    <!-- Image Wrapper -->
+                    <div class="relative h-52 w-full rounded-t-2xl overflow-hidden bg-gray-200">
+                        @if($event->image_path)
+                            <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                        @else
+                            <!-- Placeholder if no image -->
+                            <div class="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700"></div>
+                        @endif
 
-                    <div>
-                        <span class="inline-block bg-orange-50 text-kdp-orange text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-3 border border-orange-100">
-                            Upcoming Event
-                        </span>
-                        <h3 class="font-serif font-bold text-xl text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-kdp-textblue transition-colors">
-                            KDP Annual Alumni Meet & Greet 2026
-                        </h3>
-                        <div class="flex items-center text-sm text-gray-500 font-medium mb-4">
-                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span>05:30 PM Onwards</span>
+                        <!-- Overlapping Date Badge -->
+                        <div class="absolute -bottom-6 right-6 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-2 flex flex-col items-center justify-center min-w-[70px]">
+                            <span class="text-[#f97316] text-[10px] font-extrabold uppercase tracking-widest">{{ $event->event_date->format('M') }}</span>
+                            <span class="text-2xl font-black text-[#0f172a] leading-none mt-0.5">{{ $event->event_date->format('d') }}</span>
                         </div>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="#" class="text-kdp-textblue text-sm font-bold flex items-center hover:text-kdp-orange transition-colors uppercase tracking-wide">
-                            View Details <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Event Card 2: Tech Symposium -->
-            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2">
-                <div class="relative h-56 bg-gray-100 overflow-hidden z-0">
-                    <img src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=800&q=80" alt="Tech Workshop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                
-                <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
-                    <!-- Floating Date Badge -->
-                    <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
-                        <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">OCT</span>
-                        <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">22</span>
-                    </div>
-
-                    <div>
-                        <span class="inline-block bg-blue-50 text-kdp-textblue text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-3 border border-blue-100">
-                            Workshop
+                    <!-- Card Body -->
+                    <div class="p-8 pt-10 flex-1 flex flex-col">
+                        
+                        <!-- Dynamic Category Tag -->
+                        @php
+                            $isWorkshop = strtolower($event->category) === 'workshop';
+                            $tagBg = $isWorkshop ? 'bg-blue-50' : 'bg-orange-50';
+                            $tagText = $isWorkshop ? 'text-blue-600' : 'text-[#f97316]';
+                        @endphp
+                        <span class="w-max {{ $tagBg }} {{ $tagText }} text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-4">
+                            {{ $event->category }}
                         </span>
-                        <h3 class="font-serif font-bold text-xl text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-kdp-textblue transition-colors">
-                            National Level Tech Symposium & Hackathon
+
+                        <h3 class="text-xl font-serif font-bold text-[#0f172a] mb-4 leading-snug">
+                            {{ $event->title }}
                         </h3>
-                        <div class="flex items-center text-sm text-gray-500 font-medium mb-4">
+
+                        <div class="flex items-center text-gray-500 text-sm mb-8 font-medium">
                             <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span>10:00 AM - 04:00 PM</span>
+                            {{ $event->time_display }}
+                        </div>
+
+                        <!-- Footer Link -->
+                        <div class="mt-auto">
+                            <a href="#" class="inline-flex items-center text-[#294c9b] font-bold text-sm tracking-wide uppercase hover:text-blue-800 transition-colors group">
+                                View Details 
+                                <span class="ml-2 transition-transform group-hover:translate-x-1">&rarr;</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="#" class="text-kdp-textblue text-sm font-bold flex items-center hover:text-kdp-orange transition-colors uppercase tracking-wide">
-                            View Details <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                    </div>
                 </div>
-            </div>
-
-            <!-- Event Card 3: Mentorship Mixer -->
-            <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2">
-                <div class="relative h-56 bg-gray-100 overflow-hidden z-0">
-                    <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=800&q=80" alt="Networking Event" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            @empty
+                <!-- Empty State -->
+                <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-dashed border-gray-300">
+                    <p class="text-gray-500 font-medium">No upcoming events scheduled right now.</p>
                 </div>
-                
-                <div class="p-6 pt-10 flex-grow flex flex-col justify-between relative bg-white z-10">
-                    <!-- Floating Date Badge -->
-                    <div class="absolute right-6 -top-10 bg-white p-2.5 rounded-xl shadow-lg text-center min-w-[70px] border border-gray-100 transform group-hover:-translate-y-1 transition-transform">
-                        <span class="block text-kdp-orange font-bold text-xs uppercase tracking-widest">NOV</span>
-                        <span class="block text-gray-900 font-extrabold text-2xl leading-none mt-1">05</span>
-                    </div>
-
-                    <div>
-                        <span class="inline-block bg-orange-50 text-kdp-orange text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-3 border border-orange-100">
-                            Networking
-                        </span>
-                        <h3 class="font-serif font-bold text-xl text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-kdp-textblue transition-colors">
-                            Alumni-Student Mentorship Mixer
-                        </h3>
-                        <div class="flex items-center text-sm text-gray-500 font-medium mb-4">
-                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span>04:00 PM - 07:00 PM</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="#" class="text-kdp-textblue text-sm font-bold flex items-center hover:text-kdp-orange transition-colors uppercase tracking-wide">
-                            View Details <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+            @endforelse
         </div>
-    </section>
+
+    </div>
+</div>
 
     <!-- ============================================== -->
     <!-- 5. SMART I-CARD BANNER                         -->

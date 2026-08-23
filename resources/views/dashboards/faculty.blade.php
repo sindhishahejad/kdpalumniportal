@@ -4,7 +4,7 @@
     <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white p-10 rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
             
-            <!-- Header Section -->
+            <!--- Header Section --->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                 <div>
                     <h1 class="text-3xl font-serif font-bold text-[#0f172a]">Faculty Dashboard</h1>

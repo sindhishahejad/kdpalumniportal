@@ -39,17 +39,22 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     $role = $request->user()->role;
 
     if ($role === 'admin') {
-        // Fetch albums with their photo count to display in the list
+        // Admin Dashboard: Fetch albums and events for the managers
         $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
-        return view('dashboards.admin', compact('albums'));
-    }
-     elseif ($role === 'faculty') {
+        $events = \App\Models\Event::orderBy('event_date', 'asc')->get();
+        
+        return view('dashboards.admin', compact('albums', 'events'));
+        
+    } elseif ($role === 'faculty') {
         return view('dashboards.faculty');
+        
     } elseif ($role === 'student') {
         return view('dashboards.student');
+        
     } elseif ($role === 'alumni') {
-        // The Alumni Dashboard (Your main beautifully designed page)
-        // Fetch the 3 closest upcoming events
+        // Alumni Dashboard: Fetch BOTH jobs ($showcases) and $events!
+        $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
+        
         $events = \App\Models\Event::where('event_date', '>=', now())
                                    ->orderBy('event_date', 'asc')
                                    ->take(3)
@@ -58,10 +63,10 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         return view('dashboard', compact('showcases', 'events'));
     }
 
-    // Safety fallback: if they somehow have no role, send them to the homepage
+    // Safety fallback
     return redirect('/');
-    
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 // Add this new line:
@@ -70,6 +75,9 @@ Route::get('/gallery/{album}/edit', [\App\Http\Controllers\GalleryController::cl
 Route::put('/gallery/{album}', [\App\Http\Controllers\GalleryController::class, 'update'])->name('gallery.update')->middleware(['auth']);
 Route::delete('/gallery/photos/{photo}', [\App\Http\Controllers\GalleryController::class, 'destroyPhoto'])->name('gallery.photos.destroy')->middleware(['auth']);
 Route::post('/gallery/{album}/photos', [\App\Http\Controllers\GalleryController::class, 'addPhotos'])->name('gallery.photos.store')->middleware(['auth']);
+Route::post('/events', [\App\Http\Controllers\EventController::class, 'store'])->name('events.store')->middleware(['auth']);
+Route::delete('/events/{event}', [\App\Http\Controllers\EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
+
 // Standard User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

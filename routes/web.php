@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Authentication Routes (Socialite & Email Login)
+// Authentication Routes (Socialite & Email Login) code here.
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -29,7 +29,7 @@ Route::post('/login/email', [LoginController::class, 'loginWithEmail'])->name('l
 
 
 
-// Onboarding Route (Fallback if authenticated user lacks role details.)
+// Onboarding Route (Fallback if authenticated user lacks role details.) code here.
 Route::middleware(['auth'])->group(function () {
     Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');

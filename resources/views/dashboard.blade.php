@@ -192,6 +192,7 @@
                 <h2 class="text-3xl font-serif font-extrabold text-[#0f172a]">Events & Gatherings</h2>
                 <p class="text-gray-500 mt-2">Stay updated with the latest campus activities and reunions.</p>
             </div>
+            <!-- Reverted this link back to # -->
             <a href="#" class="w-max bg-white border border-gray-200 text-[#0f172a] text-sm font-bold uppercase tracking-wider py-2.5 px-6 rounded-full hover:border-[#294c9b] hover:text-[#294c9b] transition-colors shadow-sm">
                 View All Events
             </a>
@@ -242,7 +243,7 @@
 
                         <!-- Footer Link -->
                         <div class="mt-auto">
-                            <a href="#" class="inline-flex items-center text-[#294c9b] font-bold text-sm tracking-wide uppercase hover:text-blue-800 transition-colors group">
+                            <a href="{{ route('events.show', $event->id) }}" class="inline-flex items-center text-[#294c9b] font-bold text-sm tracking-wide uppercase hover:text-blue-800 transition-colors group">
                                 View Details 
                                 <span class="ml-2 transition-transform group-hover:translate-x-1">&rarr;</span>
                             </a>

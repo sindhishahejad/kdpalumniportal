@@ -22,15 +22,15 @@ class GalleryController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120' // Max 5MB per image
         ]);
 
-        // 1. Create the Album Section
+        // 1. Create the Album Section code
         $album = GalleryAlbum::create([
             'title' => $request->title,
         ]);
 
-        // 2. Process and save each image
+        // 2. Process and save each image code
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                // Stores in storage/app/public/gallery
+                // Stores in storage/app/public/gallery code
                 $path = $image->store('gallery', 'public'); 
                 
                 GalleryPhoto::create([

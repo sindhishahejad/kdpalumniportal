@@ -42,8 +42,9 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         // Admin Dashboard: Fetch albums and events for the managers
         $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
         $events = \App\Models\Event::orderBy('event_date', 'asc')->get();
+        $jobs = \App\Models\JobPosting::latest()->get();
         
-        return view('dashboards.admin', compact('albums', 'events'));
+        return view('dashboards.admin', compact('albums', 'events', 'jobs'));
         
     } elseif ($role === 'faculty') {
         return view('dashboards.faculty');
@@ -78,6 +79,9 @@ Route::post('/gallery/{album}/photos', [\App\Http\Controllers\GalleryController:
 Route::post('/events', [\App\Http\Controllers\EventController::class, 'store'])->name('events.store')->middleware(['auth']);
 Route::delete('/events/{event}', [\App\Http\Controllers\EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
 Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show')->middleware(['auth']);
+
+Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
+Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy'); // Add this!
 
 // Standard User Routes
 Route::middleware('auth')->group(function () {

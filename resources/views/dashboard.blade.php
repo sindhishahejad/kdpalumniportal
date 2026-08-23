@@ -137,7 +137,7 @@
                 
                 <!-- Redirects directly to the jobs page -->
                 <a href="{{ route('jobs.index') }}" class="w-max bg-white text-[#0B132B] hover:bg-gray-100 text-[11px] font-bold uppercase tracking-widest py-3.5 px-6 rounded-full transition-colors flex items-center gap-2">
-                    POST A JOB 
+                    APPLY FOR A JOB 
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>

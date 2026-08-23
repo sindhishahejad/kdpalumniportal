@@ -188,6 +188,102 @@
                 </div>
             </div>
             
+            <!-- ========================================== -->
+            <!-- JOB MANAGER -->
+            <!-- ========================================== -->
+            <div class="mt-10 p-8 bg-gray-50 rounded-[20px] border border-gray-200">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-serif font-bold text-[#0f172a]">Manage Job Board</h2>
+                    <p class="text-gray-500 text-sm mt-1">Post new career opportunities and remove expired listings.</p>
+                </div>
+                
+                @if(session('job_status'))
+                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg shadow-sm text-sm font-medium">
+                        {{ session('job_status') }}
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="mb-6 bg-red-50 text-red-600 p-4 rounded-lg text-sm border border-red-100">
+                        <ul class="list-disc pl-5 font-medium">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left: Create Form -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm h-max">
+                        <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Post New Job</h3>
+                        <form action="{{ route('jobs.store') }}" method="POST" class="space-y-4">
+                            @csrf
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0f172a] mb-1">Job Title</label>
+                                    <input type="text" name="title" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0f172a] mb-1">Company</label>
+                                    <input type="text" name="company" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0f172a] mb-1">Location</label>
+                                    <input type="text" name="location" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0f172a] mb-1">Emp. Type</label>
+                                    <select name="employment_type" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm text-gray-600">
+                                        <option value="full-time">Full-time</option>
+                                        <option value="part-time">Part-time</option>
+                                        <option value="internship">Internship</option>
+                                        <option value="contract">Contract</option>
+                                        <option value="apprenticeship">Apprenticeship</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0f172a] mb-1">Application Link or Email</label>
+                                <input type="text" name="application_link_or_email" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0f172a] mb-1">Description</label>
+                                <textarea name="description" required rows="3" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#3b82f6] text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-[#16a34a] hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors mt-2">
+                                Publish Job to Network
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Existing Jobs -->
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Active Jobs</h3>
+                        <div class="space-y-3 max-h-[450px] overflow-y-auto pr-2">
+                            @forelse($jobs as $job)
+                                <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100 transition-colors">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-[#0f172a]">{{ $job->title }}</h4>
+                                        <p class="text-xs text-[#3b82f6] font-bold">{{ $job->company }} <span class="text-gray-500 font-normal">| {{ ucfirst($job->employment_type) }}</span></p>
+                                    </div>
+                                    <form action="{{ route('jobs.destroy', $job->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this job?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            @empty
+                                <p class="text-sm text-gray-400 italic">No active jobs posted.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 @endsection

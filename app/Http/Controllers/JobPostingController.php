@@ -20,6 +20,11 @@ class JobPostingController extends Controller
 
     public function store(Request $request)
     {
+        // 1. SECURITY: Only allow Admins to post jobs
+        if (auth()->user()->role !== 'admin') {
+            return back()->with('error', 'Only Administrators can post job openings.');
+        }
+
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'company' => ['required', 'string', 'max:255'],
@@ -36,9 +41,21 @@ class JobPostingController extends Controller
             'employment_type' => $request->employment_type,
             'description' => $request->description,
             'application_link_or_email' => $request->application_link_or_email,
-            'is_active' => true,
+            'is_active' => true, // 2. AUTO-APPROVE: Shows up instantly
         ]);
 
-        return redirect()->route('jobs.index')->with('status', 'Job posted successfully!');
+        // ✨ CHANGED: Now redirects back to the Admin Dashboard instead of the public job board
+        return back()->with('job_status', 'Job posted successfully!');
+    }
+
+    // ✨ NEW: Added destroy method so Admins can delete jobs from the dashboard
+    public function destroy(JobPosting $job)
+    {
+        if (auth()->user()->role !== 'admin') {
+            return back()->with('error', 'Unauthorized.');
+        }
+        
+        $job->delete();
+        return back()->with('job_status', 'Job deleted successfully!');
     }
 }

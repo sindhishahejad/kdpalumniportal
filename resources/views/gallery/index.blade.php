@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Alpine Data Scope for Lightbox -->
+<!--- Alpine Data Scope for Lightbox --->
 <div x-data="lightbox()" @keydown.escape.window="close()" @keydown.right.window="next()" @keydown.left.window="prev()">
 
     <!-- Official KDP Blue Header Banner -->

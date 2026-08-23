@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Notice: Removed the x-data openModal state since this is read-only now -->
+<!--- Notice: Removed the x-data openModal state since this is read-only now --->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     
     <!-- Header Section -->
@@ -10,7 +10,7 @@
             <h1 class="text-3xl font-serif font-bold text-[#0f172a]">Alumni Job Board</h1>
             <p class="text-gray-500 mt-2 text-sm">Discover career opportunities or hire from the KDP network.</p>
         </div>
-        <!-- Notice: The Post Job button has been permanently moved to the Admin Dashboard -->
+        <!--- Notice: The Post Job button has been permanently moved to the Admin Dashboard --->
     </div>
 
     @if(session('success'))

@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
+    // ✨ NEW: Added the missing index method for the "All Events" page ✨
+    public function index()
+    {
+        // Fetch all events, including ones happening today, ordered by date
+        $events = Event::whereDate('event_date', '>=', today())
+                       ->orderBy('event_date', 'asc')
+                       ->get();
+                       
+        return view('events.index', compact('events'));
+    }
+
     public function show(Event $event)
     {
         return view('events.show', compact('event'));

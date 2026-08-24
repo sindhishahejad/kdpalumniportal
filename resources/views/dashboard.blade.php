@@ -190,7 +190,7 @@
         </div>
     </div>
 
-    <!-- ============================================== -->
+<!-- ============================================== -->
 <!-- EVENTS & GATHERINGS SECTION -->
 <!-- ============================================== -->
 <div class="py-16 bg-gray-50">
@@ -213,17 +213,18 @@
             @forelse($events as $event)
                 <div class="bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-gray-100 flex flex-col relative transition-transform hover:-translate-y-1 duration-300">
                     
-                    <!-- Image Wrapper -->
-                    <div class="relative h-52 w-full rounded-t-2xl overflow-hidden bg-gray-200">
+                    <!-- ✨ Image Wrapper: Removed overflow-hidden so badge isn't cut off ✨ -->
+                    <div class="relative h-52 w-full rounded-t-2xl bg-gray-200">
                         @if($event->image_path)
-                            <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
+                            <!-- ✨ Moved rounded corners directly to the image ✨ -->
+                            <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover rounded-t-2xl">
                         @else
-                            <!-- Placeholder if no image -->
-                            <div class="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700"></div>
+                            <!-- ✨ Moved rounded corners directly to the placeholder ✨ -->
+                            <div class="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700 rounded-t-2xl"></div>
                         @endif
 
-                        <!-- Overlapping Date Badge -->
-                        <div class="absolute -bottom-6 right-6 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-2 flex flex-col items-center justify-center min-w-[70px]">
+                        <!-- ✨ Overlapping Date Badge: Added z-10 so it sits on top ✨ -->
+                        <div class="absolute -bottom-6 right-6 z-10 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-2 flex flex-col items-center justify-center min-w-[70px]">
                             <span class="text-[#f97316] text-[10px] font-extrabold uppercase tracking-widest">{{ $event->event_date->format('M') }}</span>
                             <span class="text-2xl font-black text-[#0f172a] leading-none mt-0.5">{{ $event->event_date->format('d') }}</span>
                         </div>

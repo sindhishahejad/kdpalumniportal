@@ -9,6 +9,10 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
             <span>Print / Save ID Card</span>
         </button>
+
+        <a href="{{ route('id-card.download') }}" class="bg-[#8b0000] hover:bg-[#6b0d0d] text-white font-bold py-2 px-6 rounded-sm shadow transition-colors text-sm uppercase tracking-wider inline-block">
+            Download Official PDF ID Card
+        </a>
         <a href="{{ route('dashboard') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded shadow transition-colors">
             Back to Dashboard
         </a>

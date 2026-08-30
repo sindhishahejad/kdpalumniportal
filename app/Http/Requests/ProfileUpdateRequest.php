@@ -19,6 +19,8 @@ class ProfileUpdateRequest extends FormRequest
     return [
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+        'phone' => ['nullable', 'string', 'max:20'],
+        'blood_group' => ['nullable', 'string', 'max:5'],
         
         // Add all your new fields here:
         'phone' => ['nullable', 'string', 'max:20'],

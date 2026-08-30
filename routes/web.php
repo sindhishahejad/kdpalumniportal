@@ -119,6 +119,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/mentorship', [MentorshipController::class, 'store'])->name('mentorship.store');
 
     Route::get('/id-card', [IdCardController::class, 'show'])->name('id-card.show');
+    Route::get('/id-card/download', [IdCardController::class, 'download'])->name('id-card.download');
 
     // ✨ Giving Back & Donation Portal Routes ✨
     Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');

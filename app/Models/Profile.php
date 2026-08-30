@@ -19,6 +19,7 @@ class Profile extends Model
         'job_title',
         'location',
         'bio',
+        'blood_group',
         'photo_path',
         'is_phone_public',
         'is_email_public',

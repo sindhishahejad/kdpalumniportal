@@ -10,6 +10,7 @@ class Profile extends Model
     use HasFactory;
 
     protected $fillable = [
+        'phone',
         'user_id',
         'graduation_year',
         'degree',
@@ -19,6 +20,13 @@ class Profile extends Model
         'location',
         'bio',
         'photo_path',
+        'is_phone_public',
+        'is_email_public',
+    ];
+
+    protected $casts = [
+        'is_phone_public' => 'boolean',
+        'is_email_public' => 'boolean',
     ];
 
     public function user()

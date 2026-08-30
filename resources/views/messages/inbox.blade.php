@@ -71,23 +71,50 @@
                         </div>
                     </div>
 
-                    <!-- Messages Scroll Area (Properly contained with min-h-0 and flex-1) -->
-                    <div class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col min-h-0" x-ref="chatContainer">
-                        @foreach($messages as $msg)
-                            @php $isMe = $msg->sender_id === Auth::id(); @endphp
-                            <div class="flex w-full {{ $isMe ? 'justify-end' : 'justify-start' }}">
-                                <div class="max-w-[70%] rounded-lg px-4 py-2 text-sm shadow-sm relative group {{ $isMe ? 'bg-[#dcf8c6] text-gray-900 rounded-tr-none' : 'bg-white text-gray-900 rounded-tl-none' }}">
-                                    <p class="text-xs sm:text-sm leading-relaxed break-words">{{ $msg->message }}</p>
-                                    <div class="text-[10px] text-gray-400 text-right mt-1 flex items-center justify-end space-x-1">
-                                        <span>{{ $msg->created_at->format('h:i A') }}</span>
-                                        @if($isMe)
-                                            <span class="text-blue-500 font-bold">✓✓</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                    <!-- Messages Scroll Area with Date Dividers & WhatsApp Ticks -->
+<div class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col min-h-0" x-ref="chatContainer">
+    @php $lastDate = null; @endphp
+    
+    @foreach($messages as $msg)
+        @php 
+            $isMe = $msg->sender_id === Auth::id(); 
+            
+            // Format WhatsApp-style Date Header
+            $msgDate = $msg->created_at->isToday() 
+                ? 'Today' 
+                : ($msg->created_at->isYesterday() ? 'Yesterday' : $msg->created_at->format('d/m/Y'));
+        @endphp
+
+        <!-- Date Separator Pill -->
+        @if($lastDate !== $msgDate)
+            <div class="flex justify-center my-3">
+                <span class="bg-[#e1f3fb] text-gray-600 text-[11px] px-3 py-1 rounded-lg shadow-sm font-medium uppercase tracking-wider">
+                    {{ $msgDate }}
+                </span>
+            </div>
+            @php $lastDate = $msgDate; @endphp
+        @endif
+
+        <!-- Message Bubble -->
+        <div class="flex w-full {{ $isMe ? 'justify-end' : 'justify-start' }}">
+            <div class="max-w-[70%] rounded-lg px-4 py-2 text-sm shadow-sm relative group {{ $isMe ? 'bg-[#dcf8c6] text-gray-900 rounded-tr-none' : 'bg-white text-gray-900 rounded-tl-none' }}">
+                <p class="text-xs sm:text-sm leading-relaxed break-words">{{ $msg->message }}</p>
+                <div class="text-[10px] text-gray-400 text-right mt-1 flex items-center justify-end space-x-1">
+                    <span>{{ $msg->created_at->format('h:i A') }}</span>
+                    @if($isMe)
+                        @if($msg->is_read)
+                            <!-- Double Blue Tick (Seen) -->
+                            <span class="text-blue-500 font-bold tracking-tighter" title="Read">✓✓</span>
+                        @else
+                            <!-- Double Gray Tick (Delivered / Unread) -->
+                            <span class="text-gray-400 font-bold tracking-tighter" title="Delivered">✓✓</span>
+                        @endif
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
 
                     <!-- Sticky Bottom Input Form (Flex-shrink-0 ensures it never gets cut off) -->
                     <div class="p-3 bg-white border-t border-gray-200 flex-shrink-0">

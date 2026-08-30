@@ -14,39 +14,49 @@ class MessageController extends Controller
      * Display WhatsApp-style chat interface.
      */
     public function inbox($userId = null)
-    {
-        $currentUserId = Auth::id();
+{
+    $currentUserId = Auth::id();
 
-        // 1. Get all unique users who have exchanged messages with the authenticated user
-        $conversations = User::where('id', '!=', $currentUserId)
-            ->where(function ($query) use ($currentUserId) {
-                $query->whereHas('sentMessages', function ($q) use ($currentUserId) {
-                    $q->where('recipient_id', $currentUserId);
-                })->orWhereHas('receivedMessages', function ($q) use ($currentUserId) {
-                    $q->where('sender_id', $currentUserId);
-                });
-            })
-            ->get();
+    // Get users with existing messages OR the currently selected user profile
+    $conversations = User::where('id', '!=', $currentUserId)
+        ->where(function ($query) use ($currentUserId, $userId) {
+            $query->whereHas('sentMessages', function ($q) use ($currentUserId) {
+                $q->where('recipient_id', $currentUserId);
+            })->orWhereHas('receivedMessages', function ($q) use ($currentUserId) {
+                $q->where('sender_id', $currentUserId);
+            });
 
-        // If no user is selected yet, default to the first conversation if available
-        if (!$userId && $conversations->isNotEmpty()) {
-            return redirect()->route('messages.inbox', $conversations->first()->id);
-        }
+            // ✨ Ensure a newly clicked user appears in the sidebar immediately ✨
+            if ($userId) {
+                $query->orWhere('id', $userId);
+            }
+        })
+        ->get();
 
-        $activeUser = $userId ? User::findOrFail($userId) : null;
-        $messages = collect();
-
-        if ($activeUser) {
-            // Fetch conversation history between current user and active user
-            $messages = Message::where(function ($q) use ($currentUserId, $activeUser) {
-                $q->where('sender_id', $currentUserId)->where('recipient_id', $activeUser->id);
-            })->orWhere(function ($q) use ($currentUserId, $activeUser) {
-                $q->where('sender_id', $activeUser->id)->where('recipient_id', $currentUserId);
-            })->orderBy('created_at', 'asc')->get();
-        }
-
-        return view('messages.inbox', compact('conversations', 'activeUser', 'messages'));
+    if (!$userId && $conversations->isNotEmpty()) {
+        return redirect()->route('messages.inbox', $conversations->first()->id);
     }
+
+    $activeUser = $userId ? User::findOrFail($userId) : null;
+    $messages = collect();
+
+    if ($activeUser) {
+        // Automatically mark incoming messages from active user as read
+        Message::where('sender_id', $activeUser->id)
+            ->where('recipient_id', $currentUserId)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        // Fetch conversation history
+        $messages = Message::where(function ($q) use ($currentUserId, $activeUser) {
+            $q->where('sender_id', $currentUserId)->where('recipient_id', $activeUser->id);
+        })->orWhere(function ($q) use ($currentUserId, $activeUser) {
+            $q->where('sender_id', $activeUser->id)->where('recipient_id', $currentUserId);
+        })->orderBy('created_at', 'asc')->get();
+    }
+
+    return view('messages.inbox', compact('conversations', 'activeUser', 'messages'));
+}
 
     public function store(Request $request, $recipientId)
     {

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\EventRsvpMail;
+use Illuminate\Support\Facades\Mail;
 
 class EventController extends Controller
 {
@@ -50,6 +53,21 @@ class EventController extends Controller
         ]);
 
         return back()->with('event_status', 'Event created successfully!');
+    }
+
+    public function rsvp(Event $event)
+    {
+        $user = Auth::user();
+
+        // Attach user to event attendees if relationship exists
+        if (method_exists($event, 'attendees')) {
+            $event->attendees()->syncWithoutDetaching([$user->id]);
+        }
+
+        // ✨ Trigger automated email confirmation for event RSVP ✨
+        Mail::to($user->email)->queue(new EventRsvpMail($event, $user));
+
+        return back()->with('event_status', 'RSVP confirmed successfully! A confirmation email has been queued.');
     }
 
     public function destroy(Event $event)

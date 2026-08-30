@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\MentorshipListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\MentorshipRequestMail;
+use Illuminate\Support\Facades\Mail;
 
 class MentorshipController extends Controller
 {
@@ -41,5 +43,19 @@ class MentorshipController extends Controller
         );
 
         return back()->with('status', 'Mentorship profile updated successfully!');
+    }
+
+    public function sendRequest(Request $request, MentorshipListing $listing)
+    {
+        $request->validate([
+            'message' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $mentorUser = $listing->user;
+
+        // ✨ Trigger automated email notification to the mentor ✨
+        Mail::to($mentorUser->email)->queue(new MentorshipRequestMail(Auth::user(), $request->message));
+
+        return back()->with('status', 'Mentorship request sent successfully!');
     }
 }

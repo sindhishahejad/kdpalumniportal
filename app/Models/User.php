@@ -74,6 +74,17 @@ class User extends Authenticatable
     {
         return $this->hasOne(MentorshipListing::class);
     }
+
+    // ✨ Messaging Relationships for WhatsApp-style Inbox ✨
+    public function sentMessages() 
+    { 
+        return $this->hasMany(Message::class, 'sender_id'); 
+    }
+
+    public function receivedMessages() 
+    { 
+        return $this->hasMany(Message::class, 'recipient_id'); 
+    }
     
     // Helper method to check admin status
     public function isAdmin()

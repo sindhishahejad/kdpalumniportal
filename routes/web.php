@@ -13,6 +13,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\OnboardingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
+use Illuminate\Support\Facades\Broadcast;
+
+// ✨ Register the broadcasting authentication route ✨
+Broadcast::routes(['middleware' => ['auth']]);
 
 Route::get('/', function () {
     return view('welcome');

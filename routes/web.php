@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Authentication Routes (Socialite & Email Login) code here.
+// Authentication Routes (Socialite & Email Login)
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -27,9 +27,7 @@ Route::get('/auth/google', [LoginController::class, 'redirectToGoogle'])->name('
 Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 Route::post('/login/email', [LoginController::class, 'loginWithEmail'])->name('login.email');
 
-
-
-// Onboarding Route (Fallback if authenticated user lacks role details.) code here.
+// Onboarding Route
 Route::middleware(['auth'])->group(function () {
     Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
     Route::post('/onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
@@ -39,7 +37,6 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     $role = $request->user()->role;
 
     if ($role === 'admin') {
-        // Admin Dashboard: Fetch albums and events for the managers
         $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
         $events = \App\Models\Event::orderBy('event_date', 'asc')->get();
         $jobs = \App\Models\JobPosting::latest()->get();
@@ -53,7 +50,6 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         return view('dashboards.student');
         
     } elseif ($role === 'alumni') {
-        // Alumni Dashboard: Fetch BOTH jobs ($showcases) and $events!
         $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
         $events = \App\Models\Event::whereDate('event_date', '>=', today())
             ->orderBy('event_date', 'asc')
@@ -63,7 +59,6 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         return view('dashboard', compact('showcases', 'events'));
     }
 
-    // Safety fallback codeline
     return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -79,9 +74,9 @@ Route::delete('/events/{event}', [\App\Http\Controllers\EventController::class, 
 Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show')->middleware(['auth']);
 
 Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
-Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy'); // Add this!
+Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy');
 
-// Standard User Routes code
+// Standard User Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -89,7 +84,10 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/alumni', [AlumniDirectoryController::class, 'index'])->name('alumni.index');
     Route::get('/alumni/{user}', [AlumniDirectoryController::class, 'show'])->name('alumni.show');
-    Route::get('/inbox', [MessageController::class, 'inbox'])->name('messages.inbox');
+    
+    // ✨ Updated WhatsApp-style Inbox Route with optional user ID parameter ✨
+    Route::get('/inbox/{user?}', [MessageController::class, 'inbox'])->name('messages.inbox');
+    
     Route::post('/alumni/{user}/message', [MessageController::class, 'store'])->name('alumni.message');
 
     Route::get('/feed', [PostController::class, 'index'])->name('posts.index');
@@ -111,13 +109,9 @@ Route::middleware('auth')->group(function () {
 // Admin Only Routes 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    
-    // ✨ NEW: Approve User Route ✨
     Route::patch('/users/{user}/approve', [AdminController::class, 'approveUser'])->name('users.approve');
-    
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
-    // Notice routes
     Route::post('/notices', [AdminController::class, 'storeNotice'])->name('notices.store');
     Route::delete('/notices/{notice}', [AdminController::class, 'destroyNotice'])->name('notices.destroy');    
 });

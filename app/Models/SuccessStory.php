@@ -2,13 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SuccessStory extends Model
 {
-    protected $fillable = ['user_id', 'title', 'content', 'image_path', 'is_featured'];
+    use HasFactory;
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = [
+        'title',
+        'alumni_name',
+        'batch_year',
+        'department',
+        'story',
+        'image_path',
+        'is_featured',
+    ];
 }

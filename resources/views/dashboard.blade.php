@@ -136,6 +136,19 @@
                 </div>
             </a>
 
+            <!-- Card 7: Success Stories -->
+<a href="{{ route('stories.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Success Stories" />
+    <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue via-kdp-textblue/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+    <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+        <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Success Stories</h3>
+        <p class="text-sm mb-5 text-blue-100 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Read inspiring career milestones and journeys of KDP alumni.</p>
+        <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-orange-300 transition-colors">
+            Read Stories <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </div>
+    </div>
+</a>
+
         </div>
     </div>
 

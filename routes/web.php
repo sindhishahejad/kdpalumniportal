@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DocumentRequestController;
 use App\Http\Controllers\ContactInquiryController;
+use App\Http\Controllers\SuccessStoryController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -26,7 +27,14 @@ Route::get('/', function () {
 });
 
 // Public Contact Form Submission Route
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 Route::post('/contact', [ContactInquiryController::class, 'store'])->name('contact.store');
+
+// Public Success Stories Route
+Route::get('/success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
 
 // Authentication Routes (Socialite & Email Login)
 Route::get('/login', function () {
@@ -130,14 +138,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');
     Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
 
-    // Public Contact Routes
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-Route::post('/contact', [ContactInquiryController::class, 'store'])->name('contact.store');
-    
-
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');
     Route::post('/documents', [DocumentRequestController::class, 'store'])->name('documents.store');
@@ -159,6 +159,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // ✨ Admin Contact Inquiry Management ✨
     Route::get('/inquiries', [ContactInquiryController::class, 'adminIndex'])->name('inquiries.index');
     Route::put('/inquiries/{inquiry}', [ContactInquiryController::class, 'update'])->name('inquiries.update');
+
+    // ✨ Admin Success Stories Management ✨
+    Route::get('/success-stories', [SuccessStoryController::class, 'adminIndex'])->name('stories.index');
+    Route::post('/success-stories', [SuccessStoryController::class, 'store'])->name('stories.store');
+    Route::delete('/success-stories/{story}', [SuccessStoryController::class, 'destroy'])->name('stories.destroy');
 });
 
 require __DIR__.'/auth.php';

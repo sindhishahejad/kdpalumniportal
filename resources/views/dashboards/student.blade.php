@@ -52,6 +52,15 @@
                     <h3 class="text-[#0f172a] font-bold mb-1">Document Requests</h3>
                     <p class="text-xs text-gray-500 leading-relaxed flex-grow">Request official bonafide certificates and recommendation letters.</p>
                 </a>
+
+                <!-- Action Card: Success Stories -->
+<a href="{{ route('stories.index') }}" class="group p-6 bg-gray-50 rounded-xl border border-gray-100 hover:border-[#0f172a] hover:shadow-md transition-all flex flex-col">
+    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-[#0f172a] group-hover:scale-110 transition-transform">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+    </div>
+    <h3 class="text-[#0f172a] font-bold mb-1">Success Stories</h3>
+    <p class="text-xs text-gray-500 leading-relaxed flex-grow">Get inspired by notable alumni career paths and achievements.</p>
+</a>
             </div>
         </div>
     </div>

@@ -111,6 +111,17 @@
             </a>
         </div>
 
+        <!-- Success Stories Quick Access -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-600 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Success Stories</h3>
+                <p class="text-sm text-gray-500">Highlight alumni achievements and career spotlights on the network.</p>
+            </div>
+            <a href="{{ route('admin.stories.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap">
+                Manage Stories &rarr;
+            </a>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Post a Notice -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

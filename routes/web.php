@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DocumentRequestController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -124,6 +125,10 @@ Route::middleware('auth')->group(function () {
     // ✨ Giving Back & Donation Portal Routes ✨
     Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');
     Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
+
+    // ✨ Document Request Routes ✨
+    Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');
+    Route::post('/documents', [DocumentRequestController::class, 'store'])->name('documents.store');
 });
 
 // Admin Only Routes 
@@ -134,6 +139,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::post('/notices', [AdminController::class, 'storeNotice'])->name('notices.store');
     Route::delete('/notices/{notice}', [AdminController::class, 'destroyNotice'])->name('notices.destroy');    
+
+    // ✨ Admin Document Request Management ✨
+    Route::get('/documents', [DocumentRequestController::class, 'adminIndex'])->name('documents.index');
+    Route::put('/documents/{document}', [DocumentRequestController::class, 'update'])->name('documents.update');
 });
 
 require __DIR__.'/auth.php';

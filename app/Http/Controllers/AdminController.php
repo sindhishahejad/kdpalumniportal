@@ -26,7 +26,7 @@ class AdminController extends Controller
         
         $notices = Notice::latest()->get();
 
-        return view('admin.dashboard', compact('stats', 'users', 'pendingUsers', 'notices'));
+        return view('dashboards.admin', compact('stats', 'users', 'pendingUsers', 'notices'));
     }
 
     // ✨ NEW: Method to approve a user ✨

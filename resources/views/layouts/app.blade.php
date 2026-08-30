@@ -148,6 +148,7 @@
                             <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Jobs</a></li>
                             <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Resources</a></li>
                             <li><a href="{{ route('mentorship.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Mentorship</a></li>
+                            <li><a href="{{ route('documents.index') }}"" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Request Official Documents</a></li>
                         </ul>
                     </div>
                 </div>

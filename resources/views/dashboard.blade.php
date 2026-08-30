@@ -55,7 +55,8 @@
     <!-- 2. PREMIUM ALUMNI SERVICES GRID                -->
     <!-- ============================================== -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Changed to lg:grid-cols-3 to perfectly fit 6 cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
             <!-- Card 1: Profile (Professional Working) -->
             <a href="{{ route('profile.edit') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
@@ -105,6 +106,32 @@
                     <p class="text-sm mb-5 text-orange-50 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Access exclusive academic materials, past papers, and learning resources.</p>
                     <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-blue-900 transition-colors">
                         Access <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 5: ✨ NEW: Document Requests ✨ -->
+            <a href="{{ route('documents.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Official Documents" />
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue via-kdp-textblue/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Document Requests</h3>
+                    <p class="text-sm mb-5 text-blue-100 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Request official transcripts, certificates, and recommendation letters from the administration.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-orange-300 transition-colors">
+                        Request Now <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 6: ✨ NEW: Giving Back / Donations ✨ -->
+            <a href="{{ route('donations.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Charity and Giving Back" />
+                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange via-kdp-orange/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Giving Back</h3>
+                    <p class="text-sm mb-5 text-orange-50 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Support KDP's future by contributing to scholarships, labs, and campus development.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-blue-900 transition-colors">
+                        Contribute <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </div>
                 </div>
             </a>

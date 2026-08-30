@@ -89,6 +89,17 @@
         </div>
         @endif
 
+        <!-- Document Requests Quick Access -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-[#1C3661] flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Document Requests</h3>
+                <p class="text-sm text-gray-500">Manage alumni requests for transcripts, recommendation letters, and certificates.</p>
+            </div>
+            <a href="{{ route('admin.documents.index') }}" class="bg-[#1C3661] hover:bg-blue-800 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap">
+                Manage Requests &rarr;
+            </a>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Post a Notice -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

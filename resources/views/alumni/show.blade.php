@@ -48,8 +48,29 @@
         <div>
             <h3 class="text-xl font-serif font-bold text-[#1C3661] border-b border-gray-200 pb-2 mb-4">Contact Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm items-center mb-6">
-                <div><span class="font-semibold text-gray-600">Email:</span> <span class="text-gray-800">{{ $user->email }}</span></div>
-                <div><span class="font-semibold text-gray-600">Phone:</span> {{ $user->phone ?? 'Not Provided' }}</div>
+                <!-- ✨ Privacy Masked Email ✨ -->
+                <div>
+                    <span class="font-semibold text-gray-600">Email:</span> 
+                    @if(optional($user->profile)->is_email_public || auth()->user()->role === 'admin')
+                        <a href="mailto:{{ $user->email }}" class="text-[#8b0000] hover:underline">{{ $user->email }}</a>
+                    @else
+                        <span class="text-gray-400 italic">Hidden by user</span>
+                    @endif
+                </div>
+                
+                <!-- ✨ Privacy Masked Phone ✨ -->
+                <div>
+                    <span class="font-semibold text-gray-600">Phone:</span> 
+                    @if(optional($user->profile)->is_phone_public || auth()->user()->role === 'admin')
+                        @if($user->phone)
+                            <a href="tel:{{ $user->phone }}" class="text-[#8b0000] hover:underline">{{ $user->phone }}</a>
+                        @else
+                            <span class="text-gray-800">Not Provided</span>
+                        @endif
+                    @else
+                        <span class="text-gray-400 italic">Hidden by user</span>
+                    @endif
+                </div>
             </div>
             
             <button @click="openMessageModal = true" class="inline-flex items-center bg-[#8b0000] hover:bg-[#6b0d0d] text-white font-bold py-2.5 px-6 rounded-sm shadow-md transition-colors text-sm">

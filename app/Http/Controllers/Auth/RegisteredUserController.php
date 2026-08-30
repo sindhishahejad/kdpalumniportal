@@ -62,12 +62,15 @@ class RegisteredUserController extends Controller
             'designation' => $request->designation,
             'work_industry' => $request->work_industry,
             'skills' => $request->skills,
+            // is_approved is automatically false because of our database migration
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
+        // ❌ REMOVED: Auth::login($user); 
+        // We want them to wait for admin approval!
 
-        return redirect(route('dashboard', absolute: false));
+        // ✅ Redirect to login with a status message instead
+        return redirect()->route('login')->with('status', 'Registration successful! Your account is currently pending administrator approval. You will be able to log in once verified.');
     }
 }

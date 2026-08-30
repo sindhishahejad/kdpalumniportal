@@ -157,12 +157,42 @@
                                 </p>
                                 
                                 <!-- Company & Designation Details -->
-                                @if($alum->company || $alum->designation)
-                                    <div class="mt-auto pt-2 border-t border-gray-100">
-                                        <p class="text-[11px] text-gray-700 font-medium truncate">{{ $alum->designation }}</p>
-                                        <p class="text-[11px] text-gray-500 truncate">{{ $alum->company }}</p>
+                                <div class="mt-auto">
+                                    @if($alum->company || $alum->designation)
+                                        <div class="pt-2 border-t border-gray-100">
+                                            <p class="text-[11px] text-gray-700 font-medium truncate">{{ $alum->designation }}</p>
+                                            <p class="text-[11px] text-gray-500 truncate">{{ $alum->company }}</p>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- ✨ Contact Details with Privacy Masking ✨ -->
+                                <div class="pt-3 mt-3 border-t border-gray-100 space-y-1">
+                                    <!-- Email Display -->
+                                    <div class="text-[11px] truncate flex items-center">
+                                        <span class="font-bold text-gray-700 w-4">E:</span>
+                                        @if(optional($alum->profile)->is_email_public || auth()->user()->role === 'admin')
+                                            <a href="mailto:{{ $alum->email }}" class="text-[#8b0000] hover:underline ml-1 truncate">{{ $alum->email }}</a>
+                                        @else
+                                            <span class="text-gray-400 italic ml-1">Hidden</span>
+                                        @endif
                                     </div>
-                                @endif
+                                    
+                                    <!-- Phone Display -->
+                                    <div class="text-[11px] truncate flex items-center">
+                                        <span class="font-bold text-gray-700 w-4">P:</span>
+                                        @if(optional($alum->profile)->is_phone_public || auth()->user()->role === 'admin')
+                                            @if($alum->phone)
+                                                <a href="tel:{{ $alum->phone }}" class="text-[#8b0000] hover:underline ml-1 truncate">{{ $alum->phone }}</a>
+                                            @else
+                                                <span class="text-gray-500 ml-1">N/A</span>
+                                            @endif
+                                        @else
+                                            <span class="text-gray-400 italic ml-1">Hidden</span>
+                                        @endif
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     @empty

@@ -131,6 +131,33 @@
                 </div>
             </div>
 
+            <!-- Privacy Settings -->
+            <div class="mt-8 pt-6 border-t border-gray-100 mb-6">
+                <h3 class="text-xl font-serif font-bold text-[#1C3661] border-b border-gray-200 pb-2 mb-6">Privacy Controls</h3>
+                
+                <div class="space-y-4">
+                    <!-- Phone Toggle -->
+                    <label class="flex items-center cursor-pointer">
+                        <div class="relative">
+                            <input type="checkbox" name="is_phone_public" value="1" class="sr-only peer" {{ optional(auth()->user()->profile)->is_phone_public ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-[#8b0000] transition-colors duration-200"></div>
+                            <div class="absolute left-[2px] top-[2px] bg-white w-5 h-5 rounded-full transition-transform duration-200 peer-checked:translate-x-full"></div>
+                        </div>
+                        <span class="ml-3 text-sm font-medium text-gray-700">Display phone number in public Alumni Directory</span>
+                    </label>
+
+                    <!-- Email Toggle -->
+                    <label class="flex items-center cursor-pointer">
+                        <div class="relative">
+                            <input type="checkbox" name="is_email_public" value="1" class="sr-only peer" {{ optional(auth()->user()->profile)->is_email_public ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-[#8b0000] transition-colors duration-200"></div>
+                            <div class="absolute left-[2px] top-[2px] bg-white w-5 h-5 rounded-full transition-transform duration-200 peer-checked:translate-x-full"></div>
+                        </div>
+                        <span class="ml-3 text-sm font-medium text-gray-700">Display email address in public Alumni Directory</span>
+                    </label>
+                </div>
+            </div>
+
             <!-- Submit Button for Profile -->
             <div class="pt-4 flex justify-end border-b border-gray-200 pb-10">
                 <button type="submit" class="bg-[#8b0000] hover:bg-[#6b0d0d] text-white font-bold py-3 px-8 rounded-sm shadow-md transition-colors text-sm">

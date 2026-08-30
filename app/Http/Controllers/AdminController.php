@@ -13,9 +13,9 @@ class AdminController extends Controller
     public function index()
     {
         $stats = [
-            'total_users' => User::count(),
-            'total_posts' => Post::count(),
-            'total_jobs' => JobPosting::count(),
+            'total_alumni' => User::where('role', 'alumni')->where('is_approved', true)->count(),
+            'pending_jobs' => JobPosting::where('is_active', false)->count(),
+            'active_students' => User::where('role', 'student')->where('is_approved', true)->count(),
         ];
 
         // Fetch pending registrations

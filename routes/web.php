@@ -45,8 +45,18 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
         $events = \App\Models\Event::orderBy('event_date', 'asc')->get();
         $jobs = \App\Models\JobPosting::latest()->get();
+        $pendingUsers = \App\Models\User::where('is_approved', false)->latest()->get();
+        $users = \App\Models\User::where('is_approved', true)->with('profile')->latest()->paginate(10);
+        $notices = \App\Models\Notice::latest()->get();
         
-        return view('dashboards.admin', compact('albums', 'events', 'jobs'));
+        $stats = [
+            'total_alumni' => \App\Models\User::where('role', 'alumni')->where('is_approved', true)->count(),
+            'pending_jobs' => \App\Models\JobPosting::where('is_active', false)->count(),
+            'active_students' => \App\Models\User::where('role', 'student')->where('is_approved', true)->count(),
+        ];
+        
+        return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats'));
+        
         
     } elseif ($role === 'faculty') {
         return view('dashboards.faculty');

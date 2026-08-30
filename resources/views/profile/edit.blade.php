@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('profile.update') }}" class="space-y-10">
+        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-10">
             @csrf
             @method('patch')
 
@@ -37,6 +37,23 @@
             <div>
                 <h3 class="text-xl font-serif font-bold text-[#1C3661] border-b border-gray-200 pb-2 mb-6">Personal Details</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Profile Photo Upload Field -->
+                    <div class="md:col-span-2 flex items-center space-x-4 bg-gray-50 p-4 border border-gray-200 rounded-sm">
+                        <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-200 border border-gray-300 flex items-center justify-center shrink-0">
+                            @if($user->photo_path)
+                                <img src="{{ filter_var($user->photo_path, FILTER_VALIDATE_URL) ? $user->photo_path : asset('storage/' . $user->photo_path) }}" alt="Avatar" class="w-full h-full object-cover">
+                            @else
+                                <span class="text-xl font-bold text-[#1C3661]">{{ substr($user->name, 0, 1) }}</span>
+                            @endif
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Profile Photo (For Smart ID Card)</label>
+                            <input type="file" name="photo" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-sm file:font-semibold file:bg-[#1C3661] file:text-white hover:file:bg-[#122442] cursor-pointer">
+                            @error('photo') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name <span class="text-red-500">*</span></label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}" required class="w-full border border-gray-300 rounded-sm py-2 px-3 focus:outline-none focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] text-sm">
@@ -51,6 +68,16 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
                         <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full border border-gray-300 rounded-sm py-2 px-3 focus:outline-none focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] text-sm">
                         @error('phone') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Blood Group</label>
+                        <select name="blood_group" class="w-full border border-gray-300 rounded-sm py-2 px-3 focus:outline-none focus:border-[#8b0000] focus:ring-1 focus:ring-[#8b0000] text-sm bg-white cursor-pointer">
+                            <option value="">Select Blood Group</option>
+                            @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $bg)
+                                <option value="{{ $bg }}" {{ old('blood_group', $user->blood_group) == $bg ? 'selected' : '' }}>{{ $bg }}</option>
+                            @endforeach
+                        </select>
+                        @error('blood_group') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Current Role</label>

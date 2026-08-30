@@ -1,96 +1,113 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen">
-    <!-- Added id-card-wrapper for targeted print centering -->
-    <div id="id-card-wrapper" class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-6">
+<div class="py-12 bg-gray-100 min-h-[80vh] flex flex-col items-center justify-center">
+    
+    <!-- Action Buttons (Hidden when printing) -->
+    <div class="mb-6 flex space-x-4 print:hidden">
+        <button onclick="window.print()" class="bg-[#2e53a3] hover:bg-blue-800 text-white font-bold py-2 px-6 rounded shadow transition-colors flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Print / Save ID Card</span>
+        </button>
+        <a href="{{ route('dashboard') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded shadow transition-colors">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <!-- ID CARD CONTAINER (JMI Exact Structural Style) -->
+    <div id="id-card" class="w-full max-w-[560px] bg-white rounded-none shadow-2xl overflow-hidden border-2 border-gray-400 relative print:shadow-none print:border-black font-sans">
         
-        <!-- Action Button Above Card -->
-        <div class="w-full max-w-sm flex justify-between items-center px-2">
-            <h2 class="font-serif font-bold text-xl text-[#1C3661]">
-                Digital Identity Card
-            </h2>
-            <button onclick="window.print()" class="px-4 py-2 bg-[#8b0000] hover:bg-[#6b0d0d] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow transition-colors">
-                Print ID Card
-            </button>
+        <!-- HEADER -->
+        <div class="bg-[#2e53a3] text-white pt-3 pb-2 px-4 text-center border-b-2 border-orange-500 relative">
+            <!-- Optional Logo in Header Corner -->
+            <div class="absolute left-4 top-2.5 w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden shadow">
+                <img src="{{ asset('images/five.png') }}" alt="Logo" class="w-8 h-8 object-contain" onerror="this.src='https://picsum.photos/id/147/40/40'">
+            </div>
+            
+            <h1 class="text-sm sm:text-base font-black tracking-wider uppercase">ALUMNI ASSOCIATION OF K. D. POLYTECHNIC</h1>
+            <p class="text-xs sm:text-sm font-bold tracking-wide text-gray-200 mt-0.5">PATAN, GUJARAT - 384265</p>
+            
+            <div class="mt-2 bg-white text-[#2e53a3] font-extrabold text-xs py-1 tracking-widest uppercase border-t border-b border-gray-300 shadow-inner">
+                ALUMNI MEMBERSHIP CARD
+            </div>
         </div>
 
-        <!-- ID Card Container (Exact Physical Card Replica) -->
-        <div class="bg-white w-80 md:w-96 rounded-xl shadow-xl overflow-hidden border border-gray-300 print:shadow-none print:border-gray-400 relative">
+        <!-- BODY CONTENT -->
+        <div class="p-6 bg-white flex items-stretch gap-6 relative">
             
-            <!-- Card Header -->
-            <div class="pt-5 pb-3 px-4 text-center bg-white border-b border-gray-100 relative">
-                <!-- College Logo Placeholder -->
-                <div class="absolute left-4 top-4 w-12 h-12 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-xs shadow-inner">
-                    KDP
-                </div>
+            @php
+    $photoPath = $user->photo_path ?? null;
+@endphp
+
+<!-- PHOTO BOX (Left) with Pencil Edit Overlay -->
+<div class="shrink-0 flex items-center relative">
+    <div class="w-36 h-44 bg-gray-100 rounded-none overflow-hidden border-2 border-gray-400 shadow-sm flex items-center justify-center relative group">
+        @if($photoPath)
+            <img src="{{ filter_var($photoPath, FILTER_VALIDATE_URL) ? $photoPath : asset('storage/' . $photoPath) }}" alt="Profile Photo" class="w-full h-full object-cover">
+        @else
+            <!-- Fallback Initials -->
+            <div class="w-full h-full bg-blue-50 text-[#2e53a3] font-bold text-4xl flex items-center justify-center uppercase">
+                {{ collect(explode(' ', $user->name))->map(fn($seg) => mb_substr($seg, 0, 1))->join('') }}
+            </div>
+        @endif
+
+        <!-- ✨ Pencil Edit Overlay Button ✨ -->
+        <a href="{{ route('profile.edit') }}" title="Update Profile Photo" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white print:hidden">
+            <svg class="w-8 h-8 mb-1 bg-[#2e53a3] p-1.5 rounded-full shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+            </svg>
+            <span class="text-[11px] font-bold tracking-wider uppercase bg-black/60 px-2 py-0.5 rounded">Change Photo</span>
+        </a>
+    </div>
+</div>
+
+            <!-- DETAILS (Right) -->
+            <div class="flex-1 flex flex-col justify-center">
                 
-                <h3 class="font-sans font-extrabold text-lg text-blue-900 tracking-tight leading-none">K. D. POLYTECHNIC</h3>
-                <h4 class="font-sans font-bold text-base text-blue-900 tracking-tight leading-snug mt-0.5">PATAN</h4>
-                <p class="text-[10px] font-bold text-[#8b0000] italic mt-0.5">(GOVERNMENT OF GUJARAT)</p>
-                <p class="text-[10px] text-gray-600 font-medium leading-tight mt-1">Opp. T.B. Hospital, HNGU Road,<br>Patan-384265</p>
+                <!-- Name & Membership Status -->
+                <div class="mb-3">
+                    <h2 class="text-xl font-extrabold text-black uppercase tracking-tight leading-none pb-1 border-b border-black">
+                        {{ $user->name }}
+                    </h2>
+                    <p class="text-sm font-bold text-gray-700 mt-1 tracking-wide">Lifetime Member</p>
+                </div>
+
+                <!-- Field Grid with Colons -->
+                <div class="space-y-1.5 text-xs sm:text-sm font-medium text-gray-900">
+                    <div class="flex">
+                        <span class="w-32 font-bold text-black">Alumni ID</span>
+                        <span class="font-bold text-[#2e53a3]">: KDP-{{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-32 font-bold text-black">Department</span>
+                        <span class="font-semibold">: {{ $user->profile->department ?? $user->department ?? 'Computer Engineering' }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-32 font-bold text-black">Contact No.</span>
+                        <span class="font-semibold">: {{ $user->profile->phone ?? $user->phone ?? '9265105831' }}</span>
+                    </div>
+                    <div class="flex">
+                        <span class="w-32 font-bold text-black">Blood Grp.</span>
+                        <span class="font-semibold">: {{ $user->blood_group ?? 'N/A' }}</span>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Curved Ribbon Divider with Photo -->
-            <div class="relative bg-white pt-2 pb-4 flex flex-col items-center">
-                <!-- Decorative Blue/Maroon Ribbon Graphic Area -->
-                <div class="w-full h-8 bg-gradient-to-r from-blue-900 via-red-800 to-blue-900 absolute top-0 opacity-90 transform skew-y-1"></div>
+        </div>
 
-                <!-- Profile Photo Box -->
-                <div class="relative z-10 w-28 h-32 bg-gray-100 rounded-sm border-2 border-amber-400 shadow-md overflow-hidden mt-2">
-                    @if(optional($user->profile)->photo_path)
-                        <img src="{{ asset('storage/' . $user->profile->photo_path) }}" alt="Profile Photo" class="w-full h-full object-cover">
-                    @else
-                        <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 font-serif font-bold text-2xl uppercase">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Full Name in Bold Red -->
-                <h2 class="text-sm font-bold text-[#8b0000] uppercase tracking-wide text-center mt-3 px-4">
-                    {{ $user->name }}
-                </h2>
+        <!-- CARD FOOTER -->
+        <div class="bg-white px-6 py-3 border-t-2 border-gray-300 flex justify-between items-end text-xs font-bold text-black">
+            <div>
+                <span>Member Since : {{ $user->created_at->format('d/m/Y') }}</span>
             </div>
-
-            <!-- Details Section -->
-            <div class="px-6 pb-4 text-xs space-y-1.5 text-gray-800 font-medium">
-                <div class="grid grid-cols-12 gap-1">
-                    <span class="col-span-4 text-gray-600 font-semibold">Programme</span>
-                    <span class="col-span-8 font-bold text-black uppercase">: {{ optional($user->profile)->department ?? ($user->department ?? 'COMPUTER ENGINEERING') }}</span>
+            <div class="text-right">
+                <!-- Handwritten Style Signature Mockup -->
+                <div class="font-serif italic text-blue-900 text-base font-bold tracking-widest -mb-1 select-none">
+                    A. S. Patel
                 </div>
-                <div class="grid grid-cols-12 gap-1">
-                    <span class="col-span-4 text-gray-600 font-semibold">Enrollment No</span>
-                    <span class="col-span-8 font-bold text-black uppercase">: {{ $user->enrollment_no ?? '24631030' . str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</span>
-                </div>
-                <div class="grid grid-cols-12 gap-1">
-                    <span class="col-span-4 text-gray-600 font-semibold">Mobile</span>
-                    <span class="col-span-8 font-bold text-black">: {{ $user->phone ?? '9316751056' }}</span>
-                </div>
-                <div class="grid grid-cols-12 gap-1">
-                    <span class="col-span-4 text-gray-600 font-semibold">Date of Birth</span>
-                    <span class="col-span-8 font-bold text-black">: {{ optional($user->profile)->dob ?? '23-09-2008' }}</span>
-                </div>
-                <div class="grid grid-cols-12 gap-1">
-                    <span class="col-span-4 text-gray-600 font-semibold">Blood Group</span>
-                    <span class="col-span-8 font-bold text-red-600">: O+</span>
-                </div>
-                <div class="grid grid-cols-12 gap-1 items-start">
-                    <span class="col-span-4 text-gray-600 font-semibold">Address</span>
-                    <span class="col-span-8 font-bold text-black leading-tight">: {{ optional($user->profile)->address ?? '6/A HARSIDDHNAGAR SOCIETY, VISNAGAR ROAD, MAHESANA' }}</span>
-                </div>
-            </div>
-
-            <!-- Signatures Footer -->
-            <div class="px-6 pb-6 pt-4 flex justify-between items-end text-[10px] text-gray-700 font-bold border-t border-gray-100">
-                <div>
-                    <div class="h-6"></div>
-                    <span>Student Sign</span>
-                </div>
-                <div class="text-center">
-                    <!-- Simulated Principal Signature -->
-                    <div class="font-serif italic text-blue-900 text-sm tracking-widest transform -rotate-6">Sign</div>
-                    <span>Sign of Principal</span>
+                <div class="border-t border-black pt-0.5 tracking-widest text-[11px] font-black uppercase">
+                    PRESIDENT
                 </div>
             </div>
         </div>
@@ -98,34 +115,24 @@
     </div>
 </div>
 
+<!-- Print Stylesheet Customizations -->
 <style>
-    @media print {
-        @page {
-            margin: 0mm; 
-            size: portrait;
-        }
-        body {
-            margin: 0;
-            background-color: white;
-        }
-        body * {
-            visibility: hidden;
-        }
-        #id-card-wrapper, #id-card-wrapper * {
-            visibility: visible;
-        }
-        #id-card-wrapper {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        button {
-            display: none !important;
-        }
+@media print {
+    body * {
+        visibility: hidden;
     }
+    #id-card, #id-card * {
+        visibility: visible;
+    }
+    #id-card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: 100% !important;
+        border: 2px solid black !important;
+        box-shadow: none !important;
+    }
+}
 </style>
 @endsection

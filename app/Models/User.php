@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
+        'blood_group',
         'degree',
         'department',
         'year_joining',

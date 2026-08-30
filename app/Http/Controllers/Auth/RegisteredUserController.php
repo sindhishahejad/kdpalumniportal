@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -36,6 +37,8 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string', 'in:alumni,student,faculty'],
             'phone' => ['required', 'string', 'max:255'],
+            'blood_group' => ['nullable', 'string', 'max:10'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'entry_no' => ['required', 'string', 'max:255'],
             'degree' => ['required', 'string', 'max:255'],
             'department' => ['required', 'string', 'max:255'],
@@ -47,12 +50,19 @@ class RegisteredUserController extends Controller
             'skills' => ['required', 'string', 'max:255'],
         ]);
 
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('profile-photos', 'public');
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'phone' => $request->phone,
+            'blood_group' => $request->blood_group,
+            'photo_path' => $photoPath,
             'entry_no' => $request->entry_no,
             'degree' => $request->degree,
             'department' => $request->department,

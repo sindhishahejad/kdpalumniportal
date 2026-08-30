@@ -30,7 +30,7 @@ class ProfileController extends Controller
         $user = $request->user();
 
         // 1. Fill the User model with ALL validated data 
-        // (This automatically includes name, email, phone, company, skills, etc.)
+        // (Includes name, email, phone, blood_group, company, skills, etc.)
         $user->fill($request->validated());
 
         // 2. Handle Email Verification if the email was changed
@@ -38,14 +38,14 @@ class ProfileController extends Controller
             $user->email_verified_at = null;
         }
 
-        // 3. Handle Profile Photo Upload (Optional: If you add a photo_path column to the users table later)
+        // 3. Handle Profile Photo Upload
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+                'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             ]);
             
             // Delete old photo from storage if a new one is uploaded
-            if (isset($user->photo_path) && Storage::disk('public')->exists($user->photo_path)) {
+            if (!empty($user->photo_path) && Storage::disk('public')->exists($user->photo_path)) {
                 Storage::disk('public')->delete($user->photo_path);
             }
 
@@ -56,7 +56,6 @@ class ProfileController extends Controller
         $user->save();
 
         // 5. Update the privacy toggles in the associated profiles table
-        // We use $request->has() because unchecked HTML checkboxes do not send any data
         $user->profile()->updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -80,7 +79,7 @@ class ProfileController extends Controller
         $user = $request->user();
 
         // Delete profile photo from storage before deleting user
-        if (isset($user->photo_path) && Storage::disk('public')->exists($user->photo_path)) {
+        if (!empty($user->photo_path) && Storage::disk('public')->exists($user->photo_path)) {
             Storage::disk('public')->delete($user->photo_path);
         }
 

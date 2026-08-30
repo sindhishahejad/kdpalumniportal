@@ -15,11 +15,11 @@
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-4xl">
         <div class="bg-white py-10 px-4 shadow-xl sm:rounded-sm sm:px-10 border-t-4 border-[#8b0000]">
             
-            <form method="POST" action="{{ route('register') }}" class="space-y-10">
+            <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-10">
                 @csrf
 
                 <!-- ========================================== -->
-                <!-- SECTION 1: ACCOUNT DETAILS                 -->
+                <!-- SECTION 1: ACCOUNT DETAILS                -->
                 <!-- ========================================== -->
                 <div>
                     <h3 class="text-lg font-serif font-bold text-[#1C3661] border-b border-gray-200 pb-2 mb-6">Account Details</h3>
@@ -67,7 +67,26 @@
                                 </svg>
                             </button>
                         </div>
-                        
+
+                        <!-- Blood Group -->
+                        <div>
+                            <label class="block text-[13px] text-gray-600 mb-1">Blood Group</label>
+                            <select name="blood_group" class="w-full border-b border-gray-300 py-1.5 text-gray-900 focus:outline-none focus:border-[#8b0000] bg-transparent text-[15px] cursor-pointer">
+                                <option value="">Select Blood Group</option>
+                                @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $bg)
+                                    <option value="{{ $bg }}" {{ old('blood_group') == $bg ? 'selected' : '' }}>{{ $bg }}</option>
+                                @endforeach
+                            </select>
+                            @error('blood_group') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Profile Photo -->
+                        <div>
+                            <label class="block text-[13px] text-gray-600 mb-1">Profile Photo (For Smart ID Card)</label>
+                            <input type="file" name="photo" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-semibold file:bg-[#1C3661] file:text-white hover:file:bg-[#122442] cursor-pointer">
+                            @error('photo') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
                         <div class="md:col-span-2 flex space-x-4">
                             <div class="w-1/3 md:w-1/4">
                                 <label class="block text-[13px] text-gray-600 mb-1">Code</label>

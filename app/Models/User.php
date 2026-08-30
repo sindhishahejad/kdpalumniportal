@@ -86,6 +86,11 @@ class User extends Authenticatable
     { 
         return $this->hasMany(Message::class, 'recipient_id'); 
     }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
     
     // Helper method to check admin status
     public function isAdmin()

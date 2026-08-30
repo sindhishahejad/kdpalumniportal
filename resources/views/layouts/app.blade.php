@@ -134,7 +134,7 @@
             <!-- Desktop Nav Links -->
             <div class="hidden md:flex flex-wrap justify-center items-center h-14 space-x-6 lg:space-x-10">
                 <a href="{{ route('dashboard') ?? '#' }}" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">HOME</a>
-                <a href="#" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">GIVING BACK</a>
+                <a href="{{ route('donations.index') }}" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">GIVING BACK</a>
                 <a href="{{ route('id-card.show') }}" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">SMART I-CARD</a>
                 
                 <!-- Services Dropdown -->

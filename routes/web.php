@@ -14,6 +14,7 @@ use App\Http\Controllers\OnboardingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\DonationController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -59,7 +60,7 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
             ->orderBy('event_date', 'asc')
             ->limit(3)
             ->get();
-                                  
+                                
         return view('dashboard', compact('showcases', 'events'));
     }
 
@@ -108,6 +109,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/mentorship', [MentorshipController::class, 'store'])->name('mentorship.store');
 
     Route::get('/id-card', [IdCardController::class, 'show'])->name('id-card.show');
+
+    // ✨ Giving Back & Donation Portal Routes ✨
+    Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');
+    Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
 });
 
 // Admin Only Routes 

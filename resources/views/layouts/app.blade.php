@@ -154,7 +154,7 @@
                 </div>
 
                 <a href="{{ route('gallery.index') }}" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">GALLERY</a>
-                <a href="#" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">CONTACT</a>
+                <a href="{{ route('contact') }}" class="text-gray-900 hover:text-kdp-topbar text-[14px] font-semibold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 border-transparent hover:border-kdp-topbar">CONTACT</a>
             </div>
 
             <!-- Profile Dropdown (Desktop Right) -->

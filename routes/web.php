@@ -16,6 +16,7 @@ use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DocumentRequestController;
+use App\Http\Controllers\ContactInquiryController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -23,6 +24,9 @@ Broadcast::routes(['middleware' => ['auth']]);
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Public Contact Form Submission Route
+Route::post('/contact', [ContactInquiryController::class, 'store'])->name('contact.store');
 
 // Authentication Routes (Socialite & Email Login)
 Route::get('/login', function () {
@@ -126,6 +130,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');
     Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
 
+    // Public Contact Routes
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::post('/contact', [ContactInquiryController::class, 'store'])->name('contact.store');
+    
+
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');
     Route::post('/documents', [DocumentRequestController::class, 'store'])->name('documents.store');
@@ -143,6 +155,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // ✨ Admin Document Request Management ✨
     Route::get('/documents', [DocumentRequestController::class, 'adminIndex'])->name('documents.index');
     Route::put('/documents/{document}', [DocumentRequestController::class, 'update'])->name('documents.update');
+
+    // ✨ Admin Contact Inquiry Management ✨
+    Route::get('/inquiries', [ContactInquiryController::class, 'adminIndex'])->name('inquiries.index');
+    Route::put('/inquiries/{inquiry}', [ContactInquiryController::class, 'update'])->name('inquiries.update');
 });
 
 require __DIR__.'/auth.php';

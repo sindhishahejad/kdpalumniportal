@@ -55,12 +55,11 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     } elseif ($role === 'alumni') {
         // Alumni Dashboard: Fetch BOTH jobs ($showcases) and $events!
         $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
-        
-        $events = \App\Models\Event::where('event_date', '>=', now())
-                                   ->orderBy('event_date', 'asc')
-                                   ->take(3)
-                                   ->get();
-                                   
+        $events = \App\Models\Event::whereDate('event_date', '>=', today())
+            ->orderBy('event_date', 'asc')
+            ->limit(3)
+            ->get();
+                                  
         return view('dashboard', compact('showcases', 'events'));
     }
 
@@ -68,7 +67,6 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/gallery', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 Route::post('/gallery/upload', [\App\Http\Controllers\GalleryController::class, 'store'])->name('gallery.store')->middleware(['auth']);
 Route::get('/gallery/{album}/edit', [\App\Http\Controllers\GalleryController::class, 'edit'])->name('gallery.edit')->middleware(['auth']);
@@ -113,6 +111,10 @@ Route::middleware('auth')->group(function () {
 // Admin Only Routes 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    
+    // ✨ NEW: Approve User Route ✨
+    Route::patch('/users/{user}/approve', [AdminController::class, 'approveUser'])->name('users.approve');
+    
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
     // Notice routes

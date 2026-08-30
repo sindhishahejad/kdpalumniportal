@@ -18,10 +18,22 @@ class AdminController extends Controller
             'total_jobs' => JobPosting::count(),
         ];
 
-        $users = User::with('profile')->latest()->paginate(10);
+        // Fetch pending registrations
+        $pendingUsers = User::where('is_approved', false)->latest()->get();
+        
+        // Fetch approved active users
+        $users = User::where('is_approved', true)->with('profile')->latest()->paginate(10);
+        
         $notices = Notice::latest()->get();
 
-        return view('admin.dashboard', compact('stats', 'users', 'notices'));
+        return view('admin.dashboard', compact('stats', 'users', 'pendingUsers', 'notices'));
+    }
+
+    // ✨ NEW: Method to approve a user ✨
+    public function approveUser(User $user)
+    {
+        $user->update(['is_approved' => true]);
+        return back()->with('status', "{$user->name}'s account has been approved and activated.");
     }
 
     public function destroyUser(User $user)

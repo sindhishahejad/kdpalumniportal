@@ -35,6 +35,58 @@
                 </div>
             </div>
 
+            <!-- ✨ PENDING REGISTRATIONS QUEUE ✨ -->
+            @if($pendingUsers->count() > 0)
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-t-4 border-yellow-500">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    Pending Registrations 
+                    <span class="ml-3 bg-yellow-100 text-yellow-800 text-xs font-extrabold px-3 py-1 rounded-full">{{ $pendingUsers->count() }} Requires Action</span>
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Role / Dept</th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Decision</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach ($pendingUsers as $pending)
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm font-bold text-gray-900">{{ $pending->name }}</div>
+                                        <div class="text-xs text-gray-500">{{ $pending->email }} • {{ $pending->phone }}</div>
+                                        <div class="text-xs text-gray-500 mt-1">ID/Roll: {{ $pending->entry_no }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 capitalize">{{ $pending->role }}</span>
+                                        <div class="text-xs text-gray-600 mt-1">{{ $pending->department ?? 'N/A' }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end gap-2">
+                                            <!-- Approve Form -->
+                                            <form method="POST" action="{{ route('admin.users.approve', $pending) }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-sm text-xs font-bold transition-colors">Approve</button>
+                                            </form>
+                                            <!-- Reject Form (Uses the existing destroy route) -->
+                                            <form method="POST" action="{{ route('admin.users.destroy', $pending) }}" onsubmit="return confirm('Reject and delete this applicant forever?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-sm text-xs font-bold transition-colors">Reject</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Post a Notice -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -72,9 +124,9 @@
                     </div>
                 </div>
 
-                <!-- User Management Table -->
+                <!-- Active User Management Table -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">User Management</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Approved Users</h3>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
@@ -95,12 +147,12 @@
                                             @if($user->isAdmin())
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Admin</span>
                                             @else
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">User</span>
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 capitalize">{{ $user->role }}</span>
                                             @endif
                                         </td>
                                         <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
                                             @if(!$user->isAdmin())
-                                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Delete this user?');">
+                                                <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Delete this user completely?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-600 hover:text-red-900">Remove</button>

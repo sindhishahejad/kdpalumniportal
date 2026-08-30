@@ -55,6 +55,16 @@ class ProfileController extends Controller
         // 4. Save everything directly to the users table
         $user->save();
 
+        // 5. Update the privacy toggles in the associated profiles table
+        // We use $request->has() because unchecked HTML checkboxes do not send any data
+        $user->profile()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'is_phone_public' => $request->has('is_phone_public'),
+                'is_email_public' => $request->has('is_email_public'),
+            ]
+        );
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 

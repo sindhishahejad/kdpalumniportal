@@ -18,6 +18,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DocumentRequestController;
 use App\Http\Controllers\ContactInquiryController;
 use App\Http\Controllers\SuccessStoryController;
+use App\Http\Controllers\ProjectPitchController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -141,6 +142,11 @@ Route::middleware('auth')->group(function () {
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');
     Route::post('/documents', [DocumentRequestController::class, 'store'])->name('documents.store');
+
+    // Project Incubation Routes
+    Route::get('/incubation', [ProjectPitchController::class, 'index'])->name('pitches.index');
+    Route::get('/incubation/pitch', [ProjectPitchController::class, 'create'])->name('pitches.create');
+    Route::post('/incubation/pitch', [ProjectPitchController::class, 'store'])->name('pitches.store');
 });
 
 // Admin Only Routes 

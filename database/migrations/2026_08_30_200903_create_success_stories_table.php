@@ -6,25 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+    public function up(): void
     {
-    Schema::create('success_stories', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-        $table->string('title'); // e.g., "Secured Placement at TCS"
-        $table->text('content');
-        $table->string('image_path')->nullable();
-        $table->boolean('is_featured')->default(false);
-        $table->timestamps();
+        Schema::create('success_stories', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('alumni_name');
+            $table->string('batch_year');
+            $table->string('department');
+            $table->text('story');
+            $table->string('image_path')->nullable();
+            $table->boolean('is_featured')->default(false);
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('success_stories');

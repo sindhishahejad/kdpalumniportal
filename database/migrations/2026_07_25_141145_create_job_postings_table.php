@@ -1,3 +1,5 @@
+<?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +14,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('company');
             $table->string('location')->nullable();
-            $table->string('employment_type')->nullable(); // e.g., Full-time, Internship here.
+            $table->string('employment_type')->nullable();
             $table->text('description')->nullable();
             $table->string('application_link_or_email')->nullable();
             $table->boolean('is_active')->default(true);

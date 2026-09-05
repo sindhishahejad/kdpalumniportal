@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -17,10 +14,19 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // KDP Alumni Portal Custom Fields
+            $table->string('role')->default('student'); // admin, alumni, student, faculty
+            $table->boolean('is_approved')->default(false);
+            $table->string('phone')->nullable();
+            $table->string('entry_no')->nullable(); // Roll No or Alumni ID
+            $table->string('department')->nullable();
+            
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // Leave the password_reset_tokens and sessions tables below intact as they are in your file
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -37,9 +43,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

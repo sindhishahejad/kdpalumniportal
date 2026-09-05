@@ -19,6 +19,7 @@ use App\Http\Controllers\DocumentRequestController;
 use App\Http\Controllers\ContactInquiryController;
 use App\Http\Controllers\SuccessStoryController;
 use App\Http\Controllers\ProjectPitchController;
+use App\Http\Controllers\LabController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -147,6 +148,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/incubation', [ProjectPitchController::class, 'index'])->name('pitches.index');
     Route::get('/incubation/pitch', [ProjectPitchController::class, 'create'])->name('pitches.create');
     Route::post('/incubation/pitch', [ProjectPitchController::class, 'store'])->name('pitches.store');
+
+    Route::get('/labs', [LabController::class, 'index'])->name('labs.index');
+    Route::get('/labs/{lab}', [LabController::class, 'show'])->name('labs.show');
+    Route::get('/labs-manage/create', [LabController::class, 'create'])->name('labs.create');
+    Route::post('/labs-manage', [LabController::class, 'store'])->name('labs.store');
 });
 
 // Admin Only Routes 

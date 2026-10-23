@@ -111,20 +111,6 @@
             </div>
         </div>
 
-        <!-- Campus Time-Machine & Landmark Spots Quick Access -->
-        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-amber-600 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xl">🏛️</span>
-                    <h3 class="text-xl font-bold text-gray-900">Campus Time-Machine &amp; Landmark Spots</h3>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">Dynamic Map &amp; Vault</span>
-                </div>
-                <p class="text-sm text-gray-500 mt-1">Manage heritage landmarks, update 'Then vs Now' archival photos, adjust blueprint map coordinates, and moderate alumni stories.</p>
-            </div>
-            <a href="{{ route('admin.spots.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap shadow-sm">
-                Manage Landmark Spots &rarr;
-            </a>
-        </div>
 
         <!-- Document Requests Quick Access -->
         <div class="bg-white rounded-lg shadow p-6 border-l-4 border-[#1C3661] flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -311,49 +297,255 @@
             </div>
         </div>
 
-        <!-- GALLERY MANAGER -->
-        <div class="mt-10 p-8 bg-gray-50 rounded-[20px] border border-gray-200">
-            <div class="mb-6">
-                <h2 class="text-2xl font-serif font-bold text-[#0f172a]">Manage Gallery</h2>
-                <p class="text-gray-500 text-sm mt-1">Create new sections or edit existing memories.</p>
+        <!-- GALLERY & CAMPUS TIME-MACHINE MANAGER HUB -->
+        <div id="gallery-hub" x-data="{ galleryTab: 'spots' }" class="mt-10 p-6 sm:p-8 bg-gray-50 rounded-[20px] border border-gray-200 space-y-6">
+            
+            <!-- Hub Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-5">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🏛️</span>
+                        <h2 class="text-2xl font-serif font-bold text-[#0f172a]">Manage Gallery &amp; Campus Time-Machine</h2>
+                        <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 text-[#1c3272] rounded-full">Unified Vault</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">
+                        Control both the interactive <strong>Campus Time-Machine ("Then vs Now" &amp; Nostalgia Blueprint Map)</strong> and traditional <strong>Photo Albums</strong>.
+                    </p>
+                </div>
+                
+                <div class="flex items-center gap-2.5 flex-wrap">
+                    <a href="{{ route('gallery.index') }}" target="_blank" class="px-3.5 py-2 text-xs font-bold text-[#1c3272] bg-white hover:bg-blue-50 border border-blue-200 rounded-xl transition-all shadow-xs flex items-center gap-1.5">
+                        <span>👁️</span> Public Time-Machine &rarr;
+                    </a>
+                    <a href="{{ route('admin.spots.index') }}" class="px-3.5 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition-all shadow-xs flex items-center gap-1.5">
+                        <span>⚙️</span> Full Landmark Editor &rarr;
+                    </a>
+                </div>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- Stats Ribbon -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-2xs">
+                    <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Landmark Spots</span>
+                    <span class="text-xl font-black text-[#1c3272]">{{ ($spots ?? collect())->count() }} Active</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-2xs">
+                    <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Blueprint Layout</span>
+                    <span class="text-xl font-black text-emerald-600">Patan Calibrated</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-2xs">
+                    <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Photo Albums</span>
+                    <span class="text-xl font-black text-[#0f172a]">{{ ($albums ?? collect())->count() }} Sections</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-2xs">
+                    <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Pinned Memories</span>
+                    <span class="text-xl font-black text-[#f97316]">{{ ($recentStories ?? collect())->count() }} Stories</span>
+                </div>
+            </div>
+
+            <!-- Sub-Navigation Tabs -->
+            <div class="flex items-center gap-2 border-b border-gray-200 pb-2 overflow-x-auto">
+                <button type="button" 
+                        @click="galleryTab = 'spots'"
+                        :class="galleryTab === 'spots' ? 'bg-[#1c3272] text-white shadow-sm' : 'text-slate-600 bg-white hover:bg-slate-100 border border-gray-200'"
+                        class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0">
+                    <span>🏛️</span>
+                    <span>Campus Time-Machine Spots ({{ ($spots ?? collect())->count() }})</span>
+                </button>
+
+                <button type="button" 
+                        @click="galleryTab = 'albums'"
+                        :class="galleryTab === 'albums' ? 'bg-[#1c3272] text-white shadow-sm' : 'text-slate-600 bg-white hover:bg-slate-100 border border-gray-200'"
+                        class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0">
+                    <span>📸</span>
+                    <span>Event Photo Albums ({{ ($albums ?? collect())->count() }})</span>
+                </button>
+
+                <button type="button" 
+                        @click="galleryTab = 'stories'"
+                        :class="galleryTab === 'stories' ? 'bg-[#1c3272] text-white shadow-sm' : 'text-slate-600 bg-white hover:bg-slate-100 border border-gray-200'"
+                        class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shrink-0">
+                    <span>✍️</span>
+                    <span>Pinned Throwback Memories ({{ ($recentStories ?? collect())->count() }})</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: CAMPUS TIME-MACHINE & LANDMARK SPOTS -->
+            <div x-show="galleryTab === 'spots'" class="space-y-5">
+                <div class="bg-blue-50/60 border border-blue-200 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h4 class="font-bold text-sm text-[#1c3272] flex items-center gap-1.5">
+                            <span>🗺️</span> K. D. Polytechnic Authentic Campus Blueprint &amp; "Then vs Now" Spots
+                        </h4>
+                        <p class="text-xs text-slate-600 mt-0.5">
+                            Each spot below is mapped to its exact geographic pin coordinates on the campus layout and displays side-by-side archival comparison photos.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a href="{{ route('admin.spots.index') }}" class="px-3.5 py-1.5 rounded-lg bg-[#1c3272] text-white text-xs font-bold hover:bg-blue-900 transition-colors shadow-xs">
+                            + Add / Calibrate Spot
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Spot Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @forelse($spots ?? [] as $spot)
+                        <div class="bg-white rounded-xl p-4 border border-gray-200 hover:border-gray-300 shadow-2xs flex flex-col justify-between space-y-3 transition-all">
+                            
+                            <!-- Split Photo Thumbnails -->
+                            <div class="grid grid-cols-2 gap-1.5 aspect-[16/9] rounded-lg overflow-hidden bg-slate-900 relative">
+                                <div class="relative overflow-hidden">
+                                    <img src="{{ $spot->then_photo_path }}" class="w-full h-full object-cover filter sepia-[0.3] contrast-125" alt="Then">
+                                    <span class="absolute bottom-1 left-1 bg-amber-950/80 text-amber-200 px-1.5 py-0.5 rounded text-[8px] font-black">
+                                        THEN '{{ substr($spot->then_year, -2) }}
+                                    </span>
+                                </div>
+                                <div class="relative overflow-hidden">
+                                    <img src="{{ $spot->now_photo_path }}" class="w-full h-full object-cover" alt="Now">
+                                    <span class="absolute bottom-1 right-1 bg-slate-900/80 text-emerald-400 px-1.5 py-0.5 rounded text-[8px] font-black">
+                                        NOW '{{ substr($spot->now_year, -2) }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Info -->
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest bg-orange-100 text-orange-800 rounded-full">
+                                        {{ $spot->category }}
+                                    </span>
+                                    <span class="text-[10px] font-mono text-slate-400">
+                                        Pin: {{ $spot->x_percent }}%, {{ $spot->y_percent }}%
+                                    </span>
+                                </div>
+                                <h4 class="font-bold text-sm text-[#0f172a] leading-tight">
+                                    {{ $spot->name }}
+                                </h4>
+                                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                    {{ $spot->description }}
+                                </p>
+                            </div>
+
+                            <!-- Footer & Action -->
+                            <div class="pt-2 border-t border-gray-100 flex items-center justify-between">
+                                <span class="text-[11px] text-slate-500">
+                                    💬 {{ $spot->stories_count ?? 0 }} memories
+                                </span>
+                                <div class="flex items-center gap-1.5">
+                                    <a href="{{ route('admin.spots.index') }}" class="px-2.5 py-1 text-[11px] font-bold text-[#1c3272] bg-blue-50 hover:bg-blue-100 rounded-md transition-colors">
+                                        Edit / Change Photos
+                                    </a>
+                                    <form action="{{ route('admin.spots.destroy', $spot) }}" method="POST" onsubmit="return confirm('Delete this landmark spot from the map and time-machine?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-2 py-1 text-[11px] font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    @empty
+                        <div class="col-span-full p-8 text-center bg-white rounded-xl border border-gray-200">
+                            <p class="text-sm text-gray-500 italic">No landmark spots configured yet.</p>
+                            <a href="{{ route('admin.spots.index') }}" class="mt-2 inline-block px-4 py-2 bg-[#1c3272] text-white text-xs font-bold rounded-lg">
+                                Open Landmark Spots Manager
+                            </a>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- TAB 2: EVENT PHOTO ALBUMS & ARCHIVES -->
+            <div x-show="galleryTab === 'albums'" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Create Section Form -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm h-max">
-                    <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Create New Section</h3>
+                    <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Create New Album Section</h3>
                     <form action="{{ route('gallery.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                         @csrf
                         <div>
-                            <label class="block text-sm font-bold text-[#0f172a] mb-2">Section Name</label>
-                            <input type="text" name="title" required placeholder="e.g. Sports Week 2026" class="w-full rounded-lg border-gray-300 shadow-sm text-sm">
+                            <label class="block text-sm font-bold text-[#0f172a] mb-2">Section / Event Title</label>
+                            <input type="text" name="title" required placeholder="e.g. Sports Week 2026, Convocation 2025" class="w-full rounded-lg border-gray-300 shadow-sm text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-[#0f172a] mb-2">Upload Photos</label>
                             <input type="file" name="images[]" multiple required accept="image/*" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm text-gray-600 cursor-pointer">
+                            <span class="text-[11px] text-gray-400 mt-1 block">You can select multiple photos at once.</span>
                         </div>
-                        <button type="submit" class="w-full bg-[#3b82f6] hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors">
-                            Create Section & Upload
+                        <button type="submit" class="w-full bg-[#3b82f6] hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors shadow-xs">
+                            Create Section &amp; Upload Photos
                         </button>
                     </form>
                 </div>
+
+                <!-- Existing Sections List -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Edit Existing Sections</h3>
-                    <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
-                        @forelse($albums as $album)
+                    <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Existing Album Sections ({{ ($albums ?? collect())->count() }})</h3>
+                    <div class="space-y-3 max-h-[350px] overflow-y-auto pr-2">
+                        @forelse($albums ?? [] as $album)
                             <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100 transition-colors">
                                 <div>
                                     <h4 class="font-bold text-sm text-[#0f172a]">{{ $album->title }}</h4>
-                                    <p class="text-xs text-gray-500">{{ $album->photos_count }} Photos</p>
+                                    <p class="text-xs text-gray-500">{{ $album->photos_count }} Photos uploaded</p>
                                 </div>
                                 <a href="{{ route('gallery.edit', $album->id) }}" class="text-xs font-bold text-[#3b82f6] bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-md transition-colors">
                                     Edit / Preview
                                 </a>
                             </div>
                         @empty
-                            <p class="text-sm text-gray-400 italic">No sections created yet.</p>
+                            <p class="text-sm text-gray-400 italic">No album sections created yet.</p>
                         @endforelse
                     </div>
                 </div>
             </div>
+
+            <!-- TAB 3: PINNED ALUMNI MEMORIES & MODERATION -->
+            <div x-show="galleryTab === 'stories'" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b pb-3">
+                    <div>
+                        <h3 class="text-lg font-bold text-[#0f172a]">Alumni Throwback Memories</h3>
+                        <p class="text-xs text-gray-500">Student &amp; alumni stories pinned to campus landmark spots on the Nostalgia Blueprint Map.</p>
+                    </div>
+                    <span class="text-xs font-bold text-slate-500">{{ ($recentStories ?? collect())->count() }} Recent Submissions</span>
+                </div>
+
+                <div class="divide-y divide-gray-100">
+                    @forelse($recentStories ?? [] as $story)
+                        <div class="py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-sm text-[#1c3272]">{{ $story->user->name ?? 'Anonymous Alumni' }}</span>
+                                    <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
+                                        Batch {{ $story->batch_year ?? 'Alumni' }}
+                                    </span>
+                                    <span class="text-xs text-slate-400">&bull; at</span>
+                                    <span class="text-xs font-bold text-[#f97316]">{{ $story->spot->name ?? 'Campus Landmark' }}</span>
+                                </div>
+                                <p class="text-xs text-slate-600 italic">
+                                    "{{ $story->story }}"
+                                </p>
+                                <div class="text-[11px] text-slate-400 flex items-center gap-3">
+                                    <span>❤️ {{ $story->likes_count ?? 0 }} Likes</span>
+                                    <span>&bull; {{ $story->created_at->diffForHumans() }}</span>
+                                </div>
+                            </div>
+
+                            <form action="{{ route('admin.spots.stories.destroy', $story) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this story?');" class="shrink-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors">
+                                    Remove Story
+                                </button>
+                            </form>
+                        </div>
+                    @empty
+                        <p class="text-sm text-gray-400 italic py-4 text-center">No alumni stories submitted yet.</p>
+                    @endforelse
+                </div>
+            </div>
+
         </div>
 
         <!-- EVENT MANAGER -->

@@ -189,4 +189,39 @@ class GalleryTimeMachineTest extends TestCase
             'id' => $spot->id,
         ]);
     }
+
+    public function test_admin_dashboard_renders_unified_gallery_and_campus_time_machine_hub(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_approved' => true]);
+
+        CampusMemorySpot::create([
+            'name' => 'Main Heritage Admin Porch',
+            'slug' => 'main-heritage-porch-admin-test',
+            'category' => 'landmark',
+            'description' => 'Original colonnade of K. D. Polytechnic, Patan.',
+            'x_percent' => 50.0,
+            'y_percent' => 20.0,
+            'icon' => 'building',
+            'then_photo_path' => 'https://example.com/then.jpg',
+            'then_year' => '1985',
+            'then_title' => 'Heritage Porch',
+            'now_photo_path' => 'https://example.com/now.jpg',
+            'now_year' => '2026',
+            'now_title' => 'Modern Solar Porch',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Manage Gallery &amp; Campus Time-Machine', false);
+        $response->assertSee('Campus Time-Machine Spots', false);
+        $response->assertSee('Main Heritage Admin Porch', false);
+        $response->assertSee('Event Photo Albums', false);
+        $response->assertSee('Pinned Throwback Memories', false);
+
+        // Also verify /dashboard route
+        $mainDashboardResponse = $this->actingAs($admin)->get('/dashboard');
+        $mainDashboardResponse->assertStatus(200);
+        $mainDashboardResponse->assertSee('Manage Gallery &amp; Campus Time-Machine', false);
+    }
 }

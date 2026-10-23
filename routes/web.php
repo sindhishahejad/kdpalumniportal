@@ -77,13 +77,16 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         $users = \App\Models\User::where('is_approved', true)->with('profile')->latest()->paginate(10);
         $notices = \App\Models\Notice::latest()->get();
         
+        $spots = \App\Models\CampusMemorySpot::withCount('stories')->orderBy('order_num')->get();
+        $recentStories = \App\Models\CampusMemoryStory::with(['user', 'spot'])->latest()->take(8)->get();
+        
         $stats = [
             'total_alumni' => \App\Models\User::where('role', 'alumni')->where('is_approved', true)->count(),
             'pending_jobs' => \App\Models\JobPosting::where('is_active', false)->count(),
             'active_students' => \App\Models\User::where('role', 'student')->where('is_approved', true)->count(),
         ];
         
-        return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats', 'mapPins', 'clusters'));
+        return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats', 'mapPins', 'clusters', 'spots', 'recentStories'));
         
     } elseif ($role === 'faculty') {
         $stats = [

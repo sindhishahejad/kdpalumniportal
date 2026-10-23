@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div x-data="{ showRequestModal: false, selectedListingId: null, selectedMentorName: '', selectedMentorTitle: '' }">
     <!-- Rich Hero Banner with Image & Gradient Overlay -->
     <div class="relative w-full h-80 flex items-center justify-center overflow-hidden shadow-md">
         <img src="https://picsum.photos/id/1012/1920/600" class="absolute inset-0 w-full h-full object-cover" alt="Mentorship Background">
@@ -29,6 +30,16 @@
             <div class="p-4 bg-green-50 border-l-4 border-green-500 text-green-700 text-sm rounded shadow-sm flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                 {{ session('status') }}
+            </div>
+        </div>
+    @endif
+
+    <!-- Error Message Alert -->
+    @if (session('error'))
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 relative z-20">
+            <div class="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded shadow-sm flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                {{ session('error') }}
             </div>
         </div>
     @endif
@@ -85,11 +96,22 @@
                                 </div>
                             </div>
                             
-                            <!-- Action Button pushed to bottom -->
-                            <div class="mt-auto pt-2">
-                                <a href="#" class="block text-center w-full bg-gray-50 border border-gray-200 text-gray-800 text-sm font-bold py-2 rounded-sm hover:bg-[#8b0000] hover:border-[#8b0000] hover:text-white transition-colors">
-                                    View Profile
+                            <!-- Action Buttons -->
+                            <div class="mt-auto pt-3 border-t border-gray-100 flex items-center gap-2">
+                                <a href="{{ route('alumni.show', $listing->user_id) }}" class="flex-1 text-center bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold py-2 rounded-sm hover:bg-gray-100 transition-colors">
+                                    Profile
                                 </a>
+                                @if($listing->user_id === auth()->id())
+                                    <a href="#mentor-form" class="flex-1 text-center bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold py-2 rounded-sm hover:bg-amber-100 transition-colors">
+                                        Your Listing
+                                    </a>
+                                @else
+                                    <button type="button" 
+                                            @click="showRequestModal = true; selectedListingId = {{ $listing->id }}; selectedMentorName = '{{ addslashes($listing->user->name) }}'; selectedMentorTitle = '{{ addslashes($listing->title) }}'" 
+                                            class="flex-1 text-center bg-[#8b0000] hover:bg-[#6b0d0d] text-white text-xs font-bold py-2 rounded-sm shadow-sm transition-colors">
+                                        Request Guidance
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -166,4 +188,75 @@
             </div>
         </div>
     </div>
+
+    <!-- Mentorship Request Modal -->
+    <div x-show="showRequestModal" 
+         x-cloak 
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         style="display: none;"
+         aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div x-show="showRequestModal" 
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="showRequestModal = false" 
+                 class="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-sm"></div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <!-- Modal panel -->
+            <div x-show="showRequestModal" 
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 class="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-xl border border-gray-100">
+                
+                <div class="flex items-start justify-between pb-4 border-b border-gray-100">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider text-[#8b0000]">Mentorship Guidance</span>
+                        <h3 class="text-xl font-bold text-gray-900 mt-0.5">Send Mentorship Request</h3>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Connecting with <span class="font-bold text-gray-800" x-text="selectedMentorName"></span>
+                            <span class="text-gray-400" x-show="selectedMentorTitle"> &bull; <span x-text="selectedMentorTitle"></span></span>
+                        </p>
+                    </div>
+                    <button type="button" @click="showRequestModal = false" class="text-gray-400 hover:text-gray-600 transition-colors p-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <form :action="'/mentorship/' + selectedListingId + '/request'" method="POST" class="mt-4 space-y-4">
+                    @csrf
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
+                            Your Message / Guidance Needed <span class="text-red-500">*</span>
+                        </label>
+                        <textarea name="message" rows="5" required 
+                            placeholder="Introduce yourself, mention your semester/branch at KD Polytechnic, and what specific advice or mentorship you are looking for (e.g. Diploma to Degree transition, company interviews, project review)..."
+                            class="w-full text-sm border border-gray-300 rounded-lg shadow-sm focus:border-[#8b0000] focus:ring-[#8b0000] p-3 text-gray-900"></textarea>
+                        <p class="text-[11px] text-gray-400 mt-1">This message will be emailed to the mentor, delivered as an in-app notification, and opened as a direct message thread.</p>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+                        <button type="button" @click="showRequestModal = false" class="px-4 py-2.5 text-xs font-bold text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-5 py-2.5 text-xs font-bold text-white bg-[#8b0000] hover:bg-[#6b0d0d] rounded-lg shadow-sm transition-colors">
+                            Send Request &rarr;
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

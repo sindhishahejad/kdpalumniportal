@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MentorshipListing;
+use App\Models\Message;
+use App\Notifications\PortalNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\MentorshipRequestMail;
@@ -53,9 +55,27 @@ class MentorshipController extends Controller
 
         $mentorUser = $listing->user;
 
-        // ✨ Trigger automated email notification to the mentor ✨
+        if ($mentorUser->id === Auth::id()) {
+            return back()->with('error', 'You cannot send a mentorship request to yourself.');
+        }
+
+        // 1. Trigger automated email notification to the mentor
         Mail::to($mentorUser->email)->queue(new MentorshipRequestMail(Auth::user(), $request->message));
 
-        return back()->with('status', 'Mentorship request sent successfully!');
+        // 2. Deliver in-app message so the mentor sees it in their Inbox
+        Message::create([
+            'sender_id' => Auth::id(),
+            'recipient_id' => $mentorUser->id,
+            'message' => '[Mentorship Request] ' . $request->message,
+        ]);
+
+        // 3. Dispatch in-app notification bell update
+        $mentorUser->notify(new PortalNotification(
+            'New Mentorship Request',
+            Auth::user()->name . ' requested mentorship guidance.',
+            route('messages.inbox', Auth::id())
+        ));
+
+        return back()->with('status', 'Mentorship request sent successfully! The mentor has been notified.');
     }
 }

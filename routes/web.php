@@ -116,9 +116,6 @@ Route::post('/events', [EventController::class, 'store'])->name('events.store')-
 Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show')->middleware(['auth']);
 
-Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
-Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy');
-
 // Standard User & Event Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -139,6 +136,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/jobs', [JobPostingController::class, 'index'])->name('jobs.index');
     Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
+    Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy');
 
     Route::get('/resources', [ResourceController::class, 'index'])->name('resources.index');
     Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');

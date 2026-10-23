@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventRsvp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\EventRsvpMail;
+use App\Notifications\PortalNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
-    // ✨ NEW: Added the missing index method for the "All Events" page ✨
     public function index()
     {
-        // Fetch all events, including ones happening today, ordered by date
         $events = Event::whereDate('event_date', '>=', today())
                        ->orderBy('event_date', 'asc')
                        ->get();
@@ -34,7 +35,7 @@ class EventController extends Controller
             'category' => 'required|string|max:50',
             'event_date' => 'required|date',
             'time_display' => 'required|string|max:255',
-            'description' => 'nullable|string', // Added description validation
+            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
@@ -48,7 +49,7 @@ class EventController extends Controller
             'category' => strtoupper($request->category),
             'event_date' => $request->event_date,
             'time_display' => $request->time_display,
-            'description' => $request->description, // Save the description
+            'description' => $request->description,
             'image_path' => $imagePath,
         ]);
 
@@ -59,25 +60,48 @@ class EventController extends Controller
     {
         $user = Auth::user();
 
-        // Attach user to event attendees if relationship exists
         if (method_exists($event, 'attendees')) {
             $event->attendees()->syncWithoutDetaching([$user->id]);
         }
 
-        // ✨ Trigger automated email confirmation for event RSVP ✨
+        $existingRsvp = EventRsvp::where('event_id', $event->id)->where('user_id', $user->id)->first();
+
+        if ($existingRsvp) {
+            return redirect()->route('events.ticket', $existingRsvp->id);
+        }
+
+        $ticketCode = 'KDP-PASS-' . $event->id . '-' . $user->id . '-' . strtoupper(Str::random(6));
+
+        $rsvp = EventRsvp::create([
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'ticket_code' => $ticketCode,
+        ]);
+
         Mail::to($user->email)->queue(new EventRsvpMail($event, $user));
 
-        return back()->with('event_status', 'RSVP confirmed successfully! A confirmation email has been queued.');
+        $user->notify(new PortalNotification(
+            'RSVP Confirmed!',
+            'Your digital entry pass for ' . $event->title . ' has been successfully generated.',
+            route('events.ticket', $rsvp->id)
+        ));
+
+        return redirect()->route('events.ticket', $rsvp->id)->with('event_status', 'RSVP confirmed! Your digital entry pass has been generated.');
+    }
+
+    public function showTicket(EventRsvp $rsvp)
+    {
+        abort_if($rsvp->user_id !== auth()->id() && auth()->user()->role !== 'admin', 403);
+        
+        return view('events.ticket', compact('rsvp'));
     }
 
     public function destroy(Event $event)
     {
-        // Delete the image file from storage if it exists code
         if ($event->image_path) {
             Storage::disk('public')->delete($event->image_path);
         }
         
-        // Delete the database record code
         $event->delete();
         
         return back()->with('event_status', 'Event deleted successfully!');

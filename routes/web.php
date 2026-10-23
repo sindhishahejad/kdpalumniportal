@@ -20,6 +20,7 @@ use App\Http\Controllers\ContactInquiryController;
 use App\Http\Controllers\SuccessStoryController;
 use App\Http\Controllers\ProjectPitchController;
 use App\Http\Controllers\LabController;
+use App\Http\Controllers\EventController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -99,14 +100,16 @@ Route::put('/gallery/{album}', [\App\Http\Controllers\GalleryController::class, 
 Route::delete('/gallery/photos/{photo}', [\App\Http\Controllers\GalleryController::class, 'destroyPhoto'])->name('gallery.photos.destroy')->middleware(['auth']);
 Route::post('/gallery/{album}/photos', [\App\Http\Controllers\GalleryController::class, 'addPhotos'])->name('gallery.photos.store')->middleware(['auth']);
 
-Route::post('/events', [\App\Http\Controllers\EventController::class, 'store'])->name('events.store')->middleware(['auth']);
-Route::delete('/events/{event}', [\App\Http\Controllers\EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
-Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show')->middleware(['auth']);
+// ✨ Event Routes (Including index for /events 404 fix) ✨
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::post('/events', [EventController::class, 'store'])->name('events.store')->middleware(['auth']);
+Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show')->middleware(['auth']);
 
 Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
 Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy');
 
-// Standard User Routes
+// Standard User & Event Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -153,6 +156,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/labs/{lab}', [LabController::class, 'show'])->name('labs.show');
     Route::get('/labs-manage/create', [LabController::class, 'create'])->name('labs.create');
     Route::post('/labs-manage', [LabController::class, 'store'])->name('labs.store');
+
+    // ✨ Event RSVP & Digital Ticket Routes ✨
+    Route::get('/events/{event}/rsvp', [EventController::class, 'rsvp'])->name('events.rsvp');
+    Route::get('/events/ticket/{rsvp}', [EventController::class, 'showTicket'])->name('events.ticket');
+    
+    // ✨ Notification Read Route ✨
+    Route::post('/notifications/read', function () {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('notifications.read');
 });
 
 // Admin Only Routes 

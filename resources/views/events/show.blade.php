@@ -40,11 +40,35 @@
             </div>
 
             <!-- Event Description -->
-            <div class="prose max-w-none text-gray-600 leading-relaxed text-lg">
+            <div class="prose max-w-none text-gray-600 leading-relaxed text-lg mb-8">
                 @if($event->description)
                     {!! nl2br(e($event->description)) !!}
                 @else
                     <p class="italic text-gray-400 text-sm">No additional details provided for this event.</p>
+                @endif
+            </div>
+
+            <!-- ✨ RSVP / Digital Pass Action Area ✨ -->
+            <div class="pt-6 border-t border-gray-100">
+                @php
+                    $existingRsvp = \App\Models\EventRsvp::where('event_id', $event->id)->where('user_id', auth()->id())->first();
+                @endphp
+
+                @if($existingRsvp)
+                    <div class="flex items-center gap-4">
+                        <span class="inline-flex items-center text-green-700 bg-green-50 px-4 py-2 rounded-xl text-sm font-bold">
+                            &#10003; RSVP Confirmed
+                        </span>
+                        <a href="{{ route('events.ticket', $existingRsvp->id) }}" class="inline-block bg-[#0f172a] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-black transition-colors shadow-sm">
+                            View Digital Pass &rarr;
+                        </a>
+                    </div>
+                @else
+                    <form action="{{ route('events.rsvp', $event->id) }}" method="GET">
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors shadow-sm">
+                            RSVP & Generate Digital Pass
+                        </button>
+                    </form>
                 @endif
             </div>
             

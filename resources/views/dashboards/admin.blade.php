@@ -122,6 +122,20 @@
             </a>
         </div>
 
+        <!-- Department Labs & Workshops Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
+            <div class="absolute inset-y-0 left-0 w-2 bg-blue-600"></div>
+            <div class="pl-3 mb-4 sm:mb-0">
+                <h3 class="text-lg font-bold text-[#0f172a]">Department Labs & Workshops</h3>
+                <p class="text-sm text-gray-500 mt-0.5">Manage laboratory equipment inventories, room locations, and faculty coordinator records.</p>
+            </div>
+            <div class="flex items-center gap-3 pl-3 sm:pl-0">
+                <a href="{{ route('labs.index') }}" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-all shadow-sm shrink-0">
+                    Manage Labs &rarr;
+                </a>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Post a Notice -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

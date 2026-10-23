@@ -18,8 +18,46 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <!-- Settings & Notifications Dropdown Group (Desktop) -->
+            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
+                
+                <!-- Notification Dropdown Widget -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" class="relative p-2 text-gray-600 hover:text-gray-900 focus:outline-none transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                        <div class="px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500">Notifications</h3>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <form action="{{ route('notifications.read') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-blue-600 hover:underline font-semibold">Mark all as read</button>
+                                </form>
+                            @endif
+                        </div>
+
+                        <div class="max-h-64 overflow-y-auto">
+                            @forelse(auth()->user()->notifications()->take(5) as $notification)
+                                <a href="{{ $notification->data['action_url'] ?? '#' }}" class="block px-4 py-3 hover:bg-gray-50 border-b border-gray-50 transition-colors {{ $notification->read_at ? 'opacity-60' : '' }}">
+                                    <p class="text-xs font-bold text-[#0f172a]">{{ $notification->data['title'] }}</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">{{ $notification->data['message'] }}</p>
+                                </a>
+                            @empty
+                                <p class="text-xs text-gray-400 text-center py-6">No new notifications</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Dropdown -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -52,9 +90,43 @@
                 </x-dropdown>
             </div>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+            <!-- Hamburger & Mobile Notification Icon -->
+            <div class="flex items-center sm:hidden space-x-2">
+                <!-- Mobile Notification Bell -->
+                <div class="relative" x-data="{ mobileOpen: false }">
+                    <button @click="mobileOpen = !mobileOpen" class="relative p-2 text-gray-600 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
+                    </button>
+                    <div x-show="mobileOpen" @click.away="mobileOpen = false" class="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                        <div class="px-3 py-1.5 border-b border-gray-100 flex justify-between items-center">
+                            <span class="text-xs font-bold uppercase text-gray-500">Notifications</span>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <form action="{{ route('notifications.read') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-[11px] text-blue-600 font-semibold">Mark read</button>
+                                </form>
+                            @endif
+                        </div>
+                        <div class="max-h-56 overflow-y-auto">
+                            @forelse(auth()->user()->notifications()->take(5) as $notification)
+                                <a href="{{ $notification->data['action_url'] ?? '#' }}" class="block px-3 py-2 border-b border-gray-50 {{ $notification->read_at ? 'opacity-60' : '' }}">
+                                    <p class="text-xs font-bold text-[#0f172a]">{{ $notification->data['title'] }}</p>
+                                    <p class="text-[11px] text-gray-500">{{ $notification->data['message'] }}</p>
+                                </a>
+                            @empty
+                                <p class="text-xs text-gray-400 text-center py-4">No notifications</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hamburger Button -->
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

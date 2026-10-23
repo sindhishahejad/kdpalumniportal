@@ -57,8 +57,56 @@
                 </a>
             </div>
 
-            <div class="flex items-center hidden sm:flex">
-                <a href="https://www.facebook.com/profile.php?id=100054398415159" target="_blank" class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
+            <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap justify-center sm:justify-end">
+                
+                <!-- ⚡ AlumSmart Natural Language Query Button -->
+                <button type="button" 
+                        @click="$dispatch('open-alum-smart')" 
+                        class="bg-white/15 hover:bg-white/25 text-white px-3 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-white/20 shadow-xs cursor-pointer">
+                    <span class="text-amber-300">⚡</span>
+                    <span>AlumSmart Search</span>
+                    <kbd class="hidden sm:inline px-1 py-0.2 bg-black/30 rounded text-[10px] font-mono text-white/80">Ctrl+K</kbd>
+                </button>
+
+                <!-- 🌐 Multilingual Language Switcher Dropdown (English, Gujarati, Hindi) -->
+                <div x-data="{ langOpen: false, currentLang: localStorage.getItem('kdp_portal_lang') || 'en' }" class="relative">
+                    <button type="button" 
+                            @click="langOpen = !langOpen" 
+                            @click.away="langOpen = false"
+                            class="bg-white/15 hover:bg-white/25 text-white px-3 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-white/20 cursor-pointer">
+                        <span>🌐</span>
+                        <span x-text="currentLang === 'gu' ? 'ગુજરાતી' : (currentLang === 'hi' ? 'हिन्दी' : 'English')">English</span>
+                        <svg class="w-3 h-3 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+
+                    <div x-show="langOpen" 
+                         x-cloak 
+                         class="absolute right-0 mt-1.5 w-44 bg-white text-slate-800 rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 text-xs font-semibold">
+                        <button type="button" 
+                                @click="switchLanguage('en'); currentLang = 'en'; langOpen = false" 
+                                :class="currentLang === 'en' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50'"
+                                class="w-full text-left px-3 py-2 flex items-center justify-between transition-colors">
+                            <span>🇬🇧 English (Default)</span>
+                            <span x-show="currentLang === 'en'" class="text-[#1c3272]">✓</span>
+                        </button>
+                        <button type="button" 
+                                @click="switchLanguage('gu'); currentLang = 'gu'; langOpen = false" 
+                                :class="currentLang === 'gu' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50'"
+                                class="w-full text-left px-3 py-2 flex items-center justify-between transition-colors">
+                            <span>🇮🇳 ગુજરાતી (Gujarati)</span>
+                            <span x-show="currentLang === 'gu'" class="text-[#1c3272]">✓</span>
+                        </button>
+                        <button type="button" 
+                                @click="switchLanguage('hi'); currentLang = 'hi'; langOpen = false" 
+                                :class="currentLang === 'hi' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50'"
+                                class="w-full text-left px-3 py-2 flex items-center justify-between transition-colors">
+                            <span>🇮🇳 हिन्दी (Hindi)</span>
+                            <span x-show="currentLang === 'hi'" class="text-[#1c3272]">✓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <a href="https://www.facebook.com/profile.php?id=100054398415159" target="_blank" class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors hidden sm:flex">
                     <svg class="w-4 h-4 fill-current text-white" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg>
                 </a>
             </div>
@@ -310,8 +358,59 @@
         </button>
     </footer>
 
+    <!-- ⚡ Global AlumSmart Concierge Modal -->
+    <x-alum-smart-modal />
+
+    <!-- 🌐 Google Website Translation Integration (English, Gujarati, Hindi) -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,gu,hi',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function switchLanguage(lang) {
+            localStorage.setItem('kdp_portal_lang', lang);
+            
+            // Set cookie for Google Translate
+            const cookieVal = (lang === 'en') ? '/en/en' : ('/en/' + lang);
+            document.cookie = "googtrans=" + cookieVal + "; path=/;";
+            document.cookie = "googtrans=" + cookieVal + "; path=/; domain=" + window.location.hostname + ";";
+
+            // If google combo exists, update it
+            const combo = document.querySelector('.goog-te-combo');
+            if (combo) {
+                combo.value = lang;
+                combo.dispatchEvent(new Event('change'));
+            } else {
+                window.location.reload();
+            }
+        }
+
+        // Apply saved language preference on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('kdp_portal_lang');
+            if (savedLang && savedLang !== 'en') {
+                const expected = '/en/' + savedLang;
+                if (!document.cookie.includes('googtrans=' + expected)) {
+                    document.cookie = "googtrans=" + expected + "; path=/;";
+                    document.cookie = "googtrans=" + expected + "; path=/; domain=" + window.location.hostname + ";";
+                }
+            }
+        });
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <style>
         [x-cloak] { display: none !important; }
+        .goog-te-banner-frame.skiptranslate, .goog-te-banner-frame { display: none !important; }
+        body { top: 0px !important; position: static !important; }
+        #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+        .goog-text-highlight { background: none !important; box-shadow: none !important; }
+        font { background: transparent !important; box-shadow: none !important; }
     </style>
 </body>
 </html>

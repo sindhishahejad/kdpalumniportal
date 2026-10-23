@@ -120,6 +120,8 @@ Route::get('/gallery/{album}/edit', [\App\Http\Controllers\GalleryController::cl
 Route::put('/gallery/{album}', [\App\Http\Controllers\GalleryController::class, 'update'])->name('gallery.update')->middleware(['auth']);
 Route::delete('/gallery/photos/{photo}', [\App\Http\Controllers\GalleryController::class, 'destroyPhoto'])->name('gallery.photos.destroy')->middleware(['auth']);
 Route::post('/gallery/{album}/photos', [\App\Http\Controllers\GalleryController::class, 'addPhotos'])->name('gallery.photos.store')->middleware(['auth']);
+Route::post('/gallery/stories', [\App\Http\Controllers\GalleryController::class, 'storeStory'])->name('gallery.stories.store')->middleware(['auth']);
+Route::post('/gallery/stories/{story}/like', [\App\Http\Controllers\GalleryController::class, 'likeStory'])->name('gallery.stories.like');
 
 // ✨ Event Routes (Including index for /events 404 fix) ✨
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -282,6 +284,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/alerts', [AdminAlertController::class, 'index'])->name('alerts.index');
     Route::post('/alerts/test-email', [AdminAlertController::class, 'sendTestEmail'])->name('alerts.test-email');
     Route::post('/alerts/whatsapp-broadcast', [AdminAlertController::class, 'dispatchWhatsAppBroadcast'])->name('alerts.whatsapp-broadcast');
+
+    // 🏛️ Dynamic Campus Time-Machine & Landmark Spots Management
+    Route::get('/spots', [\App\Http\Controllers\AdminCampusSpotController::class, 'index'])->name('spots.index');
+    Route::post('/spots', [\App\Http\Controllers\AdminCampusSpotController::class, 'store'])->name('spots.store');
+    Route::put('/spots/{spot}', [\App\Http\Controllers\AdminCampusSpotController::class, 'update'])->name('spots.update');
+    Route::delete('/spots/{spot}', [\App\Http\Controllers\AdminCampusSpotController::class, 'destroy'])->name('spots.destroy');
+    Route::delete('/spots/stories/{story}', [\App\Http\Controllers\AdminCampusSpotController::class, 'destroyStory'])->name('spots.stories.destroy');
 });
+
+// ⚡ AlumSmart Natural Language Query Concierge
+Route::get('/api/alum-smart/search', [\App\Http\Controllers\AlumSmartController::class, 'search'])->name('alum-smart.search');
 
 require __DIR__.'/auth.php';

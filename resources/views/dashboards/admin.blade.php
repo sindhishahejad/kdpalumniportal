@@ -136,6 +136,20 @@
             </div>
         </div>
 
+        <!-- Knowledge Feed & Challenge Moderation -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
+            <div class="absolute inset-y-0 left-0 w-2 bg-rose-600"></div>
+            <div class="pl-3 mb-4 sm:mb-0">
+                <h3 class="text-lg font-bold text-[#0f172a]">Knowledge Feed &amp; Challenge Moderation</h3>
+                <p class="text-sm text-gray-500 mt-0.5">Review community discussions, code challenges, and remove flagged or inappropriate replies.</p>
+            </div>
+            <div class="flex items-center gap-3 pl-3 sm:pl-0">
+                <a href="{{ route('posts.index') }}" class="bg-rose-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-rose-700 transition-all shadow-sm shrink-0">
+                    Moderate Feed &rarr;
+                </a>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Post a Notice -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

@@ -132,7 +132,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/feed', [PostController::class, 'index'])->name('posts.index');
     Route::post('/feed', [PostController::class, 'store'])->name('posts.store');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/jobs', [JobPostingController::class, 'index'])->name('jobs.index');
     Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');

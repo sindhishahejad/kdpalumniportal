@@ -9,8 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
             @if (session('status'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-r-xl shadow-sm text-sm" role="alert">
                     <span class="block sm:inline">{{ session('status') }}</span>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-r-xl shadow-sm text-sm" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
                 </div>
             @endif
 
@@ -63,7 +69,18 @@
                             <span class="text-xs font-semibold uppercase px-2 py-1 rounded {{ $post->type === 'challenge' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
                                 {{ $post->type }}
                             </span>
-                            <span class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</span>
+                                @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->id() === $post->user_id))
+                                    <form method="POST" action="{{ route('posts.destroy', $post) }}" onsubmit="return confirm('Are you sure you want to remove this post?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 py-1 px-2.5 rounded-md transition-colors">
+                                            Delete
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Post Body -->
@@ -85,9 +102,20 @@
                             <div class="space-y-4 mb-4">
                                 @foreach ($post->comments as $comment)
                                     <div class="bg-white p-3 rounded-md shadow-sm text-sm border border-gray-100">
-                                        <div class="font-bold text-gray-900 mb-1">
-                                            {{ $comment->user->name }} 
-                                            <span class="text-xs text-gray-400 font-normal ml-2">{{ $comment->created_at->diffForHumans() }}</span>
+                                        <div class="flex items-center justify-between font-bold text-gray-900 mb-1">
+                                            <div>
+                                                {{ $comment->user->name }} 
+                                                <span class="text-xs text-gray-400 font-normal ml-2">{{ $comment->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            @if(auth()->check() && (auth()->user()->role === 'admin' || auth()->id() === $comment->user_id))
+                                                <form method="POST" action="{{ route('comments.destroy', $comment) }}" onsubmit="return confirm('Remove this reply?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-[11px] font-semibold text-red-500 hover:text-red-700 hover:underline">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                         <div class="text-gray-700 prose prose-sm max-w-none">
                                             {!! Str::markdown($comment->body) !!}

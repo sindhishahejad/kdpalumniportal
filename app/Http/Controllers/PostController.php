@@ -37,4 +37,18 @@ class PostController extends Controller
 
         return redirect()->route('posts.index')->with('status', 'Post published successfully!');
     }
+
+    public function destroy(Post $post)
+    {
+        $user = auth()->user();
+
+        // Allow Admins to moderate/delete any post, or author to delete their own
+        if ($user->role !== 'admin' && $post->user_id !== $user->id) {
+            return back()->with('error', 'Unauthorized. You can only delete your own posts.');
+        }
+
+        $post->delete();
+
+        return redirect()->route('posts.index')->with('status', 'Post removed successfully.');
+    }
 }

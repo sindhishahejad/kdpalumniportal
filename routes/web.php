@@ -155,6 +155,7 @@ Route::middleware('auth')->group(function () {
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');
     Route::post('/documents', [DocumentRequestController::class, 'store'])->name('documents.store');
+    Route::get('/documents/{document}/download', [DocumentRequestController::class, 'download'])->name('documents.download');
 
     // Project Incubation Routes
     Route::get('/incubation', [ProjectPitchController::class, 'index'])->name('pitches.index');

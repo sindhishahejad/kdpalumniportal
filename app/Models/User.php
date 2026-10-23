@@ -133,6 +133,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(HallOfFameInductee::class);
     }
+
+    public function toolDonations()
+    {
+        return $this->hasMany(ToolDonation::class);
+    }
+
+    public function claimedToolDonations()
+    {
+        return $this->hasMany(ToolDonation::class, 'claimed_by_user_id');
+    }
+
+    public function toolDonationRequests()
+    {
+        return $this->hasMany(ToolDonationRequest::class);
+    }
+
+    public function toolGratitudes()
+    {
+        return $this->hasMany(ToolDonationGratitude::class);
+    }
     
     // Helper method to check admin status
     public function isAdmin()

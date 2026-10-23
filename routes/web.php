@@ -26,6 +26,7 @@ use App\Http\Controllers\RegionalChapterController;
 use App\Http\Controllers\BatchReunionController;
 use App\Http\Controllers\AwardController;
 use App\Http\Controllers\AdminAwardController;
+use App\Http\Controllers\ToolDonationController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -190,6 +191,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/awards/category/{slug}', [AwardController::class, 'showCategory'])->name('awards.category');
     Route::post('/awards/vote', [AwardController::class, 'vote'])->name('awards.vote');
     Route::get('/hall-of-fame', [AwardController::class, 'hallOfFame'])->name('awards.hall-of-fame');
+
+    // 📚 Alumni Book & Engineering Tool Donation Bank
+    Route::get('/tool-bank', [ToolDonationController::class, 'index'])->name('tools.index');
+    Route::get('/tool-bank/donate', [ToolDonationController::class, 'create'])->name('tools.create');
+    Route::post('/tool-bank/donate', [ToolDonationController::class, 'store'])->name('tools.store');
+    Route::get('/tool-bank/my-donations', [ToolDonationController::class, 'myDonations'])->name('tools.my-donations');
+    Route::get('/tool-bank/my-requests', [ToolDonationController::class, 'myRequests'])->name('tools.my-requests');
+    Route::get('/tool-bank/{slug}', [ToolDonationController::class, 'show'])->name('tools.show');
+    Route::post('/tool-bank/{toolDonation}/request', [ToolDonationController::class, 'requestItem'])->name('tools.request');
+    Route::patch('/tool-bank/requests/{donationRequest}/accept', [ToolDonationController::class, 'acceptRequest'])->name('tools.requests.accept');
+    Route::patch('/tool-bank/{toolDonation}/handover', [ToolDonationController::class, 'markHandedOver'])->name('tools.handover');
+    Route::post('/tool-bank/{toolDonation}/gratitude', [ToolDonationController::class, 'storeGratitude'])->name('tools.gratitude');
+    Route::delete('/tool-bank/{toolDonation}', [ToolDonationController::class, 'destroy'])->name('tools.destroy');
 
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');

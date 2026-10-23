@@ -153,6 +153,7 @@
                             <li><a href="{{ route('reunions.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Batch Reunions & RSVPs</a></li>
                             <li><a href="{{ route('awards.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">🏆 Annual Awards & Voting</a></li>
                             <li><a href="{{ route('awards.hall-of-fame') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">🏛️ Virtual Hall of Fame</a></li>
+                            <li><a href="{{ route('tools.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">📚 Tool &amp; Book Bank</a></li>
                             <li><a href="{{ route('documents.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Request Official Documents</a></li>
                         </ul>
                     </div>
@@ -174,6 +175,8 @@
                         <div x-show="open" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-sm shadow-xl border border-gray-100 py-1">
                             <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">Dashboard</a>
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">Your Profile</a>
+                            <a href="{{ route('tools.my-donations') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">My Donated Tools</a>
+                            <a href="{{ route('tools.my-requests') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">My Tool Requests</a>
                             @if(Auth::user()->isAdmin())
                                 <a href="{{ route('admin.awards.index') }}" class="block px-4 py-2 text-sm text-amber-700 font-semibold hover:bg-amber-50">🏆 Awards Management</a>
                             @endif
@@ -225,6 +228,7 @@
                 <a href="{{ route('reunions.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Batch Reunions & RSVPs</a>
                 <a href="{{ route('awards.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">🏆 Awards & Voting</a>
                 <a href="{{ route('awards.hall-of-fame') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">🏛️ Hall of Fame</a>
+                <a href="{{ route('tools.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">📚 Tool &amp; Book Bank</a>
                 <a href="{{ route('resources.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Resources</a>
             </div>
         </div>

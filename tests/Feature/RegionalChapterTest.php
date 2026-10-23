@@ -151,4 +151,20 @@ class RegionalChapterTest extends TestCase
             'title' => 'Official KDP Vadodara Chapter Assembly',
         ]);
     }
+
+    public function test_interactive_map_is_displayed_on_main_dashboard(): void
+    {
+        $alumni = User::factory()->create(['role' => 'alumni', 'is_approved' => true]);
+        $responseAlumni = $this->actingAs($alumni)->get('/dashboard');
+        $responseAlumni->assertStatus(200);
+        $responseAlumni->assertSee('Interactive Regional Chapter Map');
+        $responseAlumni->assertSee('dashboardAlumniMap');
+        $responseAlumni->assertSee('Alumni Presence by Industrial Corridor');
+
+        $student = User::factory()->create(['role' => 'student', 'is_approved' => true]);
+        $responseStudent = $this->actingAs($student)->get('/dashboard');
+        $responseStudent->assertStatus(200);
+        $responseStudent->assertSee('Interactive Regional Chapter Map');
+        $responseStudent->assertSee('studentDashboardMap');
+    }
 }

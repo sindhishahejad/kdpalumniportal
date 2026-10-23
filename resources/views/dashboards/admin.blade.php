@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Leaflet Map Assets -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <div class="flex items-center justify-between mb-6">
             <div>
@@ -462,5 +466,107 @@
             </div>
         </div>
 
+        <!-- ============================================== -->
+        <!-- GEOGRAPHIC ALUMNI MAP & REGIONAL CHAPTERS      -->
+        <!-- ============================================== -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+                            <span>📍</span> Interactive Regional Chapter Map
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-0.5">Click on any pin to inspect chapter details, member counts, and meetup venues.</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-gray-500 flex-wrap">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#1c3272]"></span> Gujarat Hubs</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span> National & Global</span>
+                        <a href="{{ route('chapters.index') }}" class="font-bold text-[#1c3272] hover:text-[#0f172a] hover:underline flex items-center gap-1 ml-2">
+                            Explore All Chapters &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <div id="adminDashboardMap" class="w-full h-80 sm:h-96 bg-gray-50 z-10"></div>
+            </div>
+
+            <!-- Geographic Clusters Breakdown Section -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 font-serif">Alumni Presence by Industrial Corridor</h3>
+                        <p class="text-xs text-gray-500">Estimated distribution of diploma graduates based on profile location.</p>
+                    </div>
+                    <a href="{{ route('chapters.index') }}" class="text-xs font-bold text-[#1c3272] hover:underline">
+                        View Regional Directory &rarr;
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
+                    @if(isset($clusters))
+                        @foreach($clusters as $key => $cluster)
+                            <a href="{{ route('alumni.index', ['location' => $cluster['name']]) }}" 
+                               class="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm hover:border-[#1c3272] hover:shadow-md transition-all flex flex-col justify-between group">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-[#1c3272] transition-colors block truncate" title="{{ $cluster['name'] }}">
+                                        {{ $cluster['name'] }}
+                                    </span>
+                                    <div class="text-xl font-black text-gray-900 mt-1">
+                                        {{ $cluster['count'] }}
+                                    </div>
+                                </div>
+                                <span class="text-[10px] text-gray-400 group-hover:text-blue-600 transition-colors font-medium mt-2">View Alumni &rarr;</span>
+                            </a>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Leaflet Map Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof L === 'undefined') return;
+            var mapEl = document.getElementById('adminDashboardMap');
+            if (!mapEl) return;
+
+            var map = L.map('adminDashboardMap').setView([22.8, 72.5], 7);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var pins = @json($mapPins ?? []);
+
+            pins.forEach(function (pin) {
+                if (!pin.lat || !pin.lng) return;
+
+                var marker = L.circleMarker([pin.lat, pin.lng], {
+                    radius: 8,
+                    fillColor: pin.city === 'Patan' ? '#ea580c' : '#1c3272',
+                    color: '#ffffff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.85
+                }).addTo(map);
+
+                var popupContent = `
+                    <div style="font-family: inherit; min-width: 170px; padding: 2px;">
+                        <div style="font-size: 11px; font-weight: 800; color: #f97316; text-transform: uppercase;">${pin.city}, ${pin.state}</div>
+                        <div style="font-size: 13px; font-weight: bold; color: #0f172a; margin-top: 2px;">${pin.name}</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 3px;">👥 ${pin.members_count} Alumni Joined</div>
+                        ${pin.venue ? `<div style="font-size: 10px; color: #475569; margin-top: 2px;">📍 ${pin.venue}</div>` : ''}
+                        <div style="margin-top: 8px;">
+                            <a href="${pin.url}" style="display: inline-block; background: #1c3272; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; text-decoration: none;">Explore Chapter &rarr;</a>
+                        </div>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+            });
+        });
+    </script>
 @endsection

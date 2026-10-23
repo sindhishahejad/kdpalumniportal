@@ -75,7 +75,17 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         
         
     } elseif ($role === 'faculty') {
-        return view('dashboards.faculty');
+        $stats = [
+            'total_resources' => \App\Models\Resource::count(),
+            'total_labs' => \App\Models\Lab::count(),
+            'open_pitches' => \App\Models\ProjectPitch::where('status', 'open')->count(),
+            'upcoming_events' => \App\Models\Event::whereDate('event_date', '>=', today())->count(),
+            'total_alumni' => \App\Models\User::where('role', 'alumni')->where('is_approved', true)->count(),
+        ];
+        $recentPitches = \App\Models\ProjectPitch::with('student')->latest()->take(3)->get();
+        $upcomingEvents = \App\Models\Event::whereDate('event_date', '>=', today())->orderBy('event_date', 'asc')->take(3)->get();
+
+        return view('dashboards.faculty', compact('stats', 'recentPitches', 'upcomingEvents'));
         
     } elseif ($role === 'student') {
         return view('dashboards.student');

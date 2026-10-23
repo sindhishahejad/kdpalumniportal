@@ -39,6 +39,9 @@ Route::post('/contact', [ContactInquiryController::class, 'store'])->name('conta
 // Public Success Stories Route
 Route::get('/success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
 
+// Public Alumni Verification Route (Scanned via Smart ID Card QR)
+Route::get('/verify-alumni/{identifier}', [\App\Http\Controllers\IdCardController::class, 'verify'])->name('alumni.verify');
+
 // Authentication Routes (Socialite & Email Login)
 Route::get('/login', function () {
     return view('auth.login');

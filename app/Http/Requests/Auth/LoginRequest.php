@@ -50,6 +50,18 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Enforce Admin Verification / Approval Gate
+        $user = Auth::user();
+        if (! $user->is_approved) {
+            Auth::logout();
+            $this->session()->invalidate();
+            $this->session()->regenerateToken();
+
+            throw ValidationException::withMessages([
+                'email' => 'Your account is currently pending administrator verification. You will be able to log in once an administrator approves your profile.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

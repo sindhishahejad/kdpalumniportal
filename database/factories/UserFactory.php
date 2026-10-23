@@ -28,8 +28,20 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role' => 'student',
+            'is_approved' => true,
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Indicate that the user account is pending administrator approval.
+     */
+    public function unapproved(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_approved' => false,
+        ]);
     }
 
     /**

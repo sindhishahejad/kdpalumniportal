@@ -10,35 +10,52 @@ use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
-    // 1. Redirect user to Google's OAuth screen
+    /**
+     * Redirect user to Google's OAuth screen (with graceful configuration check).
+     */
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        if (empty(config('services.google.client_id')) || empty(config('services.google.client_secret'))) {
+            return redirect()->route('login')->with('error', 'Google Sign-In is not configured on this environment. Please sign in using your portal password.');
+        }
+
+        try {
+            return Socialite::driver('google')->redirect();
+        } catch (\Exception $e) {
+            return redirect()->route('login')->with('error', 'Unable to initiate Google sign-in. Please use email and password.');
+        }
     }
 
-    // 2. Handle the callback from Google after successful authentication
+    /**
+     * Handle the callback from Google after successful authentication.
+     */
     public function handleGoogleCallback()
     {
+        if (empty(config('services.google.client_id')) || empty(config('services.google.client_secret'))) {
+            return redirect()->route('login')->with('error', 'Google Sign-In is not configured.');
+        }
+
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // Check if user already exists in the database by email
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if (!$user) {
-                // If the user doesn't exist, create them as a new record
                 $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                    'password' => bcrypt(uniqid()), // Random secure password for OAuth users
+                    'password' => bcrypt(uniqid()),
+                    'role' => 'alumni',
+                    'is_approved' => false,
                 ]);
             }
 
-            // Log the user into the application
+            if (!$user->is_approved) {
+                return redirect()->route('login')->with('status', 'Your Google account was registered and is currently pending administrator verification.');
+            }
+
             Auth::login($user);
 
-            // Check if they have finished onboarding (e.g., selected their role)
             if (empty($user->role)) {
                 return redirect()->route('onboarding');
             }
@@ -46,21 +63,30 @@ class LoginController extends Controller
             return redirect()->route('dashboard');
 
         } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Google authentication failed. Please try again.');
+            return redirect()->route('login')->with('error', 'Google authentication failed. Please sign in with your portal password.');
         }
     }
     
-    // 3. Handle Email-only form submissions from the login view
+    /**
+     * Restricted debug email-only login (strictly disabled in production).
+     */
     public function loginWithEmail(Request $request)
     {
+        if (app()->isProduction()) {
+            abort(403, 'Passwordless email login is disabled for security in production.');
+        }
+
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);
 
-        // Find user by email
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
+            if (!$user->is_approved) {
+                return back()->withErrors(['email' => 'This account is pending administrator approval.']);
+            }
+
             Auth::login($user);
             
             if (empty($user->role)) {

@@ -22,6 +22,7 @@ use App\Http\Controllers\SuccessStoryController;
 use App\Http\Controllers\ProjectPitchController;
 use App\Http\Controllers\LabController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\RegionalChapterController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -60,6 +61,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/dashboard', function (Illuminate\Http\Request $request) {
     $role = $request->user()->role;
+    $mapPins = \App\Models\RegionalChapter::getMapPins();
+    $clusters = \App\Models\RegionalChapter::getClusterStats();
 
     if ($role === 'admin') {
         $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
@@ -75,8 +78,7 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
             'active_students' => \App\Models\User::where('role', 'student')->where('is_approved', true)->count(),
         ];
         
-        return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats'));
-        
+        return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats', 'mapPins', 'clusters'));
         
     } elseif ($role === 'faculty') {
         $stats = [
@@ -89,10 +91,10 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         $recentPitches = \App\Models\ProjectPitch::with('student')->latest()->take(3)->get();
         $upcomingEvents = \App\Models\Event::whereDate('event_date', '>=', today())->orderBy('event_date', 'asc')->take(3)->get();
 
-        return view('dashboards.faculty', compact('stats', 'recentPitches', 'upcomingEvents'));
+        return view('dashboards.faculty', compact('stats', 'recentPitches', 'upcomingEvents', 'mapPins', 'clusters'));
         
     } elseif ($role === 'student') {
-        return view('dashboards.student');
+        return view('dashboards.student', compact('mapPins', 'clusters'));
         
     } elseif ($role === 'alumni') {
         $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
@@ -101,7 +103,7 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
             ->limit(3)
             ->get();
                                 
-        return view('dashboard', compact('showcases', 'events'));
+        return view('dashboard', compact('showcases', 'events', 'mapPins', 'clusters'));
     }
 
     return redirect('/');
@@ -163,6 +165,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');
     Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
     Route::get('/giving-back/receipt/{donation}', [DonationController::class, 'downloadReceipt'])->name('donations.receipt');
+
+    // 🗺️ Geographic Distribution Map & Regional Chapters
+    Route::get('/chapters', [RegionalChapterController::class, 'index'])->name('chapters.index');
+    Route::get('/chapters/{chapter:slug}', [RegionalChapterController::class, 'show'])->name('chapters.show');
+    Route::post('/chapters/{chapter:slug}/join', [RegionalChapterController::class, 'join'])->name('chapters.join');
+    Route::post('/chapters/{chapter:slug}/activities', [RegionalChapterController::class, 'storeActivity'])->name('chapters.activities.store');
 
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');

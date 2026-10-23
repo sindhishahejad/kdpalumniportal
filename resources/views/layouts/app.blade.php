@@ -148,7 +148,8 @@
                             <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Jobs</a></li>
                             <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Resources</a></li>
                             <li><a href="{{ route('mentorship.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Mentorship</a></li>
-                            <li><a href="{{ route('documents.index') }}"" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Request Official Documents</a></li>
+                            <li><a href="{{ route('chapters.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Regional Chapters & Map</a></li>
+                            <li><a href="{{ route('documents.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-kdp-textblue font-medium transition-colors uppercase tracking-wide">Request Official Documents</a></li>
                         </ul>
                     </div>
                 </div>
@@ -213,6 +214,7 @@
                 <a href="{{ route('id-card.show') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Smart I-Card</a>
                 <a href="{{ route('alumni.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Alumni Directory</a>
                 <a href="{{ route('jobs.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Jobs</a>
+                <a href="{{ route('chapters.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Regional Chapters & Map</a>
                 <a href="{{ route('resources.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Resources</a>
             </div>
         </div>

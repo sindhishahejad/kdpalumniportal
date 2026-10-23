@@ -35,5 +35,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'student',
             'is_approved' => true,
         ]);
+
+        $this->call(RegionalChapterSeeder::class);
     }
 }

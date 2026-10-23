@@ -96,6 +96,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(JobReferral::class);
     }
+
+    public function chapters()
+    {
+        return $this->belongsToMany(RegionalChapter::class, 'chapter_memberships')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
     
     // Helper method to check admin status
     public function isAdmin()

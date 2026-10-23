@@ -113,6 +113,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReunionRsvp::class);
     }
+
+    public function awardNominationsMade()
+    {
+        return $this->hasMany(AwardNomination::class, 'nominator_user_id');
+    }
+
+    public function awardNominationsReceived()
+    {
+        return $this->hasMany(AwardNomination::class, 'nominee_user_id');
+    }
+
+    public function awardVotes()
+    {
+        return $this->hasMany(AwardVote::class);
+    }
+
+    public function hallOfFameInductions()
+    {
+        return $this->hasMany(HallOfFameInductee::class);
+    }
     
     // Helper method to check admin status
     public function isAdmin()

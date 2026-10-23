@@ -24,6 +24,8 @@ use App\Http\Controllers\LabController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegionalChapterController;
 use App\Http\Controllers\BatchReunionController;
+use App\Http\Controllers\AwardController;
+use App\Http\Controllers\AdminAwardController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -181,6 +183,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/reunions/{reunion:slug}/memories', [BatchReunionController::class, 'storeMemory'])->name('reunions.memories.store');
     Route::post('/reunions/{reunion:slug}/memories/{memory}/like', [BatchReunionController::class, 'likeMemory'])->name('reunions.memories.like');
 
+    // 🏆 Annual Alumni Awards & Hall of Fame Voting
+    Route::get('/awards', [AwardController::class, 'index'])->name('awards.index');
+    Route::get('/awards/nominate', [AwardController::class, 'createNomination'])->name('awards.nominate');
+    Route::post('/awards/nominate', [AwardController::class, 'storeNomination'])->name('awards.nominate.store');
+    Route::get('/awards/category/{slug}', [AwardController::class, 'showCategory'])->name('awards.category');
+    Route::post('/awards/vote', [AwardController::class, 'vote'])->name('awards.vote');
+    Route::get('/hall-of-fame', [AwardController::class, 'hallOfFame'])->name('awards.hall-of-fame');
+
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');
     Route::post('/documents', [DocumentRequestController::class, 'store'])->name('documents.store');
@@ -238,6 +248,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/success-stories', [SuccessStoryController::class, 'adminIndex'])->name('stories.index');
     Route::post('/success-stories', [SuccessStoryController::class, 'store'])->name('stories.store');
     Route::delete('/success-stories/{story}', [SuccessStoryController::class, 'destroy'])->name('stories.destroy');
+
+    // 🏆 Dynamic Admin Awards Management
+    Route::get('/awards', [AdminAwardController::class, 'index'])->name('awards.index');
+    Route::post('/awards/cycles', [AdminAwardController::class, 'storeCycle'])->name('awards.cycles.store');
+    Route::put('/awards/cycles/{cycle}', [AdminAwardController::class, 'updateCycle'])->name('awards.cycles.update');
+    Route::patch('/awards/cycles/{cycle}/status', [AdminAwardController::class, 'updateCycleStatus'])->name('awards.cycles.update-status');
+    Route::post('/awards/categories', [AdminAwardController::class, 'storeCategory'])->name('awards.categories.store');
+    Route::put('/awards/categories/{category}', [AdminAwardController::class, 'updateCategory'])->name('awards.categories.update');
+    Route::delete('/awards/categories/{category}', [AdminAwardController::class, 'destroyCategory'])->name('awards.categories.destroy');
+    Route::patch('/awards/nominations/{nomination}/status', [AdminAwardController::class, 'updateNominationStatus'])->name('awards.nominations.update-status');
+    Route::post('/awards/nominations/{nomination}/induct', [AdminAwardController::class, 'inductWinner'])->name('awards.nominations.induct');
+    Route::post('/awards/inductees', [AdminAwardController::class, 'storeInductee'])->name('awards.inductees.store');
+    Route::put('/awards/inductees/{inductee}', [AdminAwardController::class, 'updateInductee'])->name('awards.inductees.update');
+    Route::delete('/awards/inductees/{inductee}', [AdminAwardController::class, 'destroyInductee'])->name('awards.inductees.destroy');
 });
 
 require __DIR__.'/auth.php';

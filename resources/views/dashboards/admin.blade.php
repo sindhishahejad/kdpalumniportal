@@ -126,6 +126,17 @@
             </a>
         </div>
 
+        <!-- Alumni Awards & Nominations Quick Access -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">🏆 Annual Alumni Awards &amp; Hall of Fame</h3>
+                <p class="text-sm text-gray-500">Review community nominations, manage voting stages, and induct distinguished graduates into the permanent Hall of Fame.</p>
+            </div>
+            <a href="{{ route('admin.awards.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap shadow-sm">
+                Manage Awards &amp; Nominations &rarr;
+            </a>
+        </div>
+
         <!-- Department Labs & Workshops Quick Access -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
             <div class="absolute inset-y-0 left-0 w-2 bg-blue-600"></div>

@@ -38,5 +38,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(RegionalChapterSeeder::class);
         $this->call(BatchReunionSeeder::class);
+        $this->call(AwardSeeder::class);
     }
 }

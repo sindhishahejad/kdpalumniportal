@@ -168,6 +168,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/labs/{lab}', [LabController::class, 'show'])->name('labs.show');
     Route::get('/labs-manage/create', [LabController::class, 'create'])->name('labs.create');
     Route::post('/labs-manage', [LabController::class, 'store'])->name('labs.store');
+    Route::get('/labs/{lab}/edit', [LabController::class, 'edit'])->name('labs.edit');
+    Route::put('/labs/{lab}', [LabController::class, 'update'])->name('labs.update');
+    Route::delete('/labs/{lab}', [LabController::class, 'destroy'])->name('labs.destroy');
 
     // ✨ Event RSVP & Digital Ticket Routes ✨
     Route::get('/events/{event}/rsvp', [EventController::class, 'rsvp'])->name('events.rsvp');

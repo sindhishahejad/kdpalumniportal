@@ -163,6 +163,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/incubation', [ProjectPitchController::class, 'index'])->name('pitches.index');
     Route::get('/incubation/pitch', [ProjectPitchController::class, 'create'])->name('pitches.create');
     Route::post('/incubation/pitch', [ProjectPitchController::class, 'store'])->name('pitches.store');
+    Route::get('/incubation/pitch/{pitch}', [ProjectPitchController::class, 'show'])->name('pitches.show');
+    Route::patch('/incubation/pitch/{pitch}/status', [ProjectPitchController::class, 'updateStatus'])->name('pitches.update-status');
+    Route::post('/incubation/pitch/{pitch}/guidance', [ProjectPitchController::class, 'offerGuidance'])->name('pitches.offer-guidance');
+    Route::delete('/incubation/pitch/{pitch}', [ProjectPitchController::class, 'destroy'])->name('pitches.destroy');
 
     Route::get('/labs', [LabController::class, 'index'])->name('labs.index');
     Route::get('/labs/{lab}', [LabController::class, 'show'])->name('labs.show');

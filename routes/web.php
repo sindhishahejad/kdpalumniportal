@@ -192,6 +192,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/notices', [AdminController::class, 'storeNotice'])->name('notices.store');
     Route::delete('/notices/{notice}', [AdminController::class, 'destroyNotice'])->name('notices.destroy');    
 
+    // ✨ Admin Newsletter Dispatch & Test ✨
+    Route::post('/newsletter/send', [AdminController::class, 'sendNewsletter'])->name('newsletter.send');    
+
     // ✨ Admin Document Request Management ✨
     Route::get('/documents', [DocumentRequestController::class, 'adminIndex'])->name('documents.index');
     Route::put('/documents/{document}', [DocumentRequestController::class, 'update'])->name('documents.update');

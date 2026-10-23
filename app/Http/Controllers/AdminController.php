@@ -6,7 +6,10 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\JobPosting;
 use App\Models\Notice;
+use App\Models\SuccessStory;
+use App\Mail\WeeklyNewsletter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -29,7 +32,7 @@ class AdminController extends Controller
         return view('dashboards.admin', compact('stats', 'users', 'pendingUsers', 'notices'));
     }
 
-    // ✨ NEW: Method to approve a user ✨
+    // Method to approve a user
     public function approveUser(User $user)
     {
         $user->update(['is_approved' => true]);
@@ -65,5 +68,36 @@ class AdminController extends Controller
     {
         $notice->delete();
         return back()->with('status', 'Notice removed successfully.');
+    }
+
+    /**
+     * Dispatch or test the weekly community newsletter digest.
+     */
+    public function sendNewsletter(Request $request)
+    {
+        $successStories = SuccessStory::latest()->take(3)->get();
+        $jobs = JobPosting::where('is_active', true)->latest()->take(3)->get();
+        $notices = Notice::latest()->take(3)->get();
+
+        if ($request->boolean('test_only')) {
+            $adminEmail = auth()->user()->email;
+            Mail::to($adminEmail)->queue(
+                new WeeklyNewsletter($successStories, $jobs, $notices)
+            );
+            return back()->with('status', "Test newsletter digest has been queued to {$adminEmail}.");
+        }
+
+        $users = User::where('is_approved', true)
+            ->whereNotNull('email')
+            ->where('email', '!=', '')
+            ->get();
+
+        foreach ($users as $user) {
+            Mail::to($user->email)->queue(
+                new WeeklyNewsletter($successStories, $jobs, $notices)
+            );
+        }
+
+        return back()->with('status', "Weekly newsletter digest successfully queued for {$users->count()} active members.");
     }
 }

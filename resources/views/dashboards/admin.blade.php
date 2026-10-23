@@ -150,6 +150,38 @@
             </div>
         </div>
 
+        <!-- Weekly Newsletter & Campus Digest Automation -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
+            <div class="absolute inset-y-0 left-0 w-2 bg-[#8b0000]"></div>
+            <div class="pl-3 mb-4 sm:mb-0">
+                <div class="flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-[#0f172a]">Weekly Newsletter &amp; Campus Digest</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">
+                        Scheduled: Mondays 8:00 AM
+                    </span>
+                </div>
+                <p class="text-sm text-gray-500 mt-0.5">Automated digest of latest alumni spotlights, job postings, and campus announcements.</p>
+            </div>
+            <div class="flex items-center gap-2 pl-3 sm:pl-0 flex-wrap">
+                <form method="POST" action="{{ route('admin.newsletter.send') }}">
+                    @csrf
+                    <input type="hidden" name="test_only" value="1">
+                    <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 px-4 py-2 rounded-xl font-semibold text-xs transition-colors shrink-0 flex items-center gap-1.5" title="Sends test copy to your email">
+                        <svg class="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        Test Email to Me
+                    </button>
+                </form>
+
+                <form method="POST" action="{{ route('admin.newsletter.send') }}" onsubmit="return confirm('Queue and send the weekly digest email to all approved alumni, students, and faculty?');">
+                    @csrf
+                    <button type="submit" class="bg-[#8b0000] text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#6b0000] transition-all shadow-sm shrink-0 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        Dispatch Digest Now
+                    </button>
+                </form>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Post a Notice -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">

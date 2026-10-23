@@ -8,4 +8,8 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('newsletter:send')->weekly();
+// Schedule Weekly Digest to run automatically every Monday at 08:00 AM
+Schedule::command('newsletter:send')
+    ->weeklyOn(1, '08:00')
+    ->withoutOverlapping()
+    ->runInBackground();

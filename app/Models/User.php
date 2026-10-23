@@ -91,6 +91,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Donation::class);
     }
+
+    public function jobReferrals()
+    {
+        return $this->hasMany(JobReferral::class);
+    }
     
     // Helper method to check admin status
     public function isAdmin()

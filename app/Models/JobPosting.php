@@ -24,4 +24,9 @@ class JobPosting extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function referrals()
+    {
+        return $this->hasMany(JobReferral::class);
+    }
 }

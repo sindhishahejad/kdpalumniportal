@@ -1,8 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ showModal: false }">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ 
+    showModal: false,
+    showReferralModal: false,
+    referralTarget: { id: null, title: '', company: '', posterName: '' },
+    referralActionUrl: '',
+    openReferralModal(job, actionUrl) {
+        this.referralTarget = {
+            id: job.id,
+            title: job.title,
+            company: job.company,
+            posterName: job.user ? job.user.name : 'Alumnus'
+        };
+        this.referralActionUrl = actionUrl;
+        this.showReferralModal = true;
+    }
+}">
     
+    <!-- Top Sub-Navigation -->
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+        <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#1c3272] text-white shadow-sm">
+            Browse All Opportunities
+        </a>
+        @auth
+            <a href="{{ route('jobs.my-applications') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all">
+                <span>My Referral Requests</span>
+                @if(isset($myApplicationsCount) && $myApplicationsCount > 0)
+                    <span class="bg-blue-100 text-[#1c3272] text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">{{ $myApplicationsCount }}</span>
+                @endif
+            </a>
+            @if(in_array(auth()->user()->role, ['admin', 'alumni', 'faculty']))
+                <a href="{{ route('jobs.pipeline') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all">
+                    Referral Review Pipeline
+                </a>
+            @endif
+        @endauth
+    </div>
+
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-gray-200 gap-4">
         <div>
@@ -105,13 +140,15 @@
                     <div class="flex items-start gap-3.5 mb-4">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode($job->company) }}&background=f3f4f6&color=0f172a&bold=true" class="w-12 h-12 rounded-xl border border-gray-100 shadow-sm shrink-0">
                         <div class="min-w-0 flex-1">
-                            <h3 class="font-bold text-gray-900 text-base leading-snug truncate" title="{{ $job->title }}">{{ $job->title }}</h3>
+                            <div class="flex items-start justify-between gap-2">
+                                <h3 class="font-bold text-gray-900 text-base leading-snug truncate" title="{{ $job->title }}">{{ $job->title }}</h3>
+                            </div>
                             <p class="text-xs text-gray-500 font-semibold truncate mt-0.5">{{ $job->company }}</p>
                         </div>
                     </div>
 
-                    <!-- Pills: Location & Employment Type -->
-                    <div class="flex flex-wrap gap-1.5 mb-4">
+                    <!-- Pills: Location & Employment Type & Referral Applicants Badge -->
+                    <div class="flex flex-wrap items-center gap-1.5 mb-4">
                         @if($job->location)
                             <span class="inline-flex items-center gap-1 bg-gray-50 text-gray-600 text-[10px] font-bold uppercase tracking-wider py-1 px-2.5 rounded-md border border-gray-100">
                                 <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -132,6 +169,17 @@
                                 {{ ucfirst($job->employment_type) }}
                             </span>
                         @endif
+
+                        <!-- For job owner or admin: show applicants count linking to pipeline -->
+                        @auth
+                            @if(auth()->user()->role === 'admin' || auth()->id() === $job->user_id)
+                                <a href="{{ route('jobs.pipeline', ['job_id' => $job->id]) }}" 
+                                   class="inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-[#1c3272] text-[10px] font-bold py-1 px-2.5 rounded-md border border-blue-200 transition-colors" 
+                                   title="Review candidates in pipeline">
+                                    <span>🎯</span> {{ $job->referrals_count }} {{ Str::plural('Applicant', $job->referrals_count) }}
+                                </a>
+                            @endif
+                        @endauth
                     </div>
 
                     <!-- Job Description -->
@@ -149,7 +197,7 @@
                         @endif
                     </div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap justify-end">
                         @auth
                             @if(auth()->user()->role === 'admin' || auth()->id() === $job->user_id)
                                 <form action="{{ route('jobs.destroy', $job->id) }}" method="POST" onsubmit="return confirm('Remove this job listing?');">
@@ -160,12 +208,29 @@
                                     </button>
                                 </form>
                             @endif
+
+                            <!-- Referral Request Action for Candidates -->
+                            @if(auth()->id() !== $job->user_id)
+                                @if(in_array($job->id, $userReferralJobIds ?? []))
+                                    <a href="{{ route('jobs.my-applications') }}" 
+                                       class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-xs font-bold py-1.5 px-3 rounded-lg border border-emerald-200"
+                                       title="View request status">
+                                        <span>✓</span> Referral Sent
+                                    </a>
+                                @else
+                                    <button type="button" 
+                                            @click="openReferralModal({{ $job->toJson() }}, '{{ route('jobs.referrals.store', $job->id) }}')"
+                                            class="inline-flex items-center gap-1 bg-[#1c3272] hover:bg-[#152554] text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-colors">
+                                        Ask for Referral
+                                    </button>
+                                @endif
+                            @endif
                         @endauth
 
                         @if($job->application_link_or_email)
                             <a href="{{ filter_var($job->application_link_or_email, FILTER_VALIDATE_EMAIL) ? 'mailto:'.$job->application_link_or_email : $job->application_link_or_email }}" 
                                target="_blank" 
-                               class="inline-flex items-center gap-1 bg-[#0f172a] hover:bg-black text-white text-xs font-bold py-1.5 px-3.5 rounded-lg shadow-sm transition-colors">
+                               class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold py-1.5 px-3 rounded-lg transition-colors">
                                 Apply &rarr;
                             </a>
                         @endif
@@ -188,6 +253,104 @@
             {{ $jobs->links() }}
         </div>
     @endif
+
+    <!-- Request Alumni Referral Modal -->
+    @auth
+        <div x-show="showReferralModal" 
+             x-cloak 
+             class="fixed inset-0 z-50 overflow-y-auto" 
+             style="display: none;"
+             aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="showReferralModal" 
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     @click="showReferralModal = false" 
+                     class="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-sm"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div x-show="showReferralModal" 
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     class="inline-block w-full max-w-xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl border border-gray-100">
+                    
+                    <div class="flex items-start justify-between pb-4 border-b border-gray-100">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-[#f97316]">Alumni Network Referral</span>
+                            <h3 class="text-xl font-serif font-bold text-gray-900 mt-0.5">Request Employee Referral</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                Applying for <strong class="text-gray-900" x-text="referralTarget.title"></strong> at <strong class="text-gray-900" x-text="referralTarget.company"></strong>.
+                            </p>
+                        </div>
+                        <button type="button" @click="showReferralModal = false" class="text-gray-400 hover:text-gray-600 transition-colors p-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3 my-4 text-xs text-blue-900 flex items-start gap-2.5">
+                        <svg class="w-4 h-4 text-[#1c3272] shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <div>
+                            Your resume and intro pitch will be submitted directly to <strong x-text="referralTarget.posterName"></strong> for internal employee referral or resume critique.
+                        </div>
+                    </div>
+
+                    <form :action="referralActionUrl" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Your Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="candidate_name" value="{{ auth()->user()->name }}" required class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Email Address <span class="text-red-500">*</span></label>
+                                <input type="email" name="candidate_email" value="{{ auth()->user()->email }}" required class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Phone / WhatsApp</label>
+                                <input type="text" name="candidate_phone" value="{{ auth()->user()->profile->phone ?? '' }}" placeholder="+91 98765 43210" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">LinkedIn or Portfolio URL</label>
+                                <input type="url" name="candidate_linkedin" value="{{ auth()->user()->profile->linkedin ?? '' }}" placeholder="https://linkedin.com/in/username" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Upload Resume (PDF, DOC, DOCX - Max 5MB) <span class="text-red-500">*</span></label>
+                            <input type="file" name="resume" accept=".pdf,.doc,.docx" required class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-[#1c3272] hover:file:bg-blue-100 border border-gray-200 rounded-lg cursor-pointer">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Why are you a good fit? (Intro Pitch)</label>
+                            <textarea name="cover_note" rows="3" placeholder="Briefly highlight your department, key technical skills, projects, or why you want an internal referral..." class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]"></textarea>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+                            <button type="button" @click="showReferralModal = false" class="px-4 py-2.5 text-xs font-bold text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2.5 text-xs font-bold text-white bg-[#1c3272] hover:bg-[#152554] rounded-lg shadow-sm transition-colors">
+                                Submit Referral Request &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endauth
 
     <!-- Post Opportunity Modal (Alumni, Faculty & Admin) -->
     @auth

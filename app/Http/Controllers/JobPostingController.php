@@ -10,6 +10,7 @@ class JobPostingController extends Controller
     public function index(Request $request)
     {
         $query = JobPosting::with('user.profile')
+            ->withCount('referrals')
             ->where('is_active', true)
             ->latest();
 
@@ -30,7 +31,22 @@ class JobPostingController extends Controller
 
         $jobs = $query->paginate(12)->withQueryString();
 
-        return view('jobs.index', compact('jobs'));
+        $userReferralJobIds = [];
+        $hasPostedJobs = false;
+        $myApplicationsCount = 0;
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            $userReferralJobIds = $user->jobReferrals()->pluck('job_posting_id')->toArray();
+            $myApplicationsCount = count($userReferralJobIds);
+            if (in_array($user->role, ['admin', 'alumni', 'faculty'])) {
+                $hasPostedJobs = $user->role === 'admin' 
+                    ? JobPosting::exists() 
+                    : $user->jobPostings()->exists();
+            }
+        }
+
+        return view('jobs.index', compact('jobs', 'userReferralJobIds', 'hasPostedJobs', 'myApplicationsCount'));
     }
 
     public function store(Request $request)

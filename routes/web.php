@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\JobPostingController;
+use App\Http\Controllers\JobReferralController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\MentorshipController;
 use App\Http\Controllers\AdminController;
@@ -142,6 +143,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs', [JobPostingController::class, 'index'])->name('jobs.index');
     Route::post('/jobs', [JobPostingController::class, 'store'])->name('jobs.store');
     Route::delete('/jobs/{job}', [JobPostingController::class, 'destroy'])->name('jobs.destroy');
+    Route::post('/jobs/{job}/referral', [JobReferralController::class, 'store'])->name('jobs.referrals.store');
+    Route::get('/jobs/pipeline', [JobReferralController::class, 'pipeline'])->name('jobs.pipeline');
+    Route::get('/jobs/my-applications', [JobReferralController::class, 'myApplications'])->name('jobs.my-applications');
+    Route::get('/jobs/referrals/{referral}/download-resume', [JobReferralController::class, 'downloadResume'])->name('jobs.referrals.download-resume');
+    Route::patch('/jobs/referrals/{referral}', [JobReferralController::class, 'updateStatus'])->name('jobs.referrals.update-status');
 
     Route::get('/resources', [ResourceController::class, 'index'])->name('resources.index');
     Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');

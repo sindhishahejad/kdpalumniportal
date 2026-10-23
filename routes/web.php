@@ -23,6 +23,7 @@ use App\Http\Controllers\ProjectPitchController;
 use App\Http\Controllers\LabController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegionalChapterController;
+use App\Http\Controllers\BatchReunionController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -171,6 +172,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/chapters/{chapter:slug}', [RegionalChapterController::class, 'show'])->name('chapters.show');
     Route::post('/chapters/{chapter:slug}/join', [RegionalChapterController::class, 'join'])->name('chapters.join');
     Route::post('/chapters/{chapter:slug}/activities', [RegionalChapterController::class, 'storeActivity'])->name('chapters.activities.store');
+
+    // 🎉 Batch Reunion Planner & Memory Wall
+    Route::get('/reunions', [BatchReunionController::class, 'index'])->name('reunions.index');
+    Route::post('/reunions', [BatchReunionController::class, 'store'])->name('reunions.store');
+    Route::get('/reunions/{reunion:slug}', [BatchReunionController::class, 'show'])->name('reunions.show');
+    Route::post('/reunions/{reunion:slug}/rsvp', [BatchReunionController::class, 'rsvp'])->name('reunions.rsvp');
+    Route::post('/reunions/{reunion:slug}/memories', [BatchReunionController::class, 'storeMemory'])->name('reunions.memories.store');
+    Route::post('/reunions/{reunion:slug}/memories/{memory}/like', [BatchReunionController::class, 'likeMemory'])->name('reunions.memories.like');
 
     // ✨ Document Request Routes ✨
     Route::get('/documents', [DocumentRequestController::class, 'index'])->name('documents.index');

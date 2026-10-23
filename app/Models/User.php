@@ -103,6 +103,16 @@ class User extends Authenticatable
             ->withPivot('role')
             ->withTimestamps();
     }
+
+    public function organizedReunions()
+    {
+        return $this->hasMany(BatchReunion::class);
+    }
+
+    public function reunionRsvps()
+    {
+        return $this->hasMany(ReunionRsvp::class);
+    }
     
     // Helper method to check admin status
     public function isAdmin()

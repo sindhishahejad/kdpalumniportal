@@ -13,8 +13,16 @@ class Donation extends Model
         'user_id',
         'amount',
         'campaign',
+        'is_anonymous',
+        'notes',
+        'payment_method',
         'transaction_id',
         'status',
+    ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'is_anonymous' => 'boolean',
     ];
 
     public function user()

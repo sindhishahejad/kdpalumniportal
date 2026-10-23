@@ -111,6 +111,21 @@
             </div>
         </div>
 
+        <!-- Campus Time-Machine & Landmark Spots Quick Access -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-amber-600 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">🏛️</span>
+                    <h3 class="text-xl font-bold text-gray-900">Campus Time-Machine &amp; Landmark Spots</h3>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">Dynamic Map &amp; Vault</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Manage heritage landmarks, update 'Then vs Now' archival photos, adjust blueprint map coordinates, and moderate alumni stories.</p>
+            </div>
+            <a href="{{ route('admin.spots.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap shadow-sm">
+                Manage Landmark Spots &rarr;
+            </a>
+        </div>
+
         <!-- Document Requests Quick Access -->
         <div class="bg-white rounded-lg shadow p-6 border-l-4 border-[#1C3661] flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>

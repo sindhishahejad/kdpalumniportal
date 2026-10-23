@@ -98,4 +98,95 @@ class GalleryTimeMachineTest extends TestCase
 
         $this->assertEquals(6, $story->fresh()->likes_count);
     }
+
+    public function test_non_admin_cannot_access_spots_management(): void
+    {
+        $student = User::factory()->create(['role' => 'student', 'is_approved' => true]);
+
+        $response = $this->actingAs($student)->get(route('admin.spots.index'));
+        $response->assertStatus(403);
+    }
+
+    public function test_admin_can_view_and_create_landmark_spot(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_approved' => true]);
+
+        $response = $this->actingAs($admin)->get(route('admin.spots.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Landmark Spots &amp; Time-Machine Management', false);
+
+        $createResponse = $this->actingAs($admin)->post(route('admin.spots.store'), [
+            'name' => 'Automobile Engineering Engine Lab',
+            'category' => 'workshop',
+            'description' => 'Four-stroke diesel engines and dynamometer test rigs.',
+            'x_percent' => 38.5,
+            'y_percent' => 62.0,
+            'icon' => 'wrench',
+            'then_year' => '1994',
+            'then_title' => 'Carburetor Test Stands (1994)',
+            'then_photo_url' => 'https://example.com/auto-then.jpg',
+            'now_year' => '2026',
+            'now_title' => 'EV Diagnostic Station (2026)',
+            'now_photo_url' => 'https://example.com/auto-now.jpg',
+            'fun_fact' => 'Revving the single-cylinder diesel engine shook the entire workshop floor!',
+            'order_num' => 7,
+        ]);
+
+        $createResponse->assertRedirect();
+        $createResponse->assertSessionHas('status');
+
+        $this->assertDatabaseHas('campus_memory_spots', [
+            'name' => 'Automobile Engineering Engine Lab',
+            'then_year' => '1994',
+            'now_year' => '2026',
+        ]);
+    }
+
+    public function test_admin_can_update_and_delete_landmark_spot(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_approved' => true]);
+
+        $spot = CampusMemorySpot::create([
+            'name' => 'Old Gymnasium Hall',
+            'slug' => 'old-gymnasium-hall',
+            'category' => 'recreation',
+            'description' => 'Indoor badminton and carrom hall.',
+            'x_percent' => 45.0,
+            'y_percent' => 60.0,
+            'icon' => 'trophy',
+            'then_photo_path' => 'https://example.com/gym-then.jpg',
+            'then_year' => '1990',
+            'then_title' => 'Wooden Floors (1990)',
+            'now_photo_path' => 'https://example.com/gym-now.jpg',
+            'now_year' => '2026',
+            'now_title' => 'Fitness Complex (2026)',
+        ]);
+
+        // Update
+        $updateResponse = $this->actingAs($admin)->put(route('admin.spots.update', $spot->id), [
+            'name' => 'Renovated Student Fitness Hub',
+            'category' => 'recreation',
+            'description' => 'Modern cardiovascular training center.',
+            'x_percent' => 48.0,
+            'y_percent' => 62.0,
+            'icon' => 'trophy',
+            'then_year' => '1990',
+            'then_title' => 'Wooden Badminton Court (1990)',
+            'now_year' => '2026',
+            'now_title' => 'Air-conditioned Fitness Hub (2026)',
+        ]);
+
+        $updateResponse->assertRedirect();
+        $this->assertDatabaseHas('campus_memory_spots', [
+            'id' => $spot->id,
+            'name' => 'Renovated Student Fitness Hub',
+        ]);
+
+        // Delete
+        $deleteResponse = $this->actingAs($admin)->delete(route('admin.spots.destroy', $spot->id));
+        $deleteResponse->assertRedirect();
+        $this->assertDatabaseMissing('campus_memory_spots', [
+            'id' => $spot->id,
+        ]);
+    }
 }

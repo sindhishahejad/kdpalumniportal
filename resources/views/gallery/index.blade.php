@@ -22,6 +22,11 @@
             </div>
 
             <div class="flex items-center gap-3">
+                @if(auth()->check() && auth()->user()->isAdmin())
+                    <a href="{{ route('admin.spots.index') }}" class="px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-white/20 hover:bg-white/30 text-white border border-white/30 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>⚙️</span> Manage Landmark Spots
+                    </a>
+                @endif
                 <button type="button" @click="openStoryModal()" class="px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-[#f97316] hover:bg-orange-600 text-white shadow-lg transition-all flex items-center gap-2 shrink-0">
                     <span>✍️</span> Pin a Throwback Memory
                 </button>
@@ -93,12 +98,17 @@
             <!-- Spot Selector Cards Bar -->
             <div>
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">
-                        Select Campus Heritage Spot:
-                    </span>
-                    <span class="text-xs text-slate-400">
-                        {{ $memorySpots->count() }} Landmark Spots Available
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                            Select Campus Heritage Spot:
+                        </span>
+                        @if(auth()->check() && auth()->user()->isAdmin())
+                            <a href="{{ route('admin.spots.index') }}" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors">
+                                ⚙️ Manage Spots
+                            </a>
+                        @endif
+                    </div>
+                    <span class="text-xs text-slate-400 font-medium" x-text="spots.length + ' Landmark Spots Available'"></span>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -133,6 +143,11 @@
                         </div>
 
                         <div class="flex items-center gap-2 shrink-0">
+                            @if(auth()->check() && auth()->user()->isAdmin())
+                                <a href="{{ route('admin.spots.index') }}" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200 transition-colors flex items-center gap-1.5">
+                                    <span>⚙️</span> Edit in Admin
+                                </a>
+                            @endif
                             <button type="button" @click="openStoryModal(selectedSpot.id)" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-50 text-[#1c3272] hover:bg-blue-100 border border-blue-200 transition-colors flex items-center gap-1.5">
                                 <span>💬</span> Add Your Memory Here
                             </button>
@@ -274,42 +289,155 @@
                     <!-- SVG Campus Blueprint Canvas (8 Cols) -->
                     <div class="lg:col-span-8 bg-slate-900 rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-inner relative overflow-hidden aspect-[4/3] sm:aspect-[16/10]">
                         
-                        <!-- Stylized Campus Layout Drawing (SVG) -->
+                        <!-- Stylized Campus Layout Drawing (SVG based on actual KDP Patan Layout) -->
                         <svg class="w-full h-full" viewBox="0 0 1000 650" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Campus Boundary -->
-                            <rect x="20" y="20" width="960" height="610" rx="24" fill="#0f172a" stroke="#1e293b" stroke-width="4"/>
+                            <!-- Background Blueprint Grid -->
+                            <rect width="1000" height="650" fill="#090d16"/>
+                            <defs>
+                                <pattern id="blueprintGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#131c2e" stroke-width="0.8"/>
+                                </pattern>
+                            </defs>
+                            <rect width="1000" height="650" fill="url(#blueprintGrid)"/>
+
+                            <!-- Campus Outer Perimeter Boundary -->
+                            <rect x="25" y="55" width="950" height="575" rx="18" fill="#0f172a" stroke="#1e293b" stroke-width="3"/>
+
+                            <!-- ============================================== -->
+                            <!-- 1. HEMCHANDRACHARYA UNIVERSITY ROAD (TOP)      -->
+                            <!-- ============================================== -->
+                            <rect x="0" y="0" width="1000" height="52" fill="#090e1a"/>
+                            <line x1="0" y1="26" x2="1000" y2="26" stroke="#fbbf24" stroke-width="2" stroke-dasharray="16 12"/>
+                            <line x1="0" y1="52" x2="1000" y2="52" stroke="#475569" stroke-width="2"/>
                             
-                            <!-- Green Pathways & Grounds -->
-                            <path d="M 50 140 Q 500 130 950 140 L 950 170 Q 500 160 50 170 Z" fill="#1e3a8a" opacity="0.3"/>
-                            <path d="M 500 150 L 500 600" stroke="#334155" stroke-width="24" stroke-dasharray="10 10"/>
+                            <text x="500" y="16" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="extrabold" letter-spacing="2" font-family="sans-serif">
+                                HEMCHANDRACHARYA NORTH GUJARAT UNIVERSITY ROAD (HNGU CORRIDOR)
+                            </text>
+                            <text x="500" y="42" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="bold" letter-spacing="1">
+                                🏥 OPPOSITE: T. B. HOSPITAL &amp; PATAN GENERAL HEALTH COMPLEX
+                            </text>
+
+                            <!-- ============================================== -->
+                            <!-- 2. MAIN ENTRANCE GATE & SECURITY CABIN         -->
+                            <!-- ============================================== -->
+                            <!-- Gate Opening -->
+                            <rect x="440" y="50" width="120" height="12" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>
+                            <rect x="430" y="46" width="12" height="20" rx="3" fill="#f97316"/>
+                            <rect x="558" y="46" width="12" height="20" rx="3" fill="#f97316"/>
+                            <text x="500" y="60" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="black" letter-spacing="1">KDP MAIN GATE</text>
+
+                            <!-- ============================================== -->
+                            <!-- 3. CENTRAL PALM AVENUE & FLAGPOLE PLAZA        -->
+                            <!-- ============================================== -->
+                            <!-- Paved Entrance Driveway -->
+                            <path d="M 455 62 L 455 160 L 410 175 L 410 200 L 590 200 L 590 175 L 545 160 L 545 62 Z" fill="#132347" stroke="#1d4ed8" stroke-width="1.5"/>
                             
-                            <!-- Athletic Oval Ground (Bottom Center) -->
-                            <ellipse cx="550" cy="520" rx="160" ry="75" fill="#064e3b" stroke="#059669" stroke-width="3" opacity="0.6"/>
-                            <text x="550" y="525" text-anchor="middle" fill="#6ee7b7" font-size="14" font-weight="bold" font-family="sans-serif">SPORTS TURF &amp; CRICKET OVAL</text>
+                            <!-- Circular Flagpole Roundabout Plaza -->
+                            <circle cx="500" cy="140" r="30" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+                            <circle cx="500" cy="140" r="18" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+                            <circle cx="500" cy="140" r="5" fill="#f97316"/>
+                            <text x="500" y="143" text-anchor="middle" fill="#93c5fd" font-size="7" font-weight="bold">FLAG PLAZA</text>
 
-                            <!-- Buildings Layout Mockup -->
-                            <!-- Admin Heritage Block (Center Top) -->
-                            <rect x="380" y="60" width="240" height="90" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
-                            <text x="500" y="110" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="bold">ADMINISTRATION &amp; PORCH</text>
+                            <!-- Connecting Paved Walkways -->
+                            <path d="M 70 195 L 930 195" stroke="#334155" stroke-width="8" stroke-dasharray="6 4" opacity="0.4"/>
+                            <path d="M 500 240 L 500 520" stroke="#334155" stroke-width="10" stroke-dasharray="8 6" opacity="0.3"/>
 
-                            <!-- Mechanical Workshops (Left) -->
-                            <rect x="80" y="220" width="260" height="130" rx="12" fill="#1e293b" stroke="#f97316" stroke-width="2"/>
-                            <text x="210" y="285" text-anchor="middle" fill="#fdba74" font-size="12" font-weight="bold">MECHANICAL &amp; FOUNDRY WORKSHOPS</text>
+                            <!-- ============================================== -->
+                            <!-- 4. HERITAGE MAIN ADMINISTRATIVE BLOCK          -->
+                            <!-- ============================================== -->
+                            <!-- Main Admin Complex (Est. 1961/1985) -->
+                            <rect x="370" y="155" width="260" height="60" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
+                            <!-- Central Porch Portico -->
+                            <rect x="460" y="150" width="80" height="20" rx="4" fill="#78350f" stroke="#fbbf24" stroke-width="2"/>
+                            <text x="500" y="163" text-anchor="middle" fill="#fef3c7" font-size="8" font-weight="black">ARCHED PORCH</text>
+                            
+                            <text x="500" y="184" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="black" font-family="sans-serif">
+                                HERITAGE MAIN ADMINISTRATIVE BUILDING
+                            </text>
+                            <text x="500" y="200" text-anchor="middle" fill="#fcd34d" font-size="8" font-weight="bold">
+                                Principal Chamber • Student Section (GTU Window) • Est. 1961
+                            </text>
 
-                            <!-- Central Library (Right Top) -->
-                            <rect x="660" y="200" width="240" height="110" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
-                            <text x="780" y="260" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="bold">CENTRAL TECHNICAL LIBRARY</text>
+                            <!-- ============================================== -->
+                            <!-- 5. EAST WING: LRUC & COMPUTER DEPT             -->
+                            <!-- ============================================== -->
+                            <!-- LRUC Building & Central Library -->
+                            <rect x="670" y="155" width="200" height="60" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+                            <text x="770" y="182" text-anchor="middle" fill="#93c5fd" font-size="9" font-weight="extrabold">LRUC BUILDING &amp; CENTRAL LIBRARY</text>
+                            <text x="770" y="198" text-anchor="middle" fill="#60a5fa" font-size="7.5">Reading Halls (~150 sq. m) • GTU E-Library</text>
 
-                            <!-- Canteen & Neem Tree (Bottom Left) -->
-                            <rect x="180" y="440" width="180" height="90" rx="12" fill="#1e293b" stroke="#eab308" stroke-width="2"/>
-                            <text x="270" y="490" text-anchor="middle" fill="#fde047" font-size="11" font-weight="bold">CANTEEN &amp; HERITAGE NEEM</text>
+                            <!-- Computer Engineering & IT Wing -->
+                            <rect x="780" y="235" width="190" height="65" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+                            <text x="875" y="264" text-anchor="middle" fill="#67e8f9" font-size="9" font-weight="extrabold">COMPUTER ENGINEERING DEPT</text>
+                            <text x="875" y="280" text-anchor="middle" fill="#a5f3fc" font-size="7.5">Advanced Software &amp; Networking Labs</text>
 
-                            <!-- Electrical Labs (Bottom Right) -->
-                            <rect x="680" y="390" width="220" height="110" rx="12" fill="#1e293b" stroke="#8b5cf6" stroke-width="2"/>
-                            <text x="790" y="450" text-anchor="middle" fill="#c4b5fd" font-size="11" font-weight="bold">ELECTRICAL HIGH VOLTAGE LAB</text>
+                            <!-- Electrical Engineering & Machines Lab -->
+                            <rect x="660" y="320" width="210" height="65" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="2"/>
+                            <text x="765" y="348" text-anchor="middle" fill="#c4b5fd" font-size="9" font-weight="extrabold">ELECTRICAL ENGINEERING DEPT</text>
+                            <text x="765" y="364" text-anchor="middle" fill="#ddd6fe" font-size="7.5">High Voltage Machines Lab • SCADA Panel</text>
 
-                            <!-- Main Gate (Top Center Indicator) -->
-                            <text x="500" y="40" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="extrabold" letter-spacing="3">MAIN CAMPUS ENTRANCE (PATAN HIGHWAY)</text>
+                            <!-- ============================================== -->
+                            <!-- 6. WEST WING: CIVIL & MECHANICAL WORKSHOPS     -->
+                            <!-- ============================================== -->
+                            <!-- Civil Engineering & Applied Mechanics -->
+                            <rect x="80" y="155" width="200" height="60" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+                            <text x="180" y="182" text-anchor="middle" fill="#6ee7b7" font-size="9" font-weight="extrabold">CIVIL ENGINEERING &amp; MECHANICS</text>
+                            <text x="180" y="198" text-anchor="middle" fill="#a7f3d0" font-size="7.5">Surveying Stores • Soil &amp; Concrete Testing</text>
+
+                            <!-- Central Mechanical Workshops & Industrial Sheds -->
+                            <!-- Workshop Bay 1 (Machine/Lathe) -->
+                            <rect x="80" y="315" width="290" height="90" rx="8" fill="#1e293b" stroke="#f97316" stroke-width="2.5"/>
+                            <line x1="80" y1="360" x2="370" y2="360" stroke="#f97316" stroke-dasharray="4 4" stroke-width="1.2"/>
+                            <text x="225" y="342" text-anchor="middle" fill="#fdba74" font-size="10" font-weight="black">CENTRAL MECHANICAL WORKSHOPS</text>
+                            <text x="225" y="356" text-anchor="middle" fill="#fed7aa" font-size="8">Lathe Machine Turning Shop • Carpentry &amp; Fitting</text>
+                            <text x="225" y="380" text-anchor="middle" fill="#fb923c" font-size="8">Welding Bay • Smithy Hearth • Casting Foundry Shed</text>
+
+                            <!-- ============================================== -->
+                            <!-- 7. SOUTH-WEST: CANTEEN & HERITAGE NEEM         -->
+                            <!-- ============================================== -->
+                            <rect x="180" y="475" width="240" height="65" rx="10" fill="#1e293b" stroke="#eab308" stroke-width="2"/>
+                            <!-- Heritage Neem Tree Symbol -->
+                            <circle cx="215" cy="507" r="18" fill="#14532d" stroke="#22c55e" stroke-width="1.8"/>
+                            <text x="215" y="511" text-anchor="middle" fill="#86efac" font-size="12">🌳</text>
+                            <text x="320" y="502" text-anchor="middle" fill="#fef08a" font-size="9.5" font-weight="extrabold">CAMPUS CANTEEN &amp; NEEM TREE</text>
+                            <text x="320" y="518" text-anchor="middle" fill="#fef9c3" font-size="7.5">Student Social Courtyard • Cutting Chai &amp; Bataka Vada</text>
+
+                            <!-- ============================================== -->
+                            <!-- 8. SOUTH-EAST: DIPLOMA HOSTEL COMPLEX          -->
+                            <!-- ============================================== -->
+                            <rect x="740" y="475" width="225" height="70" rx="10" fill="#1e293b" stroke="#ec4899" stroke-width="2"/>
+                            <text x="852" y="505" text-anchor="middle" fill="#fbcfe8" font-size="9.5" font-weight="extrabold">KDP RESIDENTIAL HOSTELS</text>
+                            <text x="852" y="521" text-anchor="middle" fill="#fdf2f8" font-size="7.5">Diploma Boys &amp; Girls Hostels • Mess Hall</text>
+
+                            <!-- ============================================== -->
+                            <!-- 9. SOUTH-CENTRAL: CRICKET GROUND & SPORTS TURF -->
+                            <!-- ============================================== -->
+                            <!-- Cricket Oval -->
+                            <ellipse cx="540" cy="545" rx="155" ry="60" fill="#064e3b" stroke="#059669" stroke-width="2.5" opacity="0.85"/>
+                            <ellipse cx="540" cy="545" rx="100" ry="38" fill="none" stroke="#34d399" stroke-width="1" stroke-dasharray="6 4"/>
+                            <!-- Cricket Pitch Rectangle -->
+                            <rect x="528" y="534" width="24" height="22" rx="2" fill="#78350f" stroke="#fbbf24" stroke-width="1"/>
+                            <text x="540" y="548" text-anchor="middle" fill="#a7f3d0" font-size="8.5" font-weight="black">CRICKET TURF</text>
+                            <text x="540" y="562" text-anchor="middle" fill="#6ee7b7" font-size="7" font-weight="bold">GTU Inter-Department Sports Arena</text>
+
+                            <!-- ============================================== -->
+                            <!-- 10. MAP ORIENTATION, COMPASS & LEGEND          -->
+                            <!-- ============================================== -->
+                            <!-- Compass Rose (Top Right) -->
+                            <g transform="translate(930, 80)">
+                                <circle cx="0" cy="0" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                                <path d="M 0 -12 L 4 0 L 0 -4 L -4 0 Z" fill="#ef4444"/>
+                                <path d="M 0 12 L 4 0 L 0 4 L -4 0 Z" fill="#94a3b8"/>
+                                <text x="0" y="-14" text-anchor="middle" fill="#f87171" font-size="8" font-weight="black">N</text>
+                            </g>
+
+                            <!-- Footprint Scale Bar -->
+                            <g transform="translate(40, 620)">
+                                <line x1="0" y1="0" x2="100" y2="0" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="0" y1="-3" x2="0" y2="3" stroke="#94a3b8" stroke-width="2"/>
+                                <line x1="100" y1="-3" x2="100" y2="3" stroke="#94a3b8" stroke-width="2"/>
+                                <text x="50" y="-6" text-anchor="middle" fill="#94a3b8" font-size="8" font-family="sans-serif">Campus Layout 1:1000m</text>
+                            </g>
                         </svg>
 
                         <!-- DYNAMIC INTERACTIVE PINS -->

@@ -27,6 +27,7 @@ use App\Http\Controllers\BatchReunionController;
 use App\Http\Controllers\AwardController;
 use App\Http\Controllers\AdminAwardController;
 use App\Http\Controllers\ToolDonationController;
+use App\Http\Controllers\AdminAlertController;
 
 // ✨ Register the broadcasting authentication route ✨
 Broadcast::routes(['middleware' => ['auth']]);
@@ -276,6 +277,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/awards/inductees', [AdminAwardController::class, 'storeInductee'])->name('awards.inductees.store');
     Route::put('/awards/inductees/{inductee}', [AdminAwardController::class, 'updateInductee'])->name('awards.inductees.update');
     Route::delete('/awards/inductees/{inductee}', [AdminAwardController::class, 'destroyInductee'])->name('awards.inductees.destroy');
+
+    // 📱 Direct WhatsApp & Email Alert Center
+    Route::get('/alerts', [AdminAlertController::class, 'index'])->name('alerts.index');
+    Route::post('/alerts/test-email', [AdminAlertController::class, 'sendTestEmail'])->name('alerts.test-email');
+    Route::post('/alerts/whatsapp-broadcast', [AdminAlertController::class, 'dispatchWhatsAppBroadcast'])->name('alerts.whatsapp-broadcast');
 });
 
 require __DIR__.'/auth.php';

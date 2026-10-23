@@ -85,6 +85,18 @@
                                     <button type="submit" class="w-full bg-[#1C3661] hover:bg-blue-900 text-white text-xs font-bold py-2 px-3 rounded-md shadow-sm transition-colors uppercase tracking-wider">
                                         Save &amp; Update
                                     </button>
+
+                                    @if($req->user->phone)
+                                        @php
+                                            $waUrl = \App\Services\WhatsAppAlertService::generateClickToChatUrl(
+                                                $req->user->phone,
+                                                \App\Services\WhatsAppAlertService::documentReadyMessage($req->user, $req)
+                                            );
+                                        @endphp
+                                        <a href="{{ $waUrl }}" target="_blank" class="w-full inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 px-3 rounded-md shadow-sm transition-colors uppercase tracking-wider">
+                                            <span>📱</span> Send WhatsApp Alert
+                                        </a>
+                                    @endif
                                 </form>
                             </td>
                         </tr>

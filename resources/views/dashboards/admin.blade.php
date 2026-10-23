@@ -93,6 +93,24 @@
         </div>
         @endif
 
+        <!-- Direct WhatsApp & Email Alert Control Center Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden bg-gradient-to-r from-emerald-50/40 via-white to-white">
+            <div class="absolute inset-y-0 left-0 w-2 bg-emerald-500"></div>
+            <div class="pl-3 mb-4 sm:mb-0">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📱</span>
+                    <h3 class="text-lg font-bold text-[#0f172a]">Direct WhatsApp &amp; Email Alert Center</h3>
+                    <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full">Zero Cost &bull; Instant</span>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Dispatch 1-click WhatsApp alerts to students &amp; alumni, test live SMTP email delivery, and view broadcast dispatch logs.</p>
+            </div>
+            <div class="flex items-center gap-3 pl-3 sm:pl-0">
+                <a href="{{ route('admin.alerts.index') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm shrink-0 flex items-center gap-2">
+                    <span>⚡</span> Open Alert Hub &rarr;
+                </a>
+            </div>
+        </div>
+
         <!-- Document Requests Quick Access -->
         <div class="bg-white rounded-lg shadow p-6 border-l-4 border-[#1C3661] flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>

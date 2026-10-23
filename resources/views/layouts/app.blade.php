@@ -179,6 +179,7 @@
                             <a href="{{ route('tools.my-requests') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-800">My Tool Requests</a>
                             @if(Auth::user()->isAdmin())
                                 <a href="{{ route('admin.awards.index') }}" class="block px-4 py-2 text-sm text-amber-700 font-semibold hover:bg-amber-50">🏆 Awards Management</a>
+                                <a href="{{ route('admin.alerts.index') }}" class="block px-4 py-2 text-sm text-emerald-700 font-semibold hover:bg-emerald-50">📱 WhatsApp &amp; Alert Center</a>
                             @endif
                             
                             <!-- Dynamic Inbox Option -->

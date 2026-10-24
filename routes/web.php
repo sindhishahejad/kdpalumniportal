@@ -173,6 +173,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/resources', [ResourceController::class, 'index'])->name('resources.index');
     Route::post('/resources', [ResourceController::class, 'store'])->name('resources.store');
+    Route::delete('/resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 
     Route::get('/mentorship', [MentorshipController::class, 'index'])->name('mentorship.index');
     Route::post('/mentorship', [MentorshipController::class, 'store'])->name('mentorship.store');

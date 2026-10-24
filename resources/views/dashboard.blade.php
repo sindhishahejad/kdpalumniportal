@@ -375,78 +375,101 @@
 <!-- ============================================== -->
 <!-- EVENTS & GATHERINGS SECTION -->
 <!-- ============================================== -->
-<div class="py-16 bg-gray-50">
+<div class="py-16 bg-slate-50 border-t border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4">
-            <div>
-                <h2 class="text-3xl font-serif font-extrabold text-[#0f172a]">Events & Gatherings</h2>
-                <p class="text-gray-500 mt-2">Stay updated with the latest campus activities and reunions.</p>
+            <div class="space-y-1.5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-900 text-xs font-semibold tracking-wide border border-amber-500/20">
+                    <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                    <span>કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-[#0f2042] tracking-tight">
+                    Campus Events &amp; Reunions
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 max-w-2xl font-light">
+                    Join hands-on engineering workshops, technical symposiums, annual alumni reunions, and student-industry networking sessions at KDP Patan.
+                </p>
             </div>
-            <!-- Reverted this link back to # -->
-            <a href="#" class="w-max bg-white border border-gray-200 text-[#0f172a] text-sm font-bold uppercase tracking-wider py-2.5 px-6 rounded-full hover:border-[#294c9b] hover:text-[#294c9b] transition-colors shadow-sm">
-                View All Events
+            <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1e3a8a] hover:bg-[#0f2042] text-white font-heading font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex-shrink-0 self-start sm:self-auto">
+                <span>View All Events</span>
+                <span>&rarr;</span>
             </a>
         </div>
 
         <!-- Events Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($events as $event)
-                <div class="bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-gray-100 flex flex-col relative transition-transform hover:-translate-y-1 duration-300">
+                <div class="bg-white rounded-3xl shadow-sm hover:shadow-xl border border-slate-200/90 flex flex-col relative transition-all duration-300 hover:-translate-y-1 overflow-hidden group hover:border-[#1e3a8a]/40">
                     
-                    <!-- ✨ Image Wrapper: Removed overflow-hidden so badge isn't cut off ✨ -->
-                    <div class="relative h-52 w-full rounded-t-2xl bg-gray-200">
+                    <!-- Cover Image Banner -->
+                    <div class="relative h-52 w-full bg-slate-900 overflow-hidden">
                         @if($event->image_path)
-                            <!-- ✨ Moved rounded corners directly to the image ✨ -->
-                            <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover rounded-t-2xl">
+                            <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         @else
-                            <!-- ✨ Moved rounded corners directly to the placeholder ✨ -->
-                            <div class="w-full h-full bg-gradient-to-br from-blue-900 to-blue-700 rounded-t-2xl"></div>
+                            <div class="w-full h-full bg-gradient-to-br from-[#0f2042] via-[#1e3a8a] to-[#0f172a] flex flex-col items-center justify-center text-white/90 p-4 text-center">
+                                <span class="text-3xl mb-1">🏛️</span>
+                                <span class="text-xs uppercase tracking-widest font-black font-heading">{{ $event->category ?? 'Campus Event' }}</span>
+                                <span class="text-[10px] text-blue-200 mt-0.5">K. D. Polytechnic, Patan</span>
+                            </div>
                         @endif
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
 
-                        <!-- ✨ Overlapping Date Badge: Added z-10 so it sits on top ✨ -->
-                        <div class="absolute -bottom-6 right-6 z-10 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-2 flex flex-col items-center justify-center min-w-[70px]">
-                            <span class="text-[#f97316] text-[10px] font-extrabold uppercase tracking-widest">{{ $event->event_date->format('M') }}</span>
-                            <span class="text-2xl font-black text-[#0f172a] leading-none mt-0.5">{{ $event->event_date->format('d') }}</span>
+                        <!-- Category Pill -->
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-[#0f2042]/90 backdrop-blur-md text-white text-[10px] font-heading font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-xs border border-white/20">
+                                {{ $event->category }}
+                            </span>
+                        </div>
+
+                        <!-- Overlapping Date Badge -->
+                        <div class="absolute -bottom-5 right-6 z-10 bg-white rounded-2xl shadow-lg border border-slate-200/80 px-4 py-2 flex flex-col items-center justify-center min-w-[72px]">
+                            <span class="text-[#f97316] text-[10px] font-heading font-black uppercase tracking-widest">{{ $event->event_date->format('M') }}</span>
+                            <span class="text-2xl font-heading font-black text-[#0f2042] leading-none mt-0.5">{{ $event->event_date->format('d') }}</span>
+                            <span class="text-[9px] font-bold text-slate-400 leading-none mt-0.5">{{ $event->event_date->format('Y') }}</span>
                         </div>
                     </div>
 
                     <!-- Card Body -->
-                    <div class="p-8 pt-10 flex-1 flex flex-col">
-                        
-                        <!-- Dynamic Category Tag -->
-                        @php
-                            $isWorkshop = strtolower($event->category) === 'workshop';
-                            $tagBg = $isWorkshop ? 'bg-blue-50' : 'bg-orange-50';
-                            $tagText = $isWorkshop ? 'text-blue-600' : 'text-[#f97316]';
-                        @endphp
-                        <span class="w-max {{ $tagBg }} {{ $tagText }} text-[10px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full mb-4">
-                            {{ $event->category }}
-                        </span>
+                    <div class="p-6 sm:p-8 pt-8 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2.5">
+                            <h3 class="text-lg font-heading font-bold text-slate-900 group-hover:text-[#1e3a8a] transition-colors leading-snug line-clamp-2">
+                                <a href="{{ route('events.show', $event->id) }}">
+                                    {{ $event->title }}
+                                </a>
+                            </h3>
 
-                        <h3 class="text-xl font-serif font-bold text-[#0f172a] mb-4 leading-snug">
-                            {{ $event->title }}
-                        </h3>
+                            <div class="flex items-center text-slate-500 text-xs font-medium gap-2">
+                                <svg class="w-4 h-4 text-[#1e3a8a] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>{{ $event->time_display }}</span>
+                            </div>
 
-                        <div class="flex items-center text-gray-500 text-sm mb-8 font-medium">
-                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            {{ $event->time_display }}
+                            @if($event->description)
+                                <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                                    {{ Str::limit($event->description, 120) }}
+                                </p>
+                            @endif
                         </div>
 
                         <!-- Footer Link -->
-                        <div class="mt-auto">
-                            <a href="{{ route('events.show', $event->id) }}" class="inline-flex items-center text-[#294c9b] font-bold text-sm tracking-wide uppercase hover:text-blue-800 transition-colors group">
-                                View Details 
-                                <span class="ml-2 transition-transform group-hover:translate-x-1">&rarr;</span>
+                        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[11px] font-semibold text-slate-400">
+                                🎟️ {{ $event->rsvps_count ?? $event->rsvps()->count() }} Registered
+                            </span>
+                            <a href="{{ route('events.show', $event->id) }}" class="inline-flex items-center gap-1.5 text-xs font-heading font-bold uppercase tracking-wider text-[#1e3a8a] hover:text-[#f97316] transition-colors group-hover:translate-x-0.5 transition-transform">
+                                <span>View Details</span>
+                                <span>&rarr;</span>
                             </a>
                         </div>
                     </div>
                 </div>
             @empty
                 <!-- Empty State -->
-                <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-dashed border-gray-300">
-                    <p class="text-gray-500 font-medium">No upcoming events scheduled right now.</p>
+                <div class="col-span-full py-16 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 p-8 space-y-3">
+                    <div class="w-16 h-16 mx-auto bg-blue-50 text-[#1e3a8a] rounded-full flex items-center justify-center text-3xl">📅</div>
+                    <h3 class="text-base font-heading font-bold text-slate-800">No Upcoming Events Scheduled</h3>
+                    <p class="text-xs text-slate-500 max-w-sm mx-auto">There are currently no scheduled events. Check back soon for workshops, seminars, and alumni gatherings.</p>
                 </div>
             @endforelse
         </div>

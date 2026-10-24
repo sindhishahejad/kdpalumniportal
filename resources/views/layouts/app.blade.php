@@ -418,7 +418,7 @@
                 <div class="flex items-center gap-3 mb-3">
                     <img src="{{ asset('images/kdp_crest.png') }}" alt="K. D. Polytechnic Logo" class="h-12 w-auto bg-white rounded-full p-1 shadow">
                     <div>
-                        <h5 class="text-sm font-extrabold uppercase tracking-wider text-white font-heading leading-tight">કિલચંદ દેવચંદ પોલિટેકનિક</h5>
+                        <h5 class="text-sm font-extrabold uppercase tracking-wider text-white font-heading leading-tight">કિલાચંદ દેવચંદ પોલિટેકનિક</h5>
                         <p class="text-xs font-bold text-blue-200 uppercase tracking-wide">K. D. Polytechnic, Patan</p>
                     </div>
                 </div>

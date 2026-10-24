@@ -76,6 +76,16 @@ class User extends Authenticatable
         return $this->hasOne(MentorshipListing::class);
     }
 
+    public function mentorshipRequestsSent()
+    {
+        return $this->hasMany(MentorshipRequest::class, 'mentee_id');
+    }
+
+    public function mentorshipRequestsReceived()
+    {
+        return $this->hasMany(MentorshipRequest::class, 'mentor_id');
+    }
+
     // ✨ Messaging Relationships for WhatsApp-style Inbox ✨
     public function sentMessages() 
     { 

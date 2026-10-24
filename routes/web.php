@@ -178,6 +178,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/mentorship', [MentorshipController::class, 'index'])->name('mentorship.index');
     Route::post('/mentorship', [MentorshipController::class, 'store'])->name('mentorship.store');
     Route::post('/mentorship/{listing}/request', [MentorshipController::class, 'sendRequest'])->name('mentorship.request');
+    Route::patch('/mentorship/requests/{mentorshipRequest}/accept', [MentorshipController::class, 'acceptRequest'])->name('mentorship.requests.accept');
+    Route::patch('/mentorship/requests/{mentorshipRequest}/complete', [MentorshipController::class, 'completeSession'])->name('mentorship.requests.complete');
+    Route::patch('/mentorship/requests/{mentorshipRequest}/decline', [MentorshipController::class, 'declineRequest'])->name('mentorship.requests.decline');
+    Route::delete('/mentorship/requests/{mentorshipRequest}', [MentorshipController::class, 'cancelRequest'])->name('mentorship.requests.cancel');
 
     Route::get('/id-card', [IdCardController::class, 'show'])->name('id-card.show');
     Route::get('/id-card/download', [IdCardController::class, 'download'])->name('id-card.download');

@@ -21,4 +21,9 @@ class MentorshipListing extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function requests()
+    {
+        return $this->hasMany(MentorshipRequest::class, 'mentorship_listing_id');
+    }
 }

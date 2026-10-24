@@ -28,8 +28,15 @@ class AdminController extends Controller
         $users = User::where('is_approved', true)->with('profile')->latest()->paginate(10);
         
         $notices = Notice::latest()->get();
+        $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
+        $events = \App\Models\Event::orderBy('event_date', 'asc')->get();
+        $jobs = \App\Models\JobPosting::latest()->get();
+        $mapPins = \App\Models\RegionalChapter::getMapPins();
+        $clusters = \App\Models\RegionalChapter::getClusterStats();
+        $spots = \App\Models\CampusMemorySpot::withCount('stories')->orderBy('order_num')->get();
+        $recentStories = \App\Models\CampusMemoryStory::with(['user', 'spot'])->latest()->take(8)->get();
 
-        return view('dashboards.admin', compact('stats', 'users', 'pendingUsers', 'notices'));
+        return view('dashboards.admin', compact('stats', 'users', 'pendingUsers', 'notices', 'albums', 'events', 'jobs', 'mapPins', 'clusters', 'spots', 'recentStories'));
     }
 
     // Method to approve a user

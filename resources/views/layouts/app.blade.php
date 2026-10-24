@@ -43,7 +43,7 @@
     <!-- ============================================== -->
     <!-- TIER 1: Official Blue Top Contact Bar          -->
     <!-- ============================================== -->
-    <div class="bg-gradient-to-r from-[#294c9b] to-[#4074e6] text-white w-full">
+    <div class="bg-gradient-to-r from-[#294c9b] to-[#4074e6] text-white w-full relative z-[60]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col sm:flex-row justify-between items-center text-[13px] font-medium tracking-wide gap-2">
             
             <div class="flex items-center space-x-6">
@@ -69,40 +69,75 @@
                 </button>
 
                 <!-- 🌐 Multilingual Language Switcher Dropdown (English, Gujarati, Hindi) -->
-                <div x-data="{ langOpen: false, currentLang: localStorage.getItem('kdp_portal_lang') || 'en' }" class="relative">
+                <div x-data="{ langOpen: false, currentLang: localStorage.getItem('kdp_portal_lang') || 'en' }" 
+                     @click.outside="langOpen = false" 
+                     class="relative">
                     <button type="button" 
                             @click="langOpen = !langOpen" 
-                            @click.away="langOpen = false"
-                            class="bg-white/15 hover:bg-white/25 text-white px-3 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-white/20 cursor-pointer">
+                            class="bg-white/15 hover:bg-white/25 text-white px-3 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-white/20 cursor-pointer shadow-xs select-none">
                         <span>🌐</span>
                         <span x-text="currentLang === 'gu' ? 'ગુજરાતી' : (currentLang === 'hi' ? 'हिन्दी' : 'English')">English</span>
-                        <svg class="w-3 h-3 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="w-3 h-3 text-white/80 transition-transform duration-200" :class="{ 'rotate-180': langOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
                     <div x-show="langOpen" 
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 translate-y-1 scale-95"
+                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                         x-transition:leave-end="opacity-0 translate-y-1 scale-95"
                          x-cloak 
-                         class="absolute right-0 mt-1.5 w-44 bg-white text-slate-800 rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 text-xs font-semibold">
-                        <button type="button" 
-                                @click="switchLanguage('en'); currentLang = 'en'; langOpen = false" 
-                                :class="currentLang === 'en' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50'"
-                                class="w-full text-left px-3 py-2 flex items-center justify-between transition-colors">
-                            <span>🇬🇧 English (Default)</span>
-                            <span x-show="currentLang === 'en'" class="text-[#1c3272]">✓</span>
-                        </button>
-                        <button type="button" 
-                                @click="switchLanguage('gu'); currentLang = 'gu'; langOpen = false" 
-                                :class="currentLang === 'gu' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50'"
-                                class="w-full text-left px-3 py-2 flex items-center justify-between transition-colors">
-                            <span>🇮🇳 ગુજરાતી (Gujarati)</span>
-                            <span x-show="currentLang === 'gu'" class="text-[#1c3272]">✓</span>
-                        </button>
-                        <button type="button" 
-                                @click="switchLanguage('hi'); currentLang = 'hi'; langOpen = false" 
-                                :class="currentLang === 'hi' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50'"
-                                class="w-full text-left px-3 py-2 flex items-center justify-between transition-colors">
-                            <span>🇮🇳 हिन्दी (Hindi)</span>
-                            <span x-show="currentLang === 'hi'" class="text-[#1c3272]">✓</span>
-                        </button>
+                         class="absolute right-0 mt-2 w-52 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200/90 py-1.5 z-[100] text-xs font-semibold overflow-hidden">
+                        
+                        <div class="px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between">
+                            <span>🌐 Select Language</span>
+                            <span class="text-[9px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-bold">Auto AI</span>
+                        </div>
+
+                        <div class="p-1 space-y-0.5">
+                            <button type="button" 
+                                    @click="switchLanguage('en'); currentLang = 'en'; langOpen = false" 
+                                    :class="currentLang === 'en' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50 text-slate-700'"
+                                    class="w-full text-left px-3 py-2 rounded-xl flex items-center justify-between transition-colors cursor-pointer">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="text-base">🇬🇧</span>
+                                    <div>
+                                        <div class="font-bold text-slate-900">English</div>
+                                        <div class="text-[10px] text-slate-400 font-normal">Default Language</div>
+                                    </div>
+                                </div>
+                                <span x-show="currentLang === 'en'" class="text-[#1c3272] font-black text-sm">✓</span>
+                            </button>
+
+                            <button type="button" 
+                                    @click="switchLanguage('gu'); currentLang = 'gu'; langOpen = false" 
+                                    :class="currentLang === 'gu' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50 text-slate-700'"
+                                    class="w-full text-left px-3 py-2 rounded-xl flex items-center justify-between transition-colors cursor-pointer">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="text-base">🇮🇳</span>
+                                    <div>
+                                        <div class="font-bold text-slate-900">ગુજરાતી</div>
+                                        <div class="text-[10px] text-slate-400 font-normal">Gujarati Portal</div>
+                                    </div>
+                                </div>
+                                <span x-show="currentLang === 'gu'" class="text-[#1c3272] font-black text-sm">✓</span>
+                            </button>
+
+                            <button type="button" 
+                                    @click="switchLanguage('hi'); currentLang = 'hi'; langOpen = false" 
+                                    :class="currentLang === 'hi' ? 'bg-blue-50 text-[#1c3272] font-bold' : 'hover:bg-slate-50 text-slate-700'"
+                                    class="w-full text-left px-3 py-2 rounded-xl flex items-center justify-between transition-colors cursor-pointer">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="text-base">🇮🇳</span>
+                                    <div>
+                                        <div class="font-bold text-slate-900">हिन्दी</div>
+                                        <div class="text-[10px] text-slate-400 font-normal">Hindi Portal</div>
+                                    </div>
+                                </div>
+                                <span x-show="currentLang === 'hi'" class="text-[#1c3272] font-black text-sm">✓</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -279,6 +314,22 @@
                 <a href="{{ route('awards.hall-of-fame') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">🏛️ Hall of Fame</a>
                 <a href="{{ route('tools.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">📚 Tool &amp; Book Bank</a>
                 <a href="{{ route('resources.index') }}" class="block px-3 py-2 text-sm font-bold text-gray-900 hover:bg-blue-50 hover:text-kdp-topbar uppercase tracking-wide">Resources</a>
+
+                <!-- Mobile Language Selector -->
+                <div class="px-3 pt-3 pb-2 border-t border-gray-100 mt-2 bg-slate-50 rounded-lg">
+                    <span class="text-[11px] font-black uppercase tracking-wider text-slate-500 block mb-2">🌐 Language / ભાષા / भाषा</span>
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button type="button" onclick="switchLanguage('en')" class="px-2 py-1.5 rounded-md text-xs font-bold text-center border transition-colors bg-white hover:bg-blue-50 text-slate-800 border-slate-200">
+                            🇬🇧 English
+                        </button>
+                        <button type="button" onclick="switchLanguage('gu')" class="px-2 py-1.5 rounded-md text-xs font-bold text-center border transition-colors bg-white hover:bg-blue-50 text-slate-800 border-slate-200">
+                            🇮🇳 ગુજરાતી
+                        </button>
+                        <button type="button" onclick="switchLanguage('hi')" class="px-2 py-1.5 rounded-md text-xs font-bold text-center border transition-colors bg-white hover:bg-blue-50 text-slate-800 border-slate-200">
+                            🇮🇳 हिन्दी
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -362,7 +413,7 @@
     <x-alum-smart-modal />
 
     <!-- 🌐 Google Website Translation Integration (English, Gujarati, Hindi) -->
-    <div id="google_translate_element" style="display:none;"></div>
+    <div id="google_translate_element" style="position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;"></div>
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -372,45 +423,121 @@
             }, 'google_translate_element');
         }
 
+        function clearGoogleTransCookies() {
+            const host = window.location.hostname;
+            const domains = ['', host, '.' + host];
+            domains.forEach(function(d) {
+                const domainStr = d ? ('; domain=' + d) : '';
+                document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/' + domainStr;
+                document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=; domain=' + d;
+            });
+        }
+
+        function setGoogleTransCookie(lang) {
+            clearGoogleTransCookies();
+            if (lang && lang !== 'en') {
+                const cookieVal = '/en/' + lang;
+                const host = window.location.hostname;
+                document.cookie = "googtrans=" + cookieVal + "; path=/;";
+                document.cookie = "googtrans=" + cookieVal + "; path=/; domain=" + host + ";";
+            }
+        }
+
         function switchLanguage(lang) {
             localStorage.setItem('kdp_portal_lang', lang);
-            
-            // Set cookie for Google Translate
-            const cookieVal = (lang === 'en') ? '/en/en' : ('/en/' + lang);
-            document.cookie = "googtrans=" + cookieVal + "; path=/;";
-            document.cookie = "googtrans=" + cookieVal + "; path=/; domain=" + window.location.hostname + ";";
+            setGoogleTransCookie(lang);
 
-            // If google combo exists, update it
+            // If google combo exists, update it dynamically
             const combo = document.querySelector('.goog-te-combo');
             if (combo) {
                 combo.value = lang;
                 combo.dispatchEvent(new Event('change'));
-            } else {
-                window.location.reload();
             }
+
+            // Reload page to re-translate all server-rendered DOM elements
+            setTimeout(function() {
+                window.location.reload();
+            }, 100);
         }
 
         // Apply saved language preference on load
         document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('kdp_portal_lang');
-            if (savedLang && savedLang !== 'en') {
+            const savedLang = localStorage.getItem('kdp_portal_lang') || 'en';
+            if (savedLang !== 'en') {
                 const expected = '/en/' + savedLang;
                 if (!document.cookie.includes('googtrans=' + expected)) {
-                    document.cookie = "googtrans=" + expected + "; path=/;";
-                    document.cookie = "googtrans=" + expected + "; path=/; domain=" + window.location.hostname + ";";
+                    setGoogleTransCookie(savedLang);
+                }
+            } else {
+                if (document.cookie.includes('googtrans=')) {
+                    clearGoogleTransCookies();
                 }
             }
         });
+        // Suppress and remove Google Translate top banner iframe automatically
+        const googleBannerObserver = new MutationObserver(function() {
+            const banners = document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate, body > .skiptranslate, .VIpgJd-ZVi9od-OR95jb-O2T7fe, #goog-gt-tt');
+            banners.forEach(function(el) {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
+                el.style.setProperty('height', '0px', 'important');
+                el.style.setProperty('opacity', '0', 'important');
+            });
+            if (document.body && document.body.style.top && document.body.style.top !== '0px') {
+                document.body.style.setProperty('top', '0px', 'important');
+            }
+        });
+        googleBannerObserver.observe(document.documentElement, { 
+            childList: true, 
+            subtree: true, 
+            attributes: true, 
+            attributeFilter: ['style', 'class'] 
+        });
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <style>
         [x-cloak] { display: none !important; }
-        .goog-te-banner-frame.skiptranslate, .goog-te-banner-frame { display: none !important; }
-        body { top: 0px !important; position: static !important; }
-        #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
-        .goog-text-highlight { background: none !important; box-shadow: none !important; }
-        font { background: transparent !important; box-shadow: none !important; }
+
+        /* Completely suppress all Google Translate banners, iframes, tooltips, and toolbars */
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate,
+        iframe.goog-te-banner-frame,
+        iframe.skiptranslate,
+        body > .skiptranslate,
+        .VIpgJd-ZVi9od-OR95jb-O2T7fe,
+        .VIpgJd-yAWNEb-hvhGLb-hvhGLb,
+        #goog-gt-tt,
+        #goog-gt-vt,
+        .goog-te-balloon-frame {
+            display: none !important;
+            visibility: hidden !important;
+            position: fixed !important;
+            top: -9999px !important;
+            left: -9999px !important;
+            width: 0 !important;
+            height: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            z-index: -9999 !important;
+        }
+
+        /* Prevent Google Translate from shifting the page down */
+        html, body {
+            top: 0px !important;
+            position: static !important;
+        }
+
+        /* Clean font and highlight styling */
+        .goog-text-highlight { 
+            background: none !important; 
+            box-shadow: none !important; 
+        }
+        font { 
+            background: transparent !important; 
+            box-shadow: none !important; 
+            display: inline !important; 
+        }
     </style>
 </body>
 </html>

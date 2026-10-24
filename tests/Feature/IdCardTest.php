@@ -110,4 +110,20 @@ class IdCardTest extends TestCase
         $this->get(route('id-card.show'))->assertRedirect(route('login'));
         $this->get(route('id-card.download'))->assertRedirect(route('login'));
     }
+
+    public function test_smart_id_card_renders_official_college_crest_and_cte_seal(): void
+    {
+        $alumni = User::factory()->create([
+            'name' => 'Ketan Patel',
+            'role' => 'alumni',
+            'is_approved' => true,
+        ]);
+
+        $response = $this->actingAs($alumni)->get(route('id-card.show'));
+        $response->assertStatus(200);
+        $response->assertSee('images/kdp_crest.png');
+        $response->assertSee('images/gtu_cte_logo.jpg');
+        $response->assertSee('Commissionerate of Technical Education');
+        $response->assertSee('OFFICIAL SMART ALUMNI CARD');
+    }
 }

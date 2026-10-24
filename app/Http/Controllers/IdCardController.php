@@ -43,7 +43,20 @@ class IdCardController extends Controller
             $qrBase64 = null;
         }
 
-        $pdf = Pdf::loadView('id-card.pdf', compact('user', 'verificationUrl', 'qrBase64'))
+        // Fetch crest and GTU logos as base64 for reliable DomPDF embedding
+        $crestBase64 = null;
+        $crestPath = public_path('images/kdp_crest.png');
+        if (file_exists($crestPath)) {
+            $crestBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($crestPath));
+        }
+
+        $gtuBase64 = null;
+        $gtuPath = public_path('images/gtu_cte_logo.jpg');
+        if (file_exists($gtuPath)) {
+            $gtuBase64 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($gtuPath));
+        }
+
+        $pdf = Pdf::loadView('id-card.pdf', compact('user', 'verificationUrl', 'qrBase64', 'crestBase64', 'gtuBase64'))
                   ->setPaper('a4', 'portrait');
         
         return $pdf->download('KDP-Alumni-ID-' . ($user->entry_no ?? $user->id) . '.pdf');

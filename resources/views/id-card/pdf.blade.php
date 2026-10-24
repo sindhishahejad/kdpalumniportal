@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Official Alumni Smart ID Card</title>
+    <title>Official Alumni Smart ID Card - KDP Patan</title>
     <style>
         body {
             font-family: Helvetica, Arial, sans-serif;
@@ -17,35 +17,40 @@
             margin: 0 auto;
         }
         .header {
-            background-color: #1C3661;
+            background-color: #1e3a8a;
             color: #ffffff;
             text-align: center;
-            padding: 12px 15px;
-            border-bottom: 2px solid #f59e0b;
+            padding: 10px 14px 6px 14px;
+            border-bottom: 2px solid #f97316;
+        }
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
         }
         .header h1 {
             margin: 0;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            color: #ffffff;
         }
         .header p {
-            margin: 3px 0 0;
-            font-size: 11px;
-            font-weight: bold;
-            color: #e5e7eb;
-        }
-        .banner {
-            background-color: #8b0000;
-            color: #ffffff;
-            text-align: center;
+            margin: 2px 0 0;
             font-size: 10px;
             font-weight: bold;
-            padding: 4px 0;
+            color: #dbeafe;
+        }
+        .banner {
+            background-color: #f97316;
+            color: #ffffff;
+            text-align: center;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 3px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         .body-container {
             width: 100%;
@@ -60,7 +65,7 @@
             width: 110px;
             height: 140px;
             border: 2px solid #9ca3af;
-            background-color: #f3f4f6;
+            background-color: #f8fafc;
             text-align: center;
             vertical-align: middle;
         }
@@ -72,7 +77,7 @@
         .initials {
             font-size: 32px;
             font-weight: bold;
-            color: #1C3661;
+            color: #1e3a8a;
             line-height: 140px;
             text-transform: uppercase;
         }
@@ -80,13 +85,13 @@
             padding-left: 10px;
         }
         .name-heading {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 900;
-            color: #000000;
+            color: #0f172a;
             text-transform: uppercase;
             margin: 0 0 2px 0;
             padding-bottom: 3px;
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid #cbd5e1;
         }
         .membership-text {
             font-size: 10px;
@@ -108,7 +113,7 @@
         }
         .field-val {
             font-weight: bold;
-            color: #1C3661;
+            color: #1e3a8a;
         }
         .field-val-normal {
             font-weight: bold;
@@ -122,7 +127,7 @@
             padding: 10px;
         }
         .card-footer {
-            background-color: #f9fafb;
+            background-color: #f8fafc;
             border-top: 1px solid #d1d5db;
             padding: 8px 15px;
             width: 100%;
@@ -151,10 +156,28 @@
     <div class="id-card">
         <!-- HEADER -->
         <div class="header">
-            <h1>ALUMNI ASSOCIATION OF K. D. POLYTECHNIC</h1>
-            <p>PATAN, GUJARAT - 384265</p>
+            <table class="header-table">
+                <tr>
+                    <td style="width: 48px; vertical-align: middle; text-align: left; padding: 0;">
+                        @if(!empty($crestBase64))
+                            <img src="{{ $crestBase64 }}" style="width: 42px; height: 42px;">
+                        @endif
+                    </td>
+                    <td style="vertical-align: middle; text-align: center; padding: 0 4px;">
+                        <div style="font-size: 8px; color: #fde68a; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Govt. of Gujarat &bull; CTE</div>
+                        <h1>ALUMNI ASSOCIATION OF K. D. POLYTECHNIC</h1>
+                        <p>PATAN, GUJARAT - 384265</p>
+                    </td>
+                    <td style="width: 48px; vertical-align: middle; text-align: right; padding: 0;">
+                        @if(!empty($gtuBase64))
+                            <img src="{{ $gtuBase64 }}" style="width: 38px; height: 38px; border-radius: 50%;">
+                        @endif
+                    </td>
+                </tr>
+            </table>
+
             <div class="banner">
-                OFFICIAL SMART ALUMNI CARD
+                OFFICIAL SMART ALUMNI CARD &bull; આજીવન સભ્યપદ
             </div>
         </div>
 
@@ -181,7 +204,7 @@
                 <!-- Details Column -->
                 <td class="details-area">
                     <h2 class="name-heading">{{ $user->name }}</h2>
-                    <p class="membership-text">• Lifetime Member (Verified)</p>
+                    <p class="membership-text">&bull; Active Lifetime Member (Verified)</p>
 
                     <div class="field-row">
                         <span class="field-label">Alumni ID</span>
@@ -197,7 +220,7 @@
 
                     <div class="field-row">
                         <span class="field-label">Dept</span>
-                        <span class="field-val-normal">: {{ $user->department ?? optional($user->profile)->department ?? 'Computer Engineering' }}</span>
+                        <span class="field-val-normal">: {{ $user->department ?? optional($user->profile)->department ?? 'Civil Engineering' }}</span>
                     </div>
 
                     @php
@@ -241,12 +264,12 @@
                     <td style="vertical-align: bottom;">
                         <span class="member-since">Member Since : {{ $user->created_at->format('d/m/Y') }}</span>
                     </td>
-                    <td style="width: 160px; vertical-align: bottom; text-align: right;">
-                        <div style="font-family: 'Times New Roman', Times, serif; font-style: italic; font-size: 15px; font-weight: bold; color: #1C3661;">
+                    <td style="width: 170px; vertical-align: bottom; text-align: right;">
+                        <div style="font-family: 'Times New Roman', Times, serif; font-style: italic; font-size: 14px; font-weight: bold; color: #1e3a8a;">
                             Principal / President
                         </div>
-                        <div style="border-top: 1px solid #000000; font-size: 9px; font-weight: bold; text-transform: uppercase; color: #6b7280; margin-top: 2px;">
-                            K.D. POLYTECHNIC, PATAN
+                        <div style="border-top: 1px solid #000000; font-size: 8px; font-weight: bold; text-transform: uppercase; color: #6b7280; margin-top: 2px;">
+                            K. D. POLYTECHNIC, PATAN
                         </div>
                     </td>
                 </tr>

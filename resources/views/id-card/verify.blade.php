@@ -7,12 +7,16 @@
         
         @if($isValid)
             <!-- Verified Header Banner -->
-            <div class="bg-gradient-to-r from-emerald-700 to-teal-800 text-white p-6 text-center relative overflow-hidden">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+            <div class="bg-gradient-to-r from-emerald-700 via-teal-800 to-[#0f172a] text-white p-6 text-center relative overflow-hidden border-b-4 border-amber-400">
+                <div class="flex items-center justify-center gap-3 mb-3">
+                    <img src="{{ asset('images/kdp_crest.png') }}" class="w-10 h-10 object-contain filter brightness-110 drop-shadow" alt="KDP Crest">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shadow-inner">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <img src="{{ asset('images/gtu_cte_logo.jpg') }}" class="w-9 h-9 object-contain rounded-full bg-white p-0.5 shadow-xs" alt="GTU CTE Seal">
                 </div>
                 <span class="inline-block px-3 py-1 bg-white/20 text-white text-[11px] font-extrabold uppercase tracking-widest rounded-full mb-1">
-                    Official Verification
+                    Official CTE Gujarat Verification
                 </span>
                 <h1 class="text-xl font-bold tracking-tight">Verified Alumni Credential</h1>
                 <p class="text-xs text-emerald-100 mt-1">K. D. Polytechnic, Patan (Alumni Association)</p>

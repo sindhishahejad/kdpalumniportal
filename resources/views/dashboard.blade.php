@@ -381,10 +381,6 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4">
             <div class="space-y-1.5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-900 text-xs font-semibold tracking-wide border border-amber-500/20">
-                    <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
-                    <span>કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961</span>
-                </div>
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-[#0f2042] tracking-tight">
                     Campus Events &amp; Reunions
                 </h2>

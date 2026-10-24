@@ -61,6 +61,9 @@ Route::post('/contact', [ContactInquiryController::class, 'store'])->name('conta
 // Public Training & Placement (TPO) Wall & Recruiters Route
 Route::get('/placement', [\App\Http\Controllers\PlacementController::class, 'index'])->name('placement.index');
 
+// Public Faculty & HOD Directory Route
+Route::get('/faculty', [\App\Http\Controllers\FacultyController::class, 'index'])->name('faculty.index');
+
 // Public Success Stories Route
 Route::get('/success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
 
@@ -298,6 +301,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/placement/partners', [\App\Http\Controllers\PlacementController::class, 'store'])->name('placement.partners.store');
     Route::put('/placement/partners/{partner}', [\App\Http\Controllers\PlacementController::class, 'update'])->name('placement.partners.update');
     Route::delete('/placement/partners/{partner}', [\App\Http\Controllers\PlacementController::class, 'destroy'])->name('placement.partners.destroy');
+
+    // 👥 Admin Faculty & HOD Directory Management
+    Route::post('/faculty', [\App\Http\Controllers\FacultyController::class, 'store'])->name('faculty.store');
+    Route::put('/faculty/{faculty}', [\App\Http\Controllers\FacultyController::class, 'update'])->name('faculty.update');
+    Route::delete('/faculty/{faculty}', [\App\Http\Controllers\FacultyController::class, 'destroy'])->name('faculty.destroy');
 
     // 🏆 Dynamic Admin Awards Management
     Route::get('/awards', [AdminAwardController::class, 'index'])->name('awards.index');

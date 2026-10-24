@@ -288,6 +288,7 @@
                             <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📚</span> Study Resources &amp; Notes</a></li>
                             <li><a href="{{ route('stories.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🌟</span> Alumni Success Stories</a></li>
                             <li><a href="{{ route('placement.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🏢</span> Training &amp; Placement (TPO)</a></li>
+                            <li><a href="{{ route('faculty.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>👥</span> Faculty &amp; HOD Directory</a></li>
                         </ul>
                     </div>
                 </div>
@@ -362,6 +363,7 @@
                 <a href="{{ route('events.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">📅 Campus Events &amp; Activities</a>
                 <a href="{{ route('stories.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🌟 Success Stories</a>
                 <a href="{{ route('placement.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🏢 Training &amp; Placement (TPO)</a>
+                <a href="{{ route('faculty.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">👥 Faculty &amp; HOD Directory</a>
                 <a href="{{ route('awards.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🏆 Awards &amp; Hall of Fame</a>
                 <a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">⏳ Time-Machine &amp; Gallery</a>
                 <a href="{{ route('labs.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🔬 Labs &amp; Workshops</a>
@@ -456,6 +458,7 @@
                     <li><a href="{{ route('labs.index') }}#mechanical" class="hover:text-white hover:underline transition-colors">Mechanical Engineering</a></li>
                     <li><a href="{{ route('labs.index') }}#civil" class="hover:text-white hover:underline transition-colors">Civil Engineering</a></li>
                     <li><a href="{{ route('labs.index') }}#general" class="hover:text-white hover:underline transition-colors">General (Science &amp; Humanities)</a></li>
+                    <li><a href="{{ route('faculty.index') }}" class="hover:text-white hover:underline transition-colors text-amber-300 font-bold flex items-center gap-1 mt-1"><span>👥</span> Department HOD Directory &rarr;</a></li>
                 </ul>
             </div>
 

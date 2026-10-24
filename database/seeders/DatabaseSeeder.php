@@ -42,5 +42,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ToolDonationSeeder::class);
         $this->call(PlacementPartnerSeeder::class);
         $this->call(FacultySeeder::class);
+        $this->call(AcademicScheduleSeeder::class);
     }
 }

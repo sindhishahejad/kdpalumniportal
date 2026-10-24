@@ -78,6 +78,11 @@
     <!-- ============================================== -->
     <x-kdp-notice-events :notices="$notices ?? collect()" :events="$events ?? collect()" />
 
+    <!-- GTU Academic Calendar & Circulars Widget Strip -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <x-kdp-gtu-calendar-widget :schedules="$schedules ?? collect()" />
+    </div>
+
     <!-- ============================================== -->
     <!-- 4. ENGINEERING DEPARTMENTS SHOWCASE            -->
     <!-- ============================================== -->

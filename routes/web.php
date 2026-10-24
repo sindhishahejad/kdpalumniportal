@@ -36,6 +36,7 @@ Route::get('/', function () {
     $events = collect();
     $notices = collect();
     $recruiters = collect();
+    $schedules = collect();
     try {
         if (\Illuminate\Support\Facades\Schema::hasTable('events')) {
             $events = \App\Models\Event::orderBy('event_date', 'desc')->take(6)->get();
@@ -46,9 +47,12 @@ Route::get('/', function () {
         if (\Illuminate\Support\Facades\Schema::hasTable('placement_partners')) {
             $recruiters = \App\Models\PlacementPartner::where('is_active', true)->orderBy('order_num')->take(12)->get();
         }
+        if (\Illuminate\Support\Facades\Schema::hasTable('academic_schedules')) {
+            $schedules = \App\Models\AcademicSchedule::where('is_active', true)->orderBy('start_date', 'asc')->take(6)->get();
+        }
     } catch (\Throwable $e) {}
 
-    return view('welcome', compact('events', 'notices', 'recruiters'));
+    return view('welcome', compact('events', 'notices', 'recruiters', 'schedules'));
 });
 
 // Public Contact Form Submission Route
@@ -63,6 +67,9 @@ Route::get('/placement', [\App\Http\Controllers\PlacementController::class, 'ind
 
 // Public Faculty & HOD Directory Route
 Route::get('/faculty', [\App\Http\Controllers\FacultyController::class, 'index'])->name('faculty.index');
+
+// Public GTU Academic Calendar & Circulars Route
+Route::get('/academic-calendar', [\App\Http\Controllers\AcademicCalendarController::class, 'index'])->name('calendar.index');
 
 // Public Success Stories Route
 Route::get('/success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
@@ -306,6 +313,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/faculty', [\App\Http\Controllers\FacultyController::class, 'store'])->name('faculty.store');
     Route::put('/faculty/{faculty}', [\App\Http\Controllers\FacultyController::class, 'update'])->name('faculty.update');
     Route::delete('/faculty/{faculty}', [\App\Http\Controllers\FacultyController::class, 'destroy'])->name('faculty.destroy');
+
+    // 🗓️ Admin GTU Academic Calendar Management
+    Route::post('/academic-calendar', [\App\Http\Controllers\AcademicCalendarController::class, 'store'])->name('calendar.store');
+    Route::put('/academic-calendar/{schedule}', [\App\Http\Controllers\AcademicCalendarController::class, 'update'])->name('calendar.update');
+    Route::delete('/academic-calendar/{schedule}', [\App\Http\Controllers\AcademicCalendarController::class, 'destroy'])->name('calendar.destroy');
 
     // 🏆 Dynamic Admin Awards Management
     Route::get('/awards', [AdminAwardController::class, 'index'])->name('awards.index');

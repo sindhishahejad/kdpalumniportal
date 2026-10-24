@@ -40,5 +40,6 @@ class DatabaseSeeder extends Seeder
         $this->call(BatchReunionSeeder::class);
         $this->call(AwardSeeder::class);
         $this->call(ToolDonationSeeder::class);
+        $this->call(PlacementPartnerSeeder::class);
     }
 }

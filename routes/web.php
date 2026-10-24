@@ -35,6 +35,7 @@ Broadcast::routes(['middleware' => ['auth']]);
 Route::get('/', function () {
     $events = collect();
     $notices = collect();
+    $recruiters = collect();
     try {
         if (\Illuminate\Support\Facades\Schema::hasTable('events')) {
             $events = \App\Models\Event::orderBy('event_date', 'desc')->take(6)->get();
@@ -42,9 +43,12 @@ Route::get('/', function () {
         if (\Illuminate\Support\Facades\Schema::hasTable('notices')) {
             $notices = \App\Models\Notice::where('is_active', true)->latest()->take(8)->get();
         }
+        if (\Illuminate\Support\Facades\Schema::hasTable('placement_partners')) {
+            $recruiters = \App\Models\PlacementPartner::where('is_active', true)->orderBy('order_num')->take(12)->get();
+        }
     } catch (\Throwable $e) {}
 
-    return view('welcome', compact('events', 'notices'));
+    return view('welcome', compact('events', 'notices', 'recruiters'));
 });
 
 // Public Contact Form Submission Route
@@ -53,6 +57,9 @@ Route::get('/contact', function () {
 })->name('contact');
 
 Route::post('/contact', [ContactInquiryController::class, 'store'])->name('contact.store');
+
+// Public Training & Placement (TPO) Wall & Recruiters Route
+Route::get('/placement', [\App\Http\Controllers\PlacementController::class, 'index'])->name('placement.index');
 
 // Public Success Stories Route
 Route::get('/success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
@@ -286,6 +293,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/success-stories', [SuccessStoryController::class, 'store'])->name('stories.store');
     Route::put('/success-stories/{story}', [SuccessStoryController::class, 'update'])->name('stories.update');
     Route::delete('/success-stories/{story}', [SuccessStoryController::class, 'destroy'])->name('stories.destroy');
+
+    // 🏢 Admin Training & Placement (TPO) Partner Management
+    Route::post('/placement/partners', [\App\Http\Controllers\PlacementController::class, 'store'])->name('placement.partners.store');
+    Route::put('/placement/partners/{partner}', [\App\Http\Controllers\PlacementController::class, 'update'])->name('placement.partners.update');
+    Route::delete('/placement/partners/{partner}', [\App\Http\Controllers\PlacementController::class, 'destroy'])->name('placement.partners.destroy');
 
     // 🏆 Dynamic Admin Awards Management
     Route::get('/awards', [AdminAwardController::class, 'index'])->name('awards.index');

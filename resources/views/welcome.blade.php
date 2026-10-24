@@ -84,7 +84,12 @@
     <x-kdp-departments />
 
     <!-- ============================================== -->
-    <!-- 5. ALUMNI SERVICES HIGHLIGHT                   -->
+    <!-- 5. CORPORATE RECRUITERS & TPO WALL             -->
+    <!-- ============================================== -->
+    <x-kdp-recruiters :recruiters="$recruiters ?? collect()" />
+
+    <!-- ============================================== -->
+    <!-- 6. ALUMNI SERVICES HIGHLIGHT                   -->
     <!-- ============================================== -->
     <section class="py-16 bg-slate-50 font-sans border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

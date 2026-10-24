@@ -1,93 +1,141 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen" x-data="{ selectedCampaign: 'Student Scholarship Fund', customAmount: 2500 }">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-slate-50 font-sans pb-20" x-data="{ selectedCampaign: 'Student Scholarship Fund', customAmount: 2500 }">
+
+    <!-- ============================================== -->
+    <!-- 1. INSTITUTIONAL HERO HEADER                   -->
+    <!-- ============================================== -->
+    <div class="relative bg-gradient-to-r from-[#0f2042] via-[#1e3a8a] to-[#0f172a] text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-lg">
         
-        <!-- Hero Header -->
-        <div class="bg-gradient-to-r from-[#1C3661] via-[#31102f] to-[#8b0000] text-white p-8 sm:p-10 rounded-2xl shadow-xl mb-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden">
-            <div class="relative z-10 max-w-2xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 text-white mb-3">
-                    <span>🌟 KDP Alumni Giving Circle</span>
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-white mb-2">
-                    Empower the Next Generation of Engineers
-                </h1>
-                <p class="text-gray-200 text-sm leading-relaxed">
-                    Your contributions directly fund student scholarships, cutting-edge laboratory upgrades, and academic resources at K. D. Polytechnic, Patan. All donations qualify for 80G tax deduction.
-                </p>
+        <!-- Watermark Backgrounds -->
+        <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+            <img src="{{ asset('images/kdp_crest.png') }}" class="w-80 h-80 object-contain filter invert" alt="KDP Crest Watermark">
+        </div>
+        <div class="absolute -left-12 -top-12 opacity-5 pointer-events-none">
+            <img src="{{ asset('images/gtu_cte_logo.jpg') }}" class="w-64 h-64 object-contain filter invert" alt="GTU Seal Watermark">
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <!-- Institutional Badges -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-orange-300 text-[11px] font-bold uppercase tracking-widest font-heading">
+                    <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                    Government Polytechnic &bull; Estd. 1961
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-400/30 text-[11px] font-bold font-heading uppercase tracking-wider">
+                    KDP Alumni Giving Circle
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[11px] font-bold font-heading uppercase tracking-wider flex items-center gap-1">
+                    <span>📜</span> 80G Tax Exemption Eligible
+                </span>
             </div>
-            
-            <div class="flex items-center gap-4 relative z-10 shrink-0 w-full sm:w-auto">
-                <div class="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/20 text-center flex-1 sm:flex-initial">
-                    <span class="block text-xs uppercase tracking-wider text-gray-300 font-semibold">Total Funds Raised</span>
-                    <span class="text-2xl sm:text-3xl font-black text-white mt-1">₹{{ number_format($totalRaised, 2) }}</span>
+
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                <div class="max-w-2xl">
+                    <p class="text-orange-300 text-xs sm:text-sm font-bold uppercase tracking-wider font-heading mb-1">
+                        કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ
+                    </p>
+                    <h1 class="font-heading text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide text-white mb-2">
+                        Empower the Next Generation of Engineers
+                    </h1>
+                    <p class="text-xs sm:text-sm text-blue-100 leading-relaxed font-sans">
+                        Your contributions directly fund student scholarships, cutting-edge laboratory upgrades, and academic resources at K. D. Polytechnic, Patan. All donations qualify for 80G tax deduction under the Income Tax Act.
+                    </p>
                 </div>
-                <div class="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/20 text-center flex-1 sm:flex-initial">
-                    <span class="block text-xs uppercase tracking-wider text-gray-300 font-semibold">Alumni Donors</span>
-                    <span class="text-2xl sm:text-3xl font-black text-white mt-1">{{ $totalDonorsCount }}</span>
+
+                <!-- Live Fund Counters -->
+                <div class="flex items-center gap-3 shrink-0 w-full sm:w-auto">
+                    <div class="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/20 text-center flex-1 sm:flex-initial min-w-[150px]">
+                        <span class="block text-[10px] uppercase tracking-wider text-orange-300 font-bold font-heading">Total Funds Raised</span>
+                        <span class="text-2xl sm:text-3xl font-black text-white mt-0.5 block font-heading">₹{{ number_format($totalRaised, 2) }}</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/20 text-center flex-1 sm:flex-initial min-w-[130px]">
+                        <span class="block text-[10px] uppercase tracking-wider text-blue-200 font-bold font-heading">Alumni Donors</span>
+                        <span class="text-2xl sm:text-3xl font-black text-white mt-0.5 block font-heading">{{ $totalDonorsCount }}</span>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- ============================================== -->
+    <!-- 2. MAIN CONTENT (CAMPAIGNS + FORM + WALL)      -->
+    <!-- ============================================== -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+        
+        <!-- Flash Success Notification -->
         @if(session('success'))
-            <div class="mb-8 bg-emerald-50 border border-emerald-300 p-4 rounded-xl flex items-center justify-between text-emerald-800 text-sm shadow-sm">
+            <div class="mb-8 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded-r-2xl text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-base">✅</span>
                     <span>{{ session('success') }}</span>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-emerald-700 hover:text-emerald-900 font-bold text-lg">&times;</button>
+                <button type="button" onclick="this.parentElement.remove()" class="text-emerald-700 hover:text-emerald-900 font-bold text-lg cursor-pointer">&times;</button>
             </div>
         @endif
 
-        <!-- Crowdfunding Active Campaigns Section -->
+        <!-- ============================================== -->
+        <!-- ACTIVE CAMPUS CAMPAIGNS                        -->
+        <!-- ============================================== -->
         <div class="mb-12">
-            <div class="flex items-center justify-between mb-6">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                    <h2 class="text-2xl font-serif font-bold text-gray-900">Active Campus Campaigns</h2>
-                    <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Explore initiatives currently being championed by our alumni network</p>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-[#f97316] font-heading block">
+                        Campus Advancement
+                    </span>
+                    <h2 class="font-heading font-black text-lg sm:text-xl text-[#0f172a] uppercase tracking-wide">
+                        Active Campus Campaigns
+                    </h2>
+                    <p class="text-xs text-slate-500 font-sans mt-0.5">Explore initiatives currently being championed by our alumni network and department heads</p>
+                </div>
+                <div class="text-xs text-slate-500 font-medium font-sans">
+                    4 Priority Development Funds
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($campaigns as $camp)
-                    <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div class="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group">
                         <div>
+                            <!-- Category Badge & Donors -->
                             <div class="flex items-center justify-between gap-2 mb-3">
-                                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded {{ $camp['badge_color'] }}">
+                                <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full {{ $camp['badge_color'] }} font-heading">
                                     {{ $camp['category'] }}
                                 </span>
-                                <span class="text-xs font-semibold text-gray-400">
+                                <span class="text-[11px] font-semibold text-slate-400">
                                     {{ $camp['donor_count'] }} {{ Str::plural('donor', $camp['donor_count']) }}
                                 </span>
                             </div>
 
-                            <h3 class="text-base font-bold text-gray-900 mb-1 leading-snug">
+                            <h3 class="font-heading font-black text-sm text-[#0f172a] mb-1.5 leading-snug group-hover:text-[#1e3a8a] transition-colors">
                                 {{ $camp['title'] }}
                             </h3>
 
-                            <p class="text-xs text-gray-500 mb-4 line-clamp-2 leading-relaxed">
+                            <p class="text-xs text-slate-500 mb-4 line-clamp-2 leading-relaxed font-sans">
                                 {{ $camp['description'] }}
                             </p>
                         </div>
 
                         <div>
                             <!-- Progress Bar -->
-                            <div class="mb-2">
-                                <div class="flex justify-between items-center text-xs mb-1">
-                                    <span class="font-bold text-gray-900">₹{{ number_format($camp['raised']) }}</span>
-                                    <span class="text-gray-400">Target: ₹{{ number_format($camp['target']) }}</span>
+                            <div class="mb-3 pt-2 border-t border-slate-100">
+                                <div class="flex justify-between items-center text-xs mb-1.5 font-sans">
+                                    <span class="font-bold text-slate-900 font-heading">₹{{ number_format($camp['raised']) }}</span>
+                                    <span class="text-slate-400 text-[11px]">Target: ₹{{ number_format($camp['target']) }}</span>
                                 </div>
-                                <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                                    <div class="{{ $camp['bar_color'] }} h-2.5 rounded-full transition-all duration-500" style="width: {{ $camp['percent'] }}%"></div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                    <div class="bg-[#1e3a8a] h-2.5 rounded-full transition-all duration-500" style="width: {{ $camp['percent'] }}%"></div>
                                 </div>
-                                <div class="text-right mt-1">
-                                    <span class="text-[11px] font-bold text-gray-600">{{ $camp['percent'] }}% Funded</span>
+                                <div class="text-right mt-1.5">
+                                    <span class="text-[11px] font-bold text-[#f97316] font-heading">{{ $camp['percent'] }}% Funded</span>
                                 </div>
                             </div>
 
-                            <button type="button" @click="selectedCampaign = '{{ $camp['title'] }}'; window.location.hash = 'donate-form'" class="w-full mt-2 text-center text-xs font-bold text-[#8b0000] bg-red-50 hover:bg-red-100 border border-red-200 py-2 rounded-xl transition-colors">
-                                Support This Fund &rarr;
+                            <button type="button" @click="selectedCampaign = '{{ $camp['title'] }}'; window.location.hash = 'donate-form'" 
+                                    class="w-full text-center text-xs font-bold uppercase tracking-wider text-white bg-[#1e3a8a] hover:bg-blue-900 py-2.5 rounded-xl shadow-xs transition-colors font-heading cursor-pointer flex items-center justify-center gap-1.5">
+                                <span>Support This Fund</span>
+                                <span>&rarr;</span>
                             </button>
                         </div>
                     </div>
@@ -95,120 +143,158 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <!-- ============================================== -->
+        <!-- CONTRIBUTION FORM & WALL OF CONTRIBUTORS       -->
+        <!-- ============================================== -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             
-            <!-- Donation Form Column -->
-            <div id="donate-form" class="lg:col-span-1 bg-white shadow-sm rounded-2xl border border-gray-200 p-6 sm:p-7">
-                <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-                    <span class="w-8 h-8 rounded-full bg-[#8b0000] text-white flex items-center justify-center font-bold text-sm">₹</span>
-                    <h3 class="text-lg font-bold text-gray-900">Make a Contribution</h3>
-                </div>
+            <!-- Donation Form Column (4 cols on lg) -->
+            <div id="donate-form" class="lg:col-span-4 bg-white shadow-xl rounded-3xl border border-slate-200/90 overflow-hidden sticky top-6">
                 
-                <form action="{{ route('donations.store') }}" method="POST" class="space-y-4">
-                    @csrf
-
-                    <!-- Campaign Selection -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Select Campaign *</label>
-                        <select name="campaign" x-model="selectedCampaign" required class="w-full border border-gray-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm focus:outline-none focus:border-[#8b0000] bg-white">
-                            @foreach($campaigns as $camp)
-                                <option value="{{ $camp['title'] }}">{{ $camp['title'] }}</option>
-                            @endforeach
-                        </select>
-                        @error('campaign') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                <div class="bg-[#1e3a8a] text-white p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">💳</span>
+                        <h3 class="font-heading font-black text-xs uppercase tracking-wider">
+                            Make a Contribution
+                        </h3>
                     </div>
+                    <span class="text-[10px] uppercase font-bold text-orange-300 font-heading bg-white/10 px-2 py-0.5 rounded-full">
+                        80G Tax Benefit
+                    </span>
+                </div>
 
-                    <!-- Quick Amount Buttons -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Contribution Amount *</label>
-                        <div class="grid grid-cols-4 gap-2 mb-2">
-                            @foreach([500, 1000, 2500, 5000] as $preset)
-                                <button type="button" @click="customAmount = {{ $preset }}" class="py-1.5 px-2 rounded-lg text-xs font-bold border transition-colors" :class="customAmount == {{ $preset }} ? 'bg-[#1C3661] text-white border-[#1C3661]' : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'">
-                                    ₹{{ $preset }}
-                                </button>
-                            @endforeach
+                <div class="p-6">
+                    <form action="{{ route('donations.store') }}" method="POST" class="space-y-4">
+                        @csrf
+
+                        <!-- Campaign Selection -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
+                                Select Campaign <span class="text-red-500">*</span>
+                            </label>
+                            <select name="campaign" x-model="selectedCampaign" required 
+                                    class="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-2xs text-slate-900 font-sans cursor-pointer">
+                                @foreach($campaigns as $camp)
+                                    <option value="{{ $camp['title'] }}">{{ $camp['title'] }}</option>
+                                @endforeach
+                            </select>
+                            @error('campaign') <span class="text-red-600 text-[11px] font-semibold mt-1 block">{{ $message }}</span> @enderror
                         </div>
-                        
-                        <div class="relative">
-                            <span class="absolute left-3 top-2.5 text-gray-500 font-bold text-sm">₹</span>
-                            <input type="number" name="amount" min="50" step="50" x-model="customAmount" required placeholder="Custom Amount" class="w-full border border-gray-300 rounded-xl py-2 pl-7 pr-3 text-sm font-semibold focus:outline-none focus:border-[#8b0000]">
+
+                        <!-- Contribution Amount Selector -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5 font-heading">
+                                Contribution Amount <span class="text-red-500">*</span>
+                            </label>
+                            <div class="grid grid-cols-4 gap-2 mb-2">
+                                @foreach([500, 1000, 2500, 5000] as $preset)
+                                    <button type="button" @click="customAmount = {{ $preset }}" 
+                                            class="py-2 px-1 rounded-xl text-xs font-bold font-heading uppercase transition-colors cursor-pointer border" 
+                                            :class="customAmount == {{ $preset }} ? 'bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'">
+                                        ₹{{ $preset }}
+                                    </button>
+                                @endforeach
+                            </div>
+                            
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-slate-500 font-bold text-xs font-heading">₹</span>
+                                <input type="number" name="amount" min="50" step="50" x-model="customAmount" required placeholder="Enter custom amount" 
+                                       class="w-full pl-8 pr-3 py-2.5 text-xs rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-2xs text-slate-900 font-heading font-bold">
+                            </div>
+                            @error('amount') <span class="text-red-600 text-[11px] font-semibold mt-1 block">{{ $message }}</span> @enderror
                         </div>
-                        @error('amount') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
-                    </div>
 
-                    <!-- Payment Mode -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Payment Channel</label>
-                        <select name="payment_method" class="w-full border border-gray-300 rounded-xl py-2 px-3 text-xs sm:text-sm focus:outline-none focus:border-[#8b0000] bg-white">
-                            <option value="UPI / QR Code">UPI (GPay / PhonePe / Paytm)</option>
-                            <option value="Net Banking">Net Banking (SBI / HDFC / BOB)</option>
-                            <option value="Credit / Debit Card">Credit / Debit Card</option>
-                            <option value="Direct College Account Transfer">Direct College Account NEFT/RTGS</option>
-                        </select>
-                    </div>
+                        <!-- Payment Channel -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
+                                Payment Channel
+                            </label>
+                            <select name="payment_method" class="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-2xs text-slate-900 font-sans cursor-pointer">
+                                <option value="UPI / QR Code">UPI (GPay / PhonePe / Paytm)</option>
+                                <option value="Net Banking">Net Banking (SBI / HDFC / BOB / Axis)</option>
+                                <option value="Credit / Debit Card">Credit / Debit Card (Visa / MasterCard / RuPay)</option>
+                                <option value="Direct College Account Transfer">Direct College Account NEFT/RTGS</option>
+                            </select>
+                        </div>
 
-                    <!-- Optional Dedication / Note -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Dedication / Message (Optional)</label>
-                        <input type="text" name="notes" placeholder="e.g. In honor of Class of 2018 or faculty mentors" class="w-full border border-gray-300 rounded-xl py-2 px-3 text-xs sm:text-sm focus:outline-none focus:border-[#8b0000]">
-                    </div>
+                        <!-- Dedication / Note -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
+                                Dedication / Message (Optional)
+                            </label>
+                            <input type="text" name="notes" placeholder="e.g. In honor of Class of 2018 or faculty mentors" 
+                                   class="w-full px-3 py-2.5 text-xs rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-2xs text-slate-900 font-sans">
+                        </div>
 
-                    <!-- Anonymous Checkbox -->
-                    <div class="pt-1">
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_anonymous" value="1" class="rounded border-gray-300 text-[#8b0000] focus:ring-[#8b0000]">
-                            <span class="ml-2 text-xs text-gray-600">Make this donation anonymous on the public contributor wall</span>
-                        </label>
-                    </div>
+                        <!-- Anonymous Toggle -->
+                        <div class="pt-1">
+                            <label class="inline-flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="is_anonymous" value="1" class="rounded border-slate-300 text-[#1e3a8a] focus:ring-[#1e3a8a]">
+                                <span class="text-xs text-slate-600 font-sans">Make this donation anonymous on public wall</span>
+                            </label>
+                        </div>
 
-                    <div class="pt-2">
-                        <button type="submit" class="w-full bg-[#8b0000] hover:bg-[#6b0000] text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-colors text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            Complete Contribution
-                        </button>
-                    </div>
+                        <!-- Submit Button -->
+                        <div class="pt-2">
+                            <button type="submit" class="w-full bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold text-xs uppercase tracking-wider py-3 px-4 rounded-xl shadow-md transition-all font-heading cursor-pointer flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                <span>Complete Contribution</span>
+                            </button>
+                        </div>
 
-                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 text-[11px] text-gray-500 leading-normal">
-                        🔒 <strong>80G Tax Benefit:</strong> An official downloadable PDF receipt with your transaction reference number will be generated immediately for your income tax deduction.
-                    </div>
-                </form>
+                        <!-- 80G Tax Benefit Callout -->
+                        <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-900 leading-normal space-y-1">
+                            <div class="flex items-center gap-1.5 font-bold font-heading uppercase text-[10px]">
+                                <span>🔒</span>
+                                <span>80G Tax Deduction Certificate</span>
+                            </div>
+                            <p class="font-sans text-amber-800">
+                                An official downloadable PDF receipt with your transaction reference number will be generated immediately for income tax filing.
+                            </p>
+                        </div>
+
+                    </form>
+                </div>
+
             </div>
 
-            <!-- Wall of Contributors & User Donation History Column -->
-            <div class="lg:col-span-2 space-y-8">
+            <!-- Wall of Contributors & User Donation History Column (8 cols on lg) -->
+            <div class="lg:col-span-8 space-y-8">
                 
                 <!-- User's Personal Donation Receipts -->
                 @auth
                     @if($userDonations->isNotEmpty())
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                            <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                        <div class="bg-white rounded-3xl shadow-xl border border-slate-200/90 overflow-hidden p-6 sm:p-7">
+                            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
                                 <div>
-                                    <h3 class="text-base font-bold text-gray-900">My Giving History &amp; 80G Receipts</h3>
-                                    <p class="text-xs text-gray-500">Download your verified tax deduction certificates</p>
+                                    <h3 class="font-heading font-black text-sm uppercase tracking-wide text-[#0f172a]">
+                                        My Giving History &amp; 80G Receipts
+                                    </h3>
+                                    <p class="text-xs text-slate-500 font-sans mt-0.5">Download your verified tax deduction certificates</p>
                                 </div>
-                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-full font-heading">
                                     {{ $userDonations->count() }} {{ Str::plural('Contribution', $userDonations->count()) }}
                                 </span>
                             </div>
 
-                            <div class="divide-y divide-gray-100">
+                            <div class="divide-y divide-slate-100">
                                 @foreach($userDonations as $userDonation)
-                                    <div class="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                    <div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                         <div>
-                                            <p class="text-xs font-bold text-gray-900">{{ $userDonation->campaign }}</p>
-                                            <p class="text-[11px] text-gray-500">
-                                                Ref: <span class="font-mono text-gray-700">{{ $userDonation->transaction_id }}</span> • {{ $userDonation->created_at->format('d M, Y') }}
+                                            <p class="text-xs font-bold text-slate-900 font-heading">{{ $userDonation->campaign }}</p>
+                                            <p class="text-[11px] text-slate-500 font-sans mt-0.5">
+                                                Ref: <span class="font-mono text-slate-700">{{ $userDonation->transaction_id }}</span> &bull; {{ $userDonation->created_at->format('d M, Y') }}
                                             </p>
                                             @if($userDonation->notes)
-                                                <p class="text-[11px] italic text-gray-600 mt-0.5">"{{ $userDonation->notes }}"</p>
+                                                <p class="text-[11px] italic text-slate-600 mt-1 font-sans">"{{ $userDonation->notes }}"</p>
                                             @endif
                                         </div>
 
                                         <div class="flex items-center gap-3 justify-between sm:justify-end">
-                                            <span class="text-sm font-black text-emerald-700">₹{{ number_format($userDonation->amount, 2) }}</span>
-                                            <a href="{{ route('donations.receipt', $userDonation->id) }}" class="inline-flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-xs border border-gray-200 transition-colors">
-                                                <svg class="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                                Download 80G Receipt
+                                            <span class="text-sm font-black text-emerald-700 font-heading">₹{{ number_format($userDonation->amount, 2) }}</span>
+                                            <a href="{{ route('donations.receipt', $userDonation->id) }}" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-[#1e3a8a] hover:text-white text-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold font-heading uppercase tracking-wide shadow-xs border border-slate-200 transition-colors">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                                <span>Download 80G Receipt</span>
                                             </a>
                                         </div>
                                     </div>
@@ -219,51 +305,62 @@
                 @endauth
 
                 <!-- Wall of Contributors -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200/90 overflow-hidden p-6 sm:p-7">
+                    <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
                         <div>
-                            <h3 class="text-base font-bold text-gray-900">Wall of Contributors</h3>
-                            <p class="text-xs text-gray-500">Honoring alumni giving back to their alma mater</p>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[#f97316] font-heading block">
+                                Honor Roll
+                            </span>
+                            <h3 class="font-heading font-black text-base text-[#0f172a] uppercase tracking-wide">
+                                Wall of Contributors
+                            </h3>
+                            <p class="text-xs text-slate-500 font-sans mt-0.5">Honoring alumni giving back to their alma mater</p>
                         </div>
-                        <span class="text-xs text-gray-400">Live Contributions</span>
+                        <span class="text-xs text-slate-400 font-heading uppercase tracking-wider font-bold">
+                            Live Contributions
+                        </span>
                     </div>
                     
                     @if($donations->isEmpty())
-                        <div class="text-center py-8 text-gray-400 text-xs">
-                            No contributions recorded yet. Be the first alumnus to pave the way!
+                        <div class="text-center py-12">
+                            <span class="text-4xl block mb-2">🤝</span>
+                            <h4 class="font-heading font-black text-sm text-[#0f172a] uppercase">No Contributions Recorded Yet</h4>
+                            <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto font-sans leading-relaxed">
+                                Be the first alumnus to pave the way! Support student scholarships or laboratory infrastructure today.
+                            </p>
                         </div>
                     @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach($donations as $donation)
-                                <div class="p-3.5 bg-gray-50/70 border border-gray-200 rounded-xl flex flex-col justify-between">
-                                    <div class="flex justify-between items-start gap-2 mb-1.5">
+                                <div class="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl flex flex-col justify-between hover:shadow-md transition-shadow">
+                                    <div class="flex justify-between items-start gap-2 mb-2">
                                         <div>
                                             @if($donation->is_anonymous)
-                                                <h4 class="font-bold text-gray-600 text-xs flex items-center gap-1">
-                                                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                                    Anonymous Donor
+                                                <h4 class="font-heading font-black text-slate-700 text-xs flex items-center gap-1.5 uppercase tracking-wide">
+                                                    <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px]">👤</span>
+                                                    <span>Anonymous Donor</span>
                                                 </h4>
-                                                <p class="text-[10px] text-gray-400">Proud Alumni Supporter</p>
+                                                <p class="text-[10px] text-slate-400 font-sans">Proud Alumni Supporter</p>
                                             @else
-                                                <h4 class="font-bold text-gray-900 text-xs">{{ $donation->user->name }}</h4>
-                                                <p class="text-[10px] text-gray-500">
+                                                <h4 class="font-heading font-black text-[#0f172a] text-xs uppercase tracking-wide">{{ $donation->user->name }}</h4>
+                                                <p class="text-[10px] text-slate-500 font-sans">
                                                     {{ $donation->user->department ?? optional($donation->user->profile)->department ?? 'Alumnus' }}
-                                                    @if($donation->user->graduation_year) • Class of {{ $donation->user->graduation_year }} @endif
+                                                    @if($donation->user->graduation_year) &bull; Class of {{ $donation->user->graduation_year }} @endif
                                                 </p>
                                             @endif
                                         </div>
-                                        <span class="font-black text-emerald-700 text-xs bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                                        <span class="font-heading font-black text-emerald-700 text-xs bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 shrink-0">
                                             ₹{{ number_format($donation->amount) }}
                                         </span>
                                     </div>
 
-                                    <div class="mt-1 pt-1.5 border-t border-gray-100 text-[11px] text-gray-500 flex justify-between items-center">
-                                        <span class="truncate max-w-[170px]" title="{{ $donation->campaign }}">{{ $donation->campaign }}</span>
-                                        <span class="text-[10px] text-gray-400 shrink-0">{{ $donation->created_at->diffForHumans() }}</span>
+                                    <div class="mt-2 pt-2 border-t border-slate-200/60 text-[11px] text-slate-500 flex justify-between items-center font-sans">
+                                        <span class="truncate max-w-[170px] font-medium text-slate-700" title="{{ $donation->campaign }}">{{ $donation->campaign }}</span>
+                                        <span class="text-[10px] text-slate-400 shrink-0">{{ $donation->created_at->diffForHumans() }}</span>
                                     </div>
 
                                     @if($donation->notes && !$donation->is_anonymous)
-                                        <p class="text-[10px] italic text-gray-600 mt-1 line-clamp-1">
+                                        <p class="text-[11px] italic text-slate-600 mt-1.5 line-clamp-1 font-sans">
                                             "{{ $donation->notes }}"
                                         </p>
                                     @endif

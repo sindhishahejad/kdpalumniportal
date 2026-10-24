@@ -216,45 +216,339 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Post a Notice -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Broadcast Notice</h3>
-                <form method="POST" action="{{ route('admin.notices.store') }}" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Notice Title</label>
-                        <input type="text" name="title" class="w-full rounded-lg border-gray-300 shadow-sm text-sm" required />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Message</label>
-                        <textarea name="body" rows="3" class="w-full rounded-lg border-gray-300 shadow-sm text-sm" required></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg text-sm">Publish Notice</button>
-                    </div>
-                </form>
-
-                <div class="mt-6 space-y-3">
-                    <h4 class="text-sm font-semibold text-gray-700">Active Notices</h4>
-                    @foreach($notices as $notice)
-                        <div class="p-3 bg-gray-50 border rounded-md flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-sm text-gray-900">{{ $notice->title }}</p>
-                                <p class="text-xs text-gray-500">{{ $notice->created_at->format('M d, Y') }}</p>
-                            </div>
-                            <form method="POST" action="{{ route('admin.notices.destroy', $notice) }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-xs text-red-600 hover:underline">Delete</button>
-                            </form>
+        <!-- ============================================================== -->
+        <!-- 📋 DYNAMIC NOTICE BOARD & CIRCULARS CONTROL CENTER (Full CRUD) -->
+        <!-- ============================================================== -->
+        <div id="notice-center" 
+             x-data="{ 
+                 showCreateModal: false, 
+                 editNotice: null, 
+                 search: '', 
+                 filterStatus: 'all',
+                 notices: {{ json_encode($notices) }},
+                 matchesNotice(item) {
+                     const q = this.search.toLowerCase().trim();
+                     const matchesQuery = !q || item.title.toLowerCase().includes(q) || item.body.toLowerCase().includes(q);
+                     const matchesFilter = this.filterStatus === 'all' 
+                         || (this.filterStatus === 'active' && item.is_active) 
+                         || (this.filterStatus === 'inactive' && !item.is_active);
+                     return matchesQuery && matchesFilter;
+                 }
+             }" 
+             class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            
+            <!-- Header Banner -->
+            <div class="p-6 bg-gradient-to-r from-[#1e3a8a] via-[#1e293b] to-[#1e3a8a] text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <span class="p-2 rounded-xl bg-white/10 text-xl shadow-xs">📋</span>
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold font-heading">Notice Board &amp; Circulars Control Center</h2>
+                            <p class="text-xs sm:text-sm text-blue-200 mt-0.5">
+                                Fully dynamic management of GTU circulars, exam notices, and fee alerts broadcast to the homepage and alumni network.
+                            </p>
                         </div>
-                    @endforeach
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                    <a href="{{ url('/') }}" target="_blank" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all flex items-center gap-1.5 font-heading">
+                        <span>👁️</span> View on Portal &rarr;
+                    </a>
+                    <button type="button" 
+                            @click="showCreateModal = true" 
+                            class="px-4 py-2 rounded-xl text-xs font-bold bg-[#f97316] hover:bg-orange-600 text-white shadow-md transition-all flex items-center gap-1.5 font-heading cursor-pointer transform hover:scale-105">
+                        <span class="text-base font-black">+</span> Publish New Circular
+                    </button>
                 </div>
             </div>
 
-            <!-- Active User Management Table -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <!-- Stats & Filter Bar -->
+            <div class="p-4 sm:p-6 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <!-- Stat chips -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" 
+                            @click="filterStatus = 'all'" 
+                            :class="filterStatus === 'all' ? 'bg-[#1e3a8a] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5">
+                        <span>All Notices</span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]" :class="filterStatus === 'all' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">{{ $notices->count() }}</span>
+                    </button>
+
+                    <button type="button" 
+                            @click="filterStatus = 'active'" 
+                            :class="filterStatus === 'active' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span>Live on Portal</span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]" :class="filterStatus === 'active' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">{{ $notices->where('is_active', true)->count() }}</span>
+                    </button>
+
+                    <button type="button" 
+                            @click="filterStatus = 'inactive'" 
+                            :class="filterStatus === 'inactive' ? 'bg-slate-700 text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <span>Hidden / Draft</span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]" :class="filterStatus === 'inactive' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">{{ $notices->where('is_active', false)->count() }}</span>
+                    </button>
+                </div>
+
+                <!-- Instant Search Input -->
+                <div class="relative w-full md:w-72">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        🔍
+                    </span>
+                    <input type="text" 
+                           x-model="search" 
+                           placeholder="Filter circulars by title..." 
+                           class="w-full pl-9 pr-4 py-1.5 text-xs rounded-xl border-slate-300 bg-white focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-2xs">
+                    <button x-show="search" @click="search = ''" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                        &times;
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notices Feed List -->
+            <div class="p-6">
+                <div class="space-y-3.5">
+                    @forelse($notices as $notice)
+                        <div x-show="matchesNotice({{ json_encode($notice) }})" 
+                             class="group p-4 rounded-xl border border-slate-200/90 hover:border-slate-300 transition-all bg-white hover:shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 {{ $notice->is_active ? 'border-l-4 border-l-[#f97316]' : 'border-l-4 border-l-slate-300 opacity-75' }}">
+                            
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2.5 mb-1.5 flex-wrap">
+                                    @if($notice->is_active)
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            Live on Portal
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                            Hidden / Inactive
+                                        </span>
+                                    @endif
+
+                                    <span class="text-xs text-slate-400 flex items-center gap-1 font-mono">
+                                        📅 {{ $notice->created_at->format('M d, Y • h:i A') }}
+                                    </span>
+
+                                    @if($notice->attachment_path)
+                                        <a href="{{ $notice->attachment_url }}" target="_blank" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border transition-colors {{ $notice->is_pdf ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' }}">
+                                            <span>{{ $notice->is_pdf ? '📄' : '🖼️' }}</span>
+                                            <span>{{ $notice->is_pdf ? 'PDF' : 'Photo' }}: {{ $notice->attachment_name ?? 'Attachment' }}</span>
+                                        </a>
+                                    @endif
+                                </div>
+
+                                <h4 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#1e3a8a] transition-colors leading-snug">
+                                    {{ $notice->title }}
+                                </h4>
+                                <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                                    {{ $notice->body }}
+                                </p>
+                            </div>
+
+                            <!-- Actions Row -->
+                            <div class="flex items-center gap-2 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end">
+                                <!-- Quick Toggle Active Status -->
+                                <form method="POST" action="{{ route('admin.notices.toggle', $notice) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" 
+                                            class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 border {{ $notice->is_active ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100' }}"
+                                            title="{{ $notice->is_active ? 'Hide notice from portal' : 'Make notice live on portal' }}">
+                                        <span>{{ $notice->is_active ? '👁️ Hide' : '🟢 Make Live' }}</span>
+                                    </button>
+                                </form>
+
+                                <!-- Edit Button -->
+                                <button type="button" 
+                                        @click="editNotice = {{ json_encode($notice) }}" 
+                                        class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-50 text-[#1e3a8a] hover:bg-blue-100 border border-blue-200 transition-colors flex items-center gap-1 cursor-pointer">
+                                    <span>✏️</span> Edit
+                                </button>
+
+                                <!-- Delete Form -->
+                                <form method="POST" action="{{ route('admin.notices.destroy', $notice) }}" onsubmit="return confirm('Permanently remove this circular?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer" title="Delete notice">
+                                        🗑️
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="py-12 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                            <span class="text-3xl block mb-2">📋</span>
+                            <p class="font-bold text-slate-600">No notices published yet.</p>
+                            <p class="text-xs text-slate-400 mt-1">Click "+ Publish New Circular" to create your first announcement.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- CREATE NOTICE MODAL -->
+            <div x-show="showCreateModal" 
+                 x-cloak 
+                 x-transition:enter="transition ease-out duration-150"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-100"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                
+                <div @click.away="showCreateModal = false" 
+                     class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+                    <div class="p-5 bg-[#1e3a8a] text-white flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">📢</span>
+                            <h3 class="font-bold font-heading text-base">Broadcast New College Circular</h3>
+                        </div>
+                        <button type="button" @click="showCreateModal = false" class="text-white/80 hover:text-white text-xl font-bold p-1 cursor-pointer">&times;</button>
+                    </div>
+
+                    <form method="POST" action="{{ route('admin.notices.store') }}" enctype="multipart/form-data" class="p-6 space-y-4">
+                        @csrf
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">Circular Title *</label>
+                            <input type="text" 
+                                   name="title" 
+                                   required 
+                                   placeholder="e.g. Regular Exam Form Notice for 3rd & 5th Sem A.Y. 26-1" 
+                                   class="w-full rounded-xl border-slate-300 text-sm focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-xs">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">Notice Message / Details *</label>
+                            <textarea name="body" 
+                                      rows="4" 
+                                      required 
+                                      placeholder="Write full circular instructions, due dates, student requirements, or GTU portal guidelines..." 
+                                      class="w-full rounded-xl border-slate-300 text-sm focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-xs"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
+                                Attach Document or Photo (PDF / JPG / PNG)
+                            </label>
+                            <input type="file" 
+                                   name="attachment" 
+                                   accept=".pdf,image/png,image/jpeg,image/webp,image/jpg" 
+                                   class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-[#1e3a8a] hover:file:bg-blue-100 border border-slate-300 rounded-xl cursor-pointer p-1">
+                            <p class="text-[11px] text-slate-400 mt-1">Upload official circular circular file (.pdf) or image photo (.jpg, .png, .webp). Max 10MB.</p>
+                        </div>
+
+                        <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <input type="checkbox" name="is_active" id="create_is_active" value="1" checked class="w-4 h-4 text-[#1e3a8a] rounded border-slate-300 focus:ring-[#1e3a8a]">
+                            <label for="create_is_active" class="text-xs font-bold text-slate-700 cursor-pointer">
+                                Publish immediately to live Notice Board
+                            </label>
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                            <button type="button" @click="showCreateModal = false" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-[#1e3a8a] hover:bg-blue-900 text-white shadow-sm transition-colors cursor-pointer font-heading">
+                                Broadcast Notice &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- EDIT NOTICE MODAL -->
+            <div x-show="editNotice" 
+                 x-cloak 
+                 x-transition:enter="transition ease-out duration-150"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-100"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                
+                <div @click.away="editNotice = null" 
+                     class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
+                    <div class="p-5 bg-gradient-to-r from-[#1e3a8a] to-[#2563eb] text-white flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">✏️</span>
+                            <h3 class="font-bold font-heading text-base">Edit Circular Announcement</h3>
+                        </div>
+                        <button type="button" @click="editNotice = null" class="text-white/80 hover:text-white text-xl font-bold p-1 cursor-pointer">&times;</button>
+                    </div>
+
+                    <form method="POST" :action="'{{ url('admin/notices') }}/' + (editNotice ? editNotice.id : '')" enctype="multipart/form-data" class="p-6 space-y-4">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">Circular Title *</label>
+                            <input type="text" 
+                                   name="title" 
+                                   x-model="editNotice.title" 
+                                   required 
+                                   class="w-full rounded-xl border-slate-300 text-sm focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-xs">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">Notice Message / Details *</label>
+                            <textarea name="body" 
+                                      rows="4" 
+                                      x-model="editNotice.body" 
+                                      required 
+                                      class="w-full rounded-xl border-slate-300 text-sm focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-xs"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
+                                Attached File (PDF or Photo)
+                            </label>
+                            <template x-if="editNotice && editNotice.attachment_path">
+                                <div class="p-2.5 mb-2 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-xs font-semibold text-[#1e3a8a] truncate mr-2">
+                                        <span x-text="editNotice.is_pdf ? '📄' : '🖼️'"></span>
+                                        <a :href="editNotice.attachment_url" target="_blank" class="hover:underline font-bold truncate max-w-[200px]" x-text="editNotice.attachment_name || 'View Attachment'"></a>
+                                    </div>
+                                    <label class="flex items-center gap-1.5 text-xs text-red-600 font-bold cursor-pointer shrink-0">
+                                        <input type="checkbox" name="remove_attachment" value="1" class="rounded border-slate-300 text-red-600 focus:ring-red-500">
+                                        <span>Remove</span>
+                                    </label>
+                                </div>
+                            </template>
+                            <input type="file" 
+                                   name="attachment" 
+                                   accept=".pdf,image/png,image/jpeg,image/webp,image/jpg" 
+                                   class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-[#1e3a8a] hover:file:bg-blue-100 border border-slate-300 rounded-xl cursor-pointer p-1">
+                            <p class="text-[11px] text-slate-400 mt-1">Upload to replace or attach a document / image (Max 10MB).</p>
+                        </div>
+
+                        <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <input type="checkbox" name="is_active" id="edit_is_active" value="1" :checked="editNotice && editNotice.is_active" class="w-4 h-4 text-[#1e3a8a] rounded border-slate-300 focus:ring-[#1e3a8a]">
+                            <label for="edit_is_active" class="text-xs font-bold text-slate-700 cursor-pointer">
+                                Notice is Live on Portal
+                            </label>
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                            <button type="button" @click="editNotice = null" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-[#1e3a8a] hover:bg-blue-900 text-white shadow-sm transition-colors cursor-pointer font-heading">
+                                Update Circular &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Active User Management Table -->
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl p-6 border border-slate-200">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Approved Users</h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -295,7 +589,6 @@
                 </div>
                 <div class="mt-4">{{ $users->links() }}</div>
             </div>
-        </div>
 
         <!-- GALLERY & CAMPUS TIME-MACHINE MANAGER HUB -->
         <div id="gallery-hub" x-data="{ galleryTab: 'spots' }" class="mt-10 p-6 sm:p-8 bg-gray-50 rounded-[20px] border border-gray-200 space-y-6">

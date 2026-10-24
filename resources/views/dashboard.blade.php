@@ -56,6 +56,38 @@
     </div>
 
     <!-- ============================================== -->
+    <!-- 1.5 OFFICIAL COLLEGE OVERVIEW & LIVE FEEDS      -->
+    <!-- ============================================== -->
+    <section class="py-12 bg-white font-sans border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <span class="inline-block px-3 py-1 bg-blue-50 text-[#1e3a8a] text-xs font-extrabold uppercase tracking-widest rounded-full mb-3 font-heading">
+                    Government Polytechnic • Established 1961
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1e3a8a] font-heading tracking-tight uppercase leading-snug">
+                    Welcome to K. D. Polytechnic, Patan
+                </h2>
+                <div class="h-1 w-20 bg-[#f97316] mx-auto rounded-full my-3"></div>
+                <p class="text-sm sm:text-base text-slate-600 leading-relaxed text-justify sm:text-center mt-3">
+                    Kilachand Devchand Polytechnic was established in the year 1961 at Patan, Gujarat, India, with the objective of providing quality technical education to students of North Gujarat. The institute is a premier state government polytechnic approved by AICTE, New Delhi and affiliated with Gujarat Technological University (GTU), Ahmedabad, empowering diploma engineers across Computer, Electrical, Mechanical, and Civil engineering specializations.
+                </p>
+                <div class="mt-6 flex flex-wrap justify-center items-center gap-6 text-xs font-semibold text-slate-500">
+                    <span class="flex items-center gap-1.5"><span class="text-[#f97316]">✓</span> AICTE Approved</span>
+                    <span class="flex items-center gap-1.5"><span class="text-[#f97316]">✓</span> Affiliated to GTU</span>
+                    <span class="flex items-center gap-1.5"><span class="text-[#f97316]">✓</span> CTE Gujarat Supervised</span>
+                    <span class="flex items-center gap-1.5"><span class="text-[#f97316]">✓</span> 60+ Years of Academic Excellence</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dual Live Feeds: Notice Board & Campus Activities -->
+    <x-kdp-notice-events :notices="$notices ?? collect()" :events="$events ?? collect()" />
+
+    <!-- Academic Engineering Departments -->
+    <x-kdp-departments />
+
+    <!-- ============================================== -->
     <!-- 2. PREMIUM ALUMNI SERVICES GRID                -->
     <!-- ============================================== -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -33,7 +33,18 @@ use App\Http\Controllers\AdminAlertController;
 Broadcast::routes(['middleware' => ['auth']]);
 
 Route::get('/', function () {
-    return view('welcome');
+    $events = collect();
+    $notices = collect();
+    try {
+        if (\Illuminate\Support\Facades\Schema::hasTable('events')) {
+            $events = \App\Models\Event::orderBy('event_date', 'desc')->take(6)->get();
+        }
+        if (\Illuminate\Support\Facades\Schema::hasTable('notices')) {
+            $notices = \App\Models\Notice::where('is_active', true)->latest()->take(8)->get();
+        }
+    } catch (\Throwable $e) {}
+
+    return view('welcome', compact('events', 'notices'));
 });
 
 // Public Contact Form Submission Route
@@ -106,12 +117,10 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         
     } elseif ($role === 'alumni') {
         $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();
-        $events = \App\Models\Event::whereDate('event_date', '>=', today())
-            ->orderBy('event_date', 'asc')
-            ->limit(3)
-            ->get();
+        $events = \App\Models\Event::orderBy('event_date', 'desc')->take(6)->get();
+        $notices = \App\Models\Notice::where('is_active', true)->latest()->take(8)->get();
                                 
-        return view('dashboard', compact('showcases', 'events', 'mapPins', 'clusters'));
+        return view('dashboard', compact('showcases', 'events', 'notices', 'mapPins', 'clusters'));
     }
 
     return redirect('/');
@@ -251,6 +260,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
     Route::post('/notices', [AdminController::class, 'storeNotice'])->name('notices.store');
+    Route::put('/notices/{notice}', [AdminController::class, 'updateNotice'])->name('notices.update');
+    Route::patch('/notices/{notice}/toggle', [AdminController::class, 'toggleNotice'])->name('notices.toggle');
     Route::delete('/notices/{notice}', [AdminController::class, 'destroyNotice'])->name('notices.destroy');    
 
     // ✨ Admin Newsletter Dispatch & Test ✨

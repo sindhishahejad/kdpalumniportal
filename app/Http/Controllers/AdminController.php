@@ -10,6 +10,7 @@ use App\Models\SuccessStory;
 use App\Mail\WeeklyNewsletter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -60,19 +61,84 @@ class AdminController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
+            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:10240',
         ]);
+
+        $attachmentPath = null;
+        $attachmentName = null;
+
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentPath = $file->store('notices', 'public');
+        }
 
         Notice::create([
             'title' => $request->title,
             'body' => $request->body,
-            'is_active' => true,
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
-        return back()->with('status', 'Notice published successfully.');
+        return back()->with('status', 'Notice published successfully to the portal.');
+    }
+
+    public function updateNotice(Request $request, Notice $notice)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp|max:10240',
+        ]);
+
+        $attachmentPath = $notice->attachment_path;
+        $attachmentName = $notice->attachment_name;
+
+        if ($request->boolean('remove_attachment')) {
+            if ($attachmentPath && Storage::disk('public')->exists($attachmentPath)) {
+                Storage::disk('public')->delete($attachmentPath);
+            }
+            $attachmentPath = null;
+            $attachmentName = null;
+        }
+
+        if ($request->hasFile('attachment')) {
+            if ($attachmentPath && Storage::disk('public')->exists($attachmentPath)) {
+                Storage::disk('public')->delete($attachmentPath);
+            }
+            $file = $request->file('attachment');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentPath = $file->store('notices', 'public');
+        }
+
+        $notice->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : $notice->is_active,
+        ]);
+
+        return back()->with('status', 'Notice updated successfully.');
+    }
+
+    public function toggleNotice(Notice $notice)
+    {
+        $notice->update([
+            'is_active' => !$notice->is_active,
+        ]);
+
+        $status = $notice->is_active ? 'activated and is now live on the portal' : 'deactivated and hidden from the portal';
+        return back()->with('status', "Notice has been {$status}.");
     }
 
     public function destroyNotice(Notice $notice)
     {
+        if ($notice->attachment_path && Storage::disk('public')->exists($notice->attachment_path)) {
+            Storage::disk('public')->delete($notice->attachment_path);
+        }
+
         $notice->delete();
         return back()->with('status', 'Notice removed successfully.');
     }

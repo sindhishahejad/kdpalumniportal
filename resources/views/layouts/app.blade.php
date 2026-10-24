@@ -487,7 +487,7 @@
 
         <div class="max-w-7xl mx-auto px-4 mt-10 pt-5 border-t border-blue-900/80 text-center text-xs text-blue-200">
             <p class="mb-1">&copy; {{ date('Y') }} K. D. POLYTECHNIC, PATAN. All Rights Reserved.</p>
-            <p class="text-[11px] text-blue-300">Designed &amp; Developed with pride by Sindhi Shahejad, Shekh Juned, Pathan Anas</p>
+            <p class="text-[11px] text-blue-300">Designed &amp; Developed with pride by Shahejad Sindhi</p>
         </div>
 
         <!-- Floating Scroll to Top Button (Alpine controlled) -->

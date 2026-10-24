@@ -23,7 +23,7 @@
             </div>
 
             <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl font-heading leading-tight uppercase">
-                કિલચંદ દેવચંદ પોલિટેકનિક, પાટણ<br>
+                કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ<br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-200">
                     K. D. Polytechnic, Patan
                 </span>

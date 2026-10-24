@@ -135,12 +135,15 @@
         </div>
 
         <!-- Success Stories Quick Access -->
-        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-600 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-xs p-6 border-l-4 border-[#1e3a8a] border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-900">Success Stories</h3>
-                <p class="text-sm text-gray-500">Highlight alumni achievements and career spotlights on the network.</p>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">🌟</span>
+                    <h3 class="text-lg font-bold text-[#0f172a] font-heading">Alumni Success Stories &amp; Spotlights</h3>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Highlight alumni achievements, executive appointments, and career spotlights across all engineering branches.</p>
             </div>
-            <a href="{{ route('admin.stories.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap">
+            <a href="{{ route('admin.stories.index') }}" class="bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
                 Manage Stories &rarr;
             </a>
         </div>

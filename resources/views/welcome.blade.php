@@ -228,6 +228,12 @@
                     </div>
                 </div>
             </div>
+
+            <div class="mt-10 text-center">
+                <a href="{{ route('stories.index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-50 text-[#1e3a8a] hover:bg-[#1e3a8a] hover:text-white font-bold text-xs uppercase tracking-wider transition-all font-heading border border-blue-200 shadow-2xs">
+                    <span>🌟</span> Read More Alumni Success Stories &amp; Spotlights &rarr;
+                </a>
+            </div>
         </div>
     </section>
 @endsection

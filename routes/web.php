@@ -284,6 +284,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // ✨ Admin Success Stories Management ✨
     Route::get('/success-stories', [SuccessStoryController::class, 'adminIndex'])->name('stories.index');
     Route::post('/success-stories', [SuccessStoryController::class, 'store'])->name('stories.store');
+    Route::put('/success-stories/{story}', [SuccessStoryController::class, 'update'])->name('stories.update');
     Route::delete('/success-stories/{story}', [SuccessStoryController::class, 'destroy'])->name('stories.destroy');
 
     // 🏆 Dynamic Admin Awards Management

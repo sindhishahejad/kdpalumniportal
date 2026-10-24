@@ -78,6 +78,8 @@ class LoginController extends Controller
 
         $request->validate([
             'email' => 'required|email|exists:users,email',
+        ], [
+            'email.exists' => 'No account found with this email in the database. Please run "php artisan db:seed" or register.',
         ]);
 
         $user = User::where('email', $request->email)->first();

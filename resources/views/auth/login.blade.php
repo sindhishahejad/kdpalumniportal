@@ -207,7 +207,7 @@
 
                 <!-- Local Dev Helper (Preserved for testing environments) -->
                 @if(app()->isLocal() && config('app.debug'))
-                    <div class="mt-6 pt-3 border-t border-dashed border-slate-200">
+                    <div class="mt-6 pt-3 border-t border-dashed border-slate-200" x-data="{ devEmail: 'sindhishahejad@gmail.com' }">
                         <button type="button" @click="showDevLogin = !showDevLogin" class="text-[11px] text-slate-400 hover:text-slate-600 flex items-center justify-between w-full font-heading cursor-pointer">
                             <span>🛠 Local Dev Quick Email Login</span>
                             <span x-text="showDevLogin ? '▲' : '▼'"></span>
@@ -215,9 +215,20 @@
 
                         <div x-show="showDevLogin" style="display: none;" class="mt-2 bg-amber-50/80 border border-amber-200 p-3 rounded-xl text-xs space-y-2">
                             <p class="text-[11px] text-amber-800 font-semibold">Quick-fill approved local test accounts:</p>
+                            <div class="flex flex-wrap gap-1.5 pb-1">
+                                <button type="button" @click="devEmail = 'sindhishahejad@gmail.com'" class="px-2 py-0.5 rounded bg-amber-100 hover:bg-amber-200 border border-amber-300 text-[10px] font-bold text-amber-900 cursor-pointer">
+                                    👑 Admin (sindhishahejad@gmail.com)
+                                </button>
+                                <button type="button" @click="devEmail = 'sabana.sindhi1481@gmail.com'" class="px-2 py-0.5 rounded bg-blue-100 hover:bg-blue-200 border border-blue-300 text-[10px] font-bold text-blue-900 cursor-pointer">
+                                    🎓 Alumni (sabana.sindhi1481@gmail.com)
+                                </button>
+                                <button type="button" @click="devEmail = 'js1818654@gmail.com'" class="px-2 py-0.5 rounded bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 text-[10px] font-bold text-emerald-900 cursor-pointer">
+                                    🎒 Student (js1818654@gmail.com)
+                                </button>
+                            </div>
                             <form action="{{ route('login.email') }}" method="POST" class="flex gap-2">
                                 @csrf
-                                <input type="email" name="email" placeholder="admin@example.com" required class="flex-1 text-xs border border-amber-300 rounded-lg px-2.5 py-1 bg-white">
+                                <input type="email" name="email" x-model="devEmail" placeholder="admin@example.com" required class="flex-1 text-xs border border-amber-300 rounded-lg px-2.5 py-1 bg-white">
                                 <button type="submit" class="bg-amber-700 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-amber-800 font-heading cursor-pointer">Dev Login</button>
                             </form>
                         </div>

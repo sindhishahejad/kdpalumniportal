@@ -138,6 +138,7 @@ Route::post('/gallery/stories/{story}/like', [\App\Http\Controllers\GalleryContr
 // ✨ Event Routes (Including index for /events 404 fix) ✨
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::post('/events', [EventController::class, 'store'])->name('events.store')->middleware(['auth']);
+Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update')->middleware(['auth']);
 Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show')->middleware(['auth']);
 

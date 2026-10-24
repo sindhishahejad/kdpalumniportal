@@ -14,4 +14,14 @@ class Event extends Model
     protected $casts = [
         'event_date' => 'date',
     ];
+
+    public function rsvps()
+    {
+        return $this->hasMany(EventRsvp::class);
+    }
+
+    public function attendees()
+    {
+        return $this->belongsToMany(User::class, 'event_rsvps', 'event_id', 'user_id');
+    }
 }

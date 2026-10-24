@@ -841,83 +841,317 @@
 
         </div>
 
-        <!-- EVENT MANAGER -->
-        <div class="mt-10 p-8 bg-gray-50 rounded-[20px] border border-gray-200">
-            <div class="mb-6">
-                <h2 class="text-2xl font-serif font-bold text-[#0f172a]">Manage Events</h2>
-                <p class="text-gray-500 text-sm mt-1">Schedule upcoming campus activities and reunions.</p>
+        <!-- EVENT MANAGER (KD Polytechnic Activities & Seminars Control) -->
+        <div id="events-section" class="mt-10 bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden"
+             x-data="{ 
+                 eventFilter: 'all', 
+                 eventSearch: '', 
+                 editEvent: null, 
+                 matchesEvent(evt) {
+                     if (this.eventFilter === 'upcoming') {
+                         const todayStr = '{{ now()->toDateString() }}';
+                         const evtDateStr = (evt.event_date || '').substring(0, 10);
+                         if (evtDateStr < todayStr) return false;
+                     }
+                     if (this.eventFilter === 'past') {
+                         const todayStr = '{{ now()->toDateString() }}';
+                         const evtDateStr = (evt.event_date || '').substring(0, 10);
+                         if (evtDateStr >= todayStr) return false;
+                     }
+                     if (!this.eventSearch) return true;
+                     const q = this.eventSearch.toLowerCase();
+                     return (evt.title && evt.title.toLowerCase().includes(q)) ||
+                            (evt.category && evt.category.toLowerCase().includes(q)) ||
+                            (evt.description && evt.description.toLowerCase().includes(q));
+                 }
+             }">
+
+            <!-- Top Header Banner -->
+            <div class="p-6 bg-gradient-to-r from-[#1e3a8a] via-[#1c3272] to-[#0f172a] text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xl">📅</span>
+                        <h2 class="text-xl font-bold tracking-tight font-heading">Campus Events &amp; Activities Control Center</h2>
+                        <span class="ml-2 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-[#f97316] text-white shadow-xs">
+                            {{ $events->count() }} Events
+                        </span>
+                    </div>
+                    <p class="text-xs text-blue-100 font-sans">
+                        Schedule campus activities, guest lectures, technical symposiums, and track alumni RSVP attendance.
+                    </p>
+                </div>
+
+                <a href="{{ route('events.index') }}" target="_blank" class="px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all flex items-center gap-1.5 font-heading">
+                    <span>🌐</span> View Public Events Hub &rarr;
+                </a>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm h-max">
-                    <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Schedule New Event</h3>
+
+            <!-- Stats & Filter Bar -->
+            <div class="p-4 sm:p-6 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <!-- Stat chips -->
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" 
+                            @click="eventFilter = 'all'" 
+                            :class="eventFilter === 'all' ? 'bg-[#1e3a8a] text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5">
+                        <span>All Activities</span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]" :class="eventFilter === 'all' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">{{ $events->count() }}</span>
+                    </button>
+
+                    <button type="button" 
+                            @click="eventFilter = 'upcoming'" 
+                            :class="eventFilter === 'upcoming' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
+                        <span>Upcoming</span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]" :class="eventFilter === 'upcoming' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">{{ $events->where('event_date', '>=', today())->count() }}</span>
+                    </button>
+
+                    <button type="button" 
+                            @click="eventFilter = 'past'" 
+                            :class="eventFilter === 'past' ? 'bg-slate-700 text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'" 
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <span>Past Archive</span>
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px]" :class="eventFilter === 'past' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">{{ $events->where('event_date', '<', today())->count() }}</span>
+                    </button>
+                </div>
+
+                <!-- Instant Search Input -->
+                <div class="relative w-full md:w-72">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        🔍
+                    </span>
+                    <input type="text" 
+                           x-model="eventSearch" 
+                           placeholder="Filter activities by title or category..." 
+                           class="w-full pl-9 pr-4 py-1.5 text-xs rounded-xl border-slate-300 bg-white focus:border-[#1e3a8a] focus:ring-[#1e3a8a] shadow-2xs">
+                    <button x-show="eventSearch" @click="eventSearch = ''" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                        &times;
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Grid: Form (Left) & List (Right) -->
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left: Schedule New Event Form -->
+                <div class="lg:col-span-5 bg-slate-50 p-6 rounded-xl border border-slate-200/80 shadow-2xs h-max">
+                    <div class="flex items-center gap-2 mb-4 border-b border-slate-200 pb-3">
+                        <span class="text-base">✨</span>
+                        <h3 class="text-base font-bold text-[#0f172a] font-heading">Schedule New Event</h3>
+                    </div>
+
                     <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
                         <div>
-                            <label class="block text-sm font-bold text-[#0f172a] mb-1">Event Title</label>
-                            <input type="text" name="title" required placeholder="e.g. Annual Tech Symposium" class="w-full rounded-lg border-gray-300 shadow-sm text-sm">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Event / Activity Title <span class="text-red-500">*</span></label>
+                            <input type="text" name="title" required placeholder="e.g. Annual Polytechnic TechFest &amp; Project Expo" class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-sm font-bold text-[#0f172a] mb-1">Category</label>
-                                <select name="category" required class="w-full rounded-lg border-gray-300 shadow-sm text-sm text-gray-600">
-                                    <option value="Upcoming Event">Upcoming Event</option>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Category <span class="text-red-500">*</span></label>
+                                <select name="category" required class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 text-slate-700 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
+                                    <option value="Technical Fest">Technical Fest</option>
                                     <option value="Workshop">Workshop</option>
-                                    <option value="Networking">Networking</option>
                                     <option value="Seminar">Seminar</option>
+                                    <option value="Reunion">Alumni Reunion</option>
+                                    <option value="Sports &amp; Cultural">Sports &amp; Cultural</option>
+                                    <option value="Career &amp; Placement">Career &amp; Placement</option>
+                                    <option value="Webinar">Webinar</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-[#0f172a] mb-1">Event Date</label>
-                                <input type="date" name="event_date" required class="w-full rounded-lg border-gray-300 shadow-sm text-sm text-gray-600">
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Event Date <span class="text-red-500">*</span></label>
+                                <input type="date" name="event_date" required class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 text-slate-700 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
                             </div>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-bold text-[#0f172a] mb-1">Time Display</label>
-                            <input type="text" name="time_display" required placeholder="e.g. 10:00 AM - 04:00 PM" class="w-full rounded-lg border-gray-300 shadow-sm text-sm">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Time &amp; Venue <span class="text-red-500">*</span></label>
+                            <input type="text" name="time_display" required placeholder="e.g. 10:00 AM - 04:00 PM • Main Campus Auditorium" class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
                         </div>
+
                         <div>
-                            <label class="block text-sm font-bold text-[#0f172a] mb-1">Event Description (Optional)</label>
-                            <textarea name="description" rows="2" placeholder="Brief details about the event..." class="w-full rounded-lg border-gray-300 shadow-sm text-sm"></textarea>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Description (Optional)</label>
+                            <textarea name="description" rows="3" placeholder="Provide background, agenda, guest speaker details, or participation criteria..." class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]"></textarea>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-bold text-[#0f172a] mb-1">Cover Image</label>
-                            <input type="file" name="image" required accept="image/*" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm text-gray-600 cursor-pointer">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Cover Photo (Optional)</label>
+                            <input type="file" name="image" accept="image/*" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs text-slate-600 cursor-pointer file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-[#1e3a8a] hover:file:bg-blue-100">
+                            <p class="text-[10px] text-slate-500 mt-1">Accepts JPG, PNG, WEBP (Max 5MB). Default KDP branded graphic will be used if omitted.</p>
                         </div>
-                        <button type="submit" class="w-full bg-[#16a34a] hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors mt-2">
-                            Publish Event
+
+                        <button type="submit" class="w-full bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm hover:shadow flex items-center justify-center gap-1.5">
+                            <span>🚀</span> Publish Campus Activity
                         </button>
                     </form>
                 </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h3 class="text-lg font-bold text-[#0f172a] mb-4 border-b pb-2">Active Events</h3>
-                    <div class="space-y-3 max-h-[450px] overflow-y-auto pr-2">
+
+                <!-- Right: Active Events List -->
+                <div class="lg:col-span-7">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-3">
+                        <h3 class="text-base font-bold text-[#0f172a] font-heading flex items-center gap-2">
+                            <span>📋</span> Campus Activities Schedule
+                        </h3>
+                        <span class="text-xs text-slate-500 font-sans">
+                            Showing {{ $events->count() }} total events
+                        </span>
+                    </div>
+
+                    <div class="space-y-3.5 max-h-[600px] overflow-y-auto pr-1">
                         @forelse($events as $event)
-                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg border border-gray-100 transition-colors">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-md overflow-hidden bg-gray-200 flex-shrink-0">
+                            <div x-show="matchesEvent({{ json_encode($event) }})" 
+                                 class="p-4 rounded-xl border border-slate-200/90 hover:border-slate-300 transition-all bg-white hover:shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 {{ $event->event_date >= today() ? 'border-l-4 border-l-[#f97316]' : 'border-l-4 border-l-slate-300 opacity-80' }}">
+                                
+                                <div class="flex items-start gap-3.5 flex-1 min-w-0">
+                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shrink-0 relative">
                                         @if($event->image_path)
                                             <img src="{{ asset('storage/' . $event->image_path) }}" class="w-full h-full object-cover">
+                                        @else
+                                            <div class="w-full h-full bg-gradient-to-br from-[#1e3a8a] to-[#2e53a3] flex flex-col items-center justify-center text-white">
+                                                <span class="text-xs font-black">{{ $event->event_date->format('M') }}</span>
+                                                <span class="text-sm font-black">{{ $event->event_date->format('d') }}</span>
+                                            </div>
                                         @endif
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold text-sm text-[#0f172a]">{{ $event->title }}</h4>
-                                        <p class="text-xs text-[#f97316] font-bold">{{ $event->event_date->format('M d, Y') }} • <span class="text-gray-500 font-normal">{{ $event->category }}</span></p>
+
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider {{ $event->event_date >= today() ? 'bg-orange-50 text-[#f97316] border border-orange-200' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                                                {{ $event->category }}
+                                            </span>
+
+                                            <span class="text-[11px] font-bold text-slate-700 flex items-center gap-1 font-sans">
+                                                📅 {{ $event->event_date->format('M d, Y') }}
+                                            </span>
+
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-[#1e3a8a] border border-blue-200">
+                                                🎟️ {{ $event->rsvps_count ?? 0 }} RSVPs
+                                            </span>
+                                        </div>
+
+                                        <h4 class="font-bold text-sm text-[#0f172a] hover:text-[#1e3a8a] transition-colors leading-snug line-clamp-1">
+                                            {{ $event->title }}
+                                        </h4>
+                                        <p class="text-xs text-slate-500 mt-0.5 line-clamp-1">
+                                            ⏰ {{ $event->time_display }}
+                                        </p>
                                     </div>
                                 </div>
-                                <form action="{{ route('events.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel and delete this event?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors">
-                                        Delete
+
+                                <!-- Actions Row -->
+                                <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                                    <a href="{{ route('events.show', $event->id) }}" target="_blank" class="p-2 rounded-lg text-slate-600 hover:text-[#1e3a8a] hover:bg-blue-50 text-xs font-bold border border-slate-200 transition-colors" title="View Public Page">
+                                        👁️
+                                    </a>
+
+                                    <button type="button" 
+                                            @click="editEvent = {{ json_encode($event) }}" 
+                                            class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-blue-50 text-[#1e3a8a] hover:bg-blue-100 border border-blue-200 transition-colors flex items-center gap-1 cursor-pointer">
+                                        <span>✏️</span> Edit
                                     </button>
-                                </form>
+
+                                    <form action="{{ route('events.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel and delete this event? All associated RSVPs will also be removed.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         @empty
-                            <p class="text-sm text-gray-400 italic">No upcoming events scheduled.</p>
+                            <div class="py-12 text-center text-slate-400 italic text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                                No campus events scheduled yet. Use the form on the left to schedule one.
+                            </div>
                         @endforelse
                     </div>
                 </div>
             </div>
+
+            <!-- Edit Event Modal -->
+            <div x-show="editEvent !== null" 
+                 x-cloak 
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0">
+                
+                <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden transform transition-all"
+                     @click.away="editEvent = null">
+                    
+                    <div class="p-5 bg-gradient-to-r from-[#1e3a8a] to-[#0f172a] text-white flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg">✏️</span>
+                            <h3 class="font-bold text-base font-heading">Edit Campus Activity</h3>
+                        </div>
+                        <button type="button" @click="editEvent = null" class="text-white/70 hover:text-white text-xl font-bold cursor-pointer">
+                            &times;
+                        </button>
+                    </div>
+
+                    <form :action="'{{ url('/events') }}/' + (editEvent ? editEvent.id : '')" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                        @csrf
+                        @method('PUT')
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Event Title <span class="text-red-500">*</span></label>
+                            <input type="text" name="title" x-model="editEvent.title" required class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Category <span class="text-red-500">*</span></label>
+                                <select name="category" x-model="editEvent.category" required class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 text-slate-700 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
+                                    <option value="Technical Fest">Technical Fest</option>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Seminar">Seminar</option>
+                                    <option value="Reunion">Alumni Reunion</option>
+                                    <option value="Sports &amp; Cultural">Sports &amp; Cultural</option>
+                                    <option value="Career &amp; Placement">Career &amp; Placement</option>
+                                    <option value="Webinar">Webinar</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Event Date <span class="text-red-500">*</span></label>
+                                <input type="date" name="event_date" :value="editEvent ? (editEvent.event_date || '').substring(0, 10) : ''" required class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 text-slate-700 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Time &amp; Venue <span class="text-red-500">*</span></label>
+                            <input type="text" name="time_display" x-model="editEvent.time_display" required class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Description</label>
+                            <textarea name="description" rows="3" x-model="editEvent.description" class="w-full rounded-lg border-slate-300 shadow-2xs text-xs py-2 px-3 focus:ring-[#1e3a8a] focus:border-[#1e3a8a]"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Replace Cover Photo (Optional)</label>
+                            <input type="file" name="image" accept="image/*" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs text-slate-600 cursor-pointer file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-[#1e3a8a]">
+                            <p class="text-[10px] text-slate-500 mt-1">Leave empty to keep existing photo.</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-200 flex justify-end gap-2">
+                            <button type="button" @click="editEvent = null" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-[#1e3a8a] hover:bg-blue-900 text-white shadow-xs cursor-pointer transition-colors">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
 
         <!-- JOB MANAGER -->

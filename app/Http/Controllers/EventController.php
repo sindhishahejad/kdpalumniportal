@@ -16,20 +16,32 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::whereDate('event_date', '>=', today())
-                       ->orderBy('event_date', 'asc')
-                       ->get();
-                       
-        return view('events.index', compact('events'));
+        $upcomingEvents = Event::whereDate('event_date', '>=', today())
+                               ->withCount('rsvps')
+                               ->orderBy('event_date', 'asc')
+                               ->get();
+
+        $pastEvents = Event::whereDate('event_date', '<', today())
+                           ->withCount('rsvps')
+                           ->orderBy('event_date', 'desc')
+                           ->get();
+
+        // For backward compatibility
+        $events = $upcomingEvents;
+
+        return view('events.index', compact('upcomingEvents', 'pastEvents', 'events'));
     }
 
     public function show(Event $event)
     {
+        $event->loadCount('rsvps');
         return view('events.show', compact('event'));
     }
 
     public function store(Request $request)
     {
+        abort_if(!Auth::check() || Auth::user()->role !== 'admin', 403, 'Unauthorized action.');
+
         $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:50',
@@ -53,16 +65,45 @@ class EventController extends Controller
             'image_path' => $imagePath,
         ]);
 
-        return back()->with('event_status', 'Event created successfully!');
+        return back()->with('event_status', 'Event scheduled successfully!');
+    }
+
+    public function update(Request $request, Event $event)
+    {
+        abort_if(!Auth::check() || Auth::user()->role !== 'admin', 403, 'Unauthorized action.');
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:50',
+            'event_date' => 'required|date',
+            'time_display' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        $data = [
+            'title' => $request->title,
+            'category' => strtoupper($request->category),
+            'event_date' => $request->event_date,
+            'time_display' => $request->time_display,
+            'description' => $request->description,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($event->image_path) {
+                Storage::disk('public')->delete($event->image_path);
+            }
+            $data['image_path'] = $request->file('image')->store('events', 'public');
+        }
+
+        $event->update($data);
+
+        return back()->with('event_status', 'Event updated successfully!');
     }
 
     public function rsvp(Event $event)
     {
         $user = Auth::user();
-
-        if (method_exists($event, 'attendees')) {
-            $event->attendees()->syncWithoutDetaching([$user->id]);
-        }
 
         $existingRsvp = EventRsvp::where('event_id', $event->id)->where('user_id', $user->id)->first();
 
@@ -78,13 +119,17 @@ class EventController extends Controller
             'ticket_code' => $ticketCode,
         ]);
 
-        Mail::to($user->email)->queue(new EventRsvpMail($event, $user));
+        try {
+            Mail::to($user->email)->queue(new EventRsvpMail($event, $user));
+        } catch (\Throwable $e) {}
 
-        $user->notify(new PortalNotification(
-            'RSVP Confirmed!',
-            'Your digital entry pass for ' . $event->title . ' has been successfully generated.',
-            route('events.ticket', $rsvp->id)
-        ));
+        try {
+            $user->notify(new PortalNotification(
+                'RSVP Confirmed!',
+                'Your digital entry pass for ' . $event->title . ' has been successfully generated.',
+                route('events.ticket', $rsvp->id)
+            ));
+        } catch (\Throwable $e) {}
 
         return redirect()->route('events.ticket', $rsvp->id)->with('event_status', 'RSVP confirmed! Your digital entry pass has been generated.');
     }
@@ -98,6 +143,8 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
+        abort_if(!Auth::check() || Auth::user()->role !== 'admin', 403, 'Unauthorized action.');
+
         if ($event->image_path) {
             Storage::disk('public')->delete($event->image_path);
         }

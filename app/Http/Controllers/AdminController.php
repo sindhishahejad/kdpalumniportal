@@ -30,7 +30,7 @@ class AdminController extends Controller
         
         $notices = Notice::latest()->get();
         $albums = \App\Models\GalleryAlbum::withCount('photos')->latest()->get();
-        $events = \App\Models\Event::orderBy('event_date', 'asc')->get();
+        $events = \App\Models\Event::withCount('rsvps')->orderBy('event_date', 'desc')->get();
         $jobs = \App\Models\JobPosting::latest()->get();
         $mapPins = \App\Models\RegionalChapter::getMapPins();
         $clusters = \App\Models\RegionalChapter::getClusterStats();

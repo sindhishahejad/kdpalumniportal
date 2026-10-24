@@ -284,6 +284,7 @@
                             <li><a href="{{ route('chapters.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📍</span> Regional Chapters &amp; Map</a></li>
                             <li><a href="{{ route('reunions.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎉</span> Batch Reunions &amp; RSVPs</a></li>
                             <li><a href="{{ route('pitches.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💡</span> Student Project Pitches</a></li>
+                            <li><a href="{{ route('events.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📅</span> Campus Events &amp; Activities</a></li>
                             <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📚</span> Study Resources &amp; Notes</a></li>
                         </ul>
                     </div>
@@ -356,6 +357,7 @@
                 <a href="{{ route('jobs.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">💼 Job Board</a>
                 <a href="{{ route('mentorship.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🤝 Mentorship</a>
                 <a href="{{ route('donations.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🎁 Giving Back</a>
+                <a href="{{ route('events.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">📅 Campus Events &amp; Activities</a>
                 <a href="{{ route('awards.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🏆 Awards &amp; Hall of Fame</a>
                 <a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">⏳ Time-Machine &amp; Gallery</a>
                 <a href="{{ route('labs.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🔬 Labs &amp; Workshops</a>
@@ -433,6 +435,8 @@
                     <li><a href="{{ route('alumni.index') }}" class="hover:text-white hover:underline transition-colors">Alumni Directory</a></li>
                     <li><a href="{{ route('jobs.index') }}" class="hover:text-white hover:underline transition-colors">Job Opportunities</a></li>
                     <li><a href="{{ route('donations.index') }}" class="hover:text-white hover:underline transition-colors">Giving Back &amp; Support</a></li>
+                    <li><a href="{{ route('events.index') }}" class="hover:text-white hover:underline transition-colors">Campus Events &amp; Activities</a></li>
+                    <li><a href="{{ route('stories.index') }}" class="hover:text-white hover:underline transition-colors">Alumni Success Stories</a></li>
                     <li><a href="{{ route('awards.index') }}" class="hover:text-white hover:underline transition-colors">Awards &amp; Recognition</a></li>
                     <li><a href="{{ route('gallery.index') }}" class="hover:text-white hover:underline transition-colors">Campus Time-Machine</a></li>
                 </ul>

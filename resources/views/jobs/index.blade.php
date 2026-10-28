@@ -19,19 +19,19 @@
 }">
     
     <!-- Top Sub-Navigation -->
-    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
-        <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#1c3272] text-white shadow-sm">
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200 font-heading">
+        <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#0f2042] text-white shadow-xs">
             Browse All Opportunities
         </a>
         @auth
-            <a href="{{ route('jobs.my-applications') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all">
+            <a href="{{ route('jobs.my-applications') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-[#0f2042] hover:bg-slate-100 transition-all">
                 <span>My Referral Requests</span>
                 @if(isset($myApplicationsCount) && $myApplicationsCount > 0)
-                    <span class="bg-blue-100 text-[#1c3272] text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">{{ $myApplicationsCount }}</span>
+                    <span class="bg-blue-100 text-[#0f2042] text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">{{ $myApplicationsCount }}</span>
                 @endif
             </a>
             @if(in_array(auth()->user()->role, ['admin', 'alumni', 'faculty']))
-                <a href="{{ route('jobs.pipeline') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all">
+                <a href="{{ route('jobs.pipeline') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-[#0f2042] hover:bg-slate-100 transition-all">
                     Referral Review Pipeline
                 </a>
             @endif
@@ -39,12 +39,18 @@
     </div>
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-gray-200 gap-4">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-slate-200 gap-4">
         <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-[#f97316]">Careers & Industrial Training</span>
-            <h1 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] mt-1">Alumni & GIDC Job Board</h1>
-            <p class="text-gray-500 mt-2 text-sm max-w-2xl">
-                Discover full-time positions, internships, and mandatory 6-month industrial apprenticeships in local GIDC zones and leading companies.
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[#c2410c] text-xs font-bold tracking-wide font-heading">
+                    <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                    કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+                </span>
+                <span class="text-xs font-bold uppercase tracking-widest text-[#f97316] font-heading">Careers &amp; Industrial Training</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f2042] font-heading tracking-tight mt-1">Alumni &amp; GIDC Job Board</h1>
+            <p class="text-slate-600 mt-2 text-sm max-w-2xl leading-relaxed">
+                Discover full-time engineering positions, diploma trainee openings, and 6-month industrial internships across GIDC industrial corridors and corporate partners.
             </p>
         </div>
 
@@ -52,7 +58,7 @@
             @if(in_array(auth()->user()->role, ['admin', 'alumni', 'faculty']))
                 <button type="button" 
                         @click="showModal = true" 
-                        class="inline-flex items-center gap-2 bg-[#1c3272] hover:bg-[#152554] text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all whitespace-nowrap">
+                        class="inline-flex items-center gap-2 bg-[#0f2042] hover:bg-[#1e3a8a] text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-xl shadow-xs transition-all whitespace-nowrap font-heading">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Post an Opportunity
                 </button>

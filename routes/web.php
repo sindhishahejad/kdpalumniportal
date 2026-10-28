@@ -112,6 +112,11 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
             'total_alumni' => \App\Models\User::where('role', 'alumni')->where('is_approved', true)->count(),
             'pending_jobs' => \App\Models\JobPosting::where('is_active', false)->count(),
             'active_students' => \App\Models\User::where('role', 'student')->where('is_approved', true)->count(),
+            'available_tools' => \App\Models\ToolDonation::where('status', 'available')->count(),
+            'open_pitches' => \App\Models\ProjectPitch::where('status', 'open')->count(),
+            'total_donations' => (float) \App\Models\Donation::where('status', 'completed')->sum('amount'),
+            'pending_inquiries' => \App\Models\ContactInquiry::where('status', 'new')->count(),
+            'pending_documents' => \App\Models\DocumentRequest::where('status', 'pending')->count(),
         ];
         
         return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats', 'mapPins', 'clusters', 'spots', 'recentStories'));
@@ -123,6 +128,7 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
             'open_pitches' => \App\Models\ProjectPitch::where('status', 'open')->count(),
             'upcoming_events' => \App\Models\Event::whereDate('event_date', '>=', today())->count(),
             'total_alumni' => \App\Models\User::where('role', 'alumni')->where('is_approved', true)->count(),
+            'available_tools' => \App\Models\ToolDonation::where('status', 'available')->count(),
         ];
         $recentPitches = \App\Models\ProjectPitch::with('student')->latest()->take(3)->get();
         $upcomingEvents = \App\Models\Event::whereDate('event_date', '>=', today())->orderBy('event_date', 'asc')->take(3)->get();
@@ -130,7 +136,18 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
         return view('dashboards.faculty', compact('stats', 'recentPitches', 'upcomingEvents', 'mapPins', 'clusters'));
         
     } elseif ($role === 'student') {
-        return view('dashboards.student', compact('mapPins', 'clusters'));
+        $stats = [
+            'available_tools' => \App\Models\ToolDonation::where('status', 'available')->count(),
+            'active_jobs' => \App\Models\JobPosting::where('is_active', true)->count(),
+            'upcoming_events' => \App\Models\Event::whereDate('event_date', '>=', today())->count(),
+            'total_resources' => \App\Models\Resource::count(),
+        ];
+        $notices = \App\Models\Notice::where('is_active', true)->latest()->take(5)->get();
+        $upcomingEvents = \App\Models\Event::whereDate('event_date', '>=', today())->orderBy('event_date', 'asc')->take(3)->get();
+        $availableTools = \App\Models\ToolDonation::where('status', 'available')->with('donor')->latest()->take(3)->get();
+        $recentJobs = \App\Models\JobPosting::where('is_active', true)->latest()->take(3)->get();
+
+        return view('dashboards.student', compact('stats', 'notices', 'upcomingEvents', 'availableTools', 'recentJobs', 'mapPins', 'clusters'));
         
     } elseif ($role === 'alumni') {
         $showcases = \App\Models\JobPosting::where('is_active', true)->latest()->take(4)->get();

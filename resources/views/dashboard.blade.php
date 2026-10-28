@@ -47,11 +47,22 @@
         </div>
 
         <!-- Premium Welcome Ribbon -->
-        <div class="bg-gradient-to-r from-kdp-textblue via-[#1a2f5c] to-kdp-textblue text-white text-center py-8 px-6 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] border-t-2 border-kdp-orange relative z-30">
+        <div class="bg-gradient-to-r from-[#0f2042] via-[#1a2f5c] to-[#0f2042] text-white text-center py-8 px-6 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] border-t-2 border-[#f97316] relative z-30">
             <h2 class="text-2xl md:text-3xl font-serif font-bold mb-3 tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 drop-shadow-sm">Welcome to KDP Alumni Association Network, {{ Auth::user()->name ?? 'Alumnus' }}</h2>
             <p class="text-sm md:text-base max-w-4xl mx-auto font-light leading-relaxed text-gray-200">
                 A world that is teeming with talent, brilliance, diversity, and adventure. A world where you can strengthen current connections, make new ones, explore myriad opportunities, and create many more to support the future of K. D. Polytechnic, Patan.
             </p>
+            <div class="mt-6 flex flex-wrap justify-center items-center gap-3">
+                <a href="{{ route('chatbot.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-xs font-bold text-white transition-all shadow-xs">
+                    <span>🤖</span> Ask KDP Mitra AI &rarr;
+                </a>
+                <a href="{{ route('id-card.show') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f97316] hover:bg-[#ea580c] text-xs font-bold text-white transition-all shadow-xs">
+                    <span>🪪</span> My Smart Alumni ID &rarr;
+                </a>
+                <a href="{{ route('tools.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-xs font-bold text-white transition-all shadow-xs">
+                    <span>📐</span> Tool &amp; Book Bank &rarr;
+                </a>
+            </div>
         </div>
     </div>
 
@@ -136,11 +147,11 @@
             <!-- Card 4: Resource Vault (Library/Books) -->
             <a href="{{ route('resources.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
                 <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Library Books" />
-                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange via-kdp-orange/80 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#1e3a8a]/85 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
                 <div class="relative z-20 p-6 flex flex-col justify-end h-full">
-                    <h3 class="font-sans font-bold text-xl mb-2 text-white transform group-hover:-translate-y-1 transition-transform duration-300">Resource Vault</h3>
-                    <p class="text-sm mb-5 text-orange-50 font-light leading-relaxed opacity-90 transform group-hover:-translate-y-1 transition-transform duration-300">Access exclusive academic materials, past papers, and learning resources.</p>
-                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-blue-900 transition-colors">
+                    <h3 class="font-heading font-black text-xl mb-2 text-white uppercase tracking-wide transform group-hover:-translate-y-1 transition-transform duration-300">Resource Vault</h3>
+                    <p class="text-xs mb-5 text-blue-100 font-normal leading-relaxed opacity-95 transform group-hover:-translate-y-1 transition-transform duration-300">Access exclusive academic materials, past papers, and learning resources.</p>
+                    <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-[#f97316] transition-colors font-heading">
                         Access <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </div>
                 </div>
@@ -488,17 +499,17 @@
 
         <div class="flex flex-col md:flex-row shadow-2xl rounded-3xl overflow-hidden bg-white transform transition-transform hover:-translate-y-1 duration-500 border border-gray-100">     
             <!-- Left Side: Content & CTA -->
-            <div class="bg-gradient-to-br from-kdp-textblue via-[#1a2f5c] to-kdp-textblue text-white p-10 md:p-14 md:w-1/2 flex flex-col justify-center border-b-4 md:border-b-0 md:border-r-4 border-kdp-orange relative overflow-hidden">
+            <div class="bg-gradient-to-br from-[#0f2042] via-[#1a2f5c] to-[#0f2042] text-white p-10 md:p-14 md:w-1/2 flex flex-col justify-center border-b-4 md:border-b-0 md:border-r-4 border-[#f97316] relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-overlay"></div>
                 <div class="absolute -top-20 -left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
                 
                 <div class="relative z-10">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 mb-6 shadow-sm">
-                        <svg class="w-4 h-4 text-kdp-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                        <span class="text-xs font-bold uppercase tracking-widest text-orange-50">Digital Identity</span>
+                        <svg class="w-4 h-4 text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
+                        <span class="text-xs font-bold uppercase tracking-widest text-orange-50 font-heading">Digital Identity</span>
                     </div>
                     
-                    <h3 class="font-serif text-3xl md:text-4xl font-extrabold mb-5 uppercase tracking-wide drop-shadow-md leading-tight">
+                    <h3 class="font-heading text-3xl md:text-4xl font-extrabold mb-5 uppercase tracking-wide drop-shadow-md leading-tight">
                         Connecting Generations of Excellence
                     </h3>
                     
@@ -506,7 +517,7 @@
                         Unlock a world of benefits with your official Alumni Smart Card. Gain seamless campus access, library privileges, and exclusive invitations to global KDP events.
                     </p>
                     
-                    <a href="{{ route('id-card.show') }}" class="group inline-flex justify-center items-center bg-kdp-orange text-white text-sm font-bold py-4 px-8 rounded-full shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:shadow-[0_0_30px_rgba(234,88,12,0.6)] hover:bg-orange-600 transition-all uppercase tracking-wider relative z-10 w-max">
+                    <a href="{{ route('id-card.show') }}" class="group inline-flex justify-center items-center bg-[#f97316] text-white text-sm font-bold py-4 px-8 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] hover:bg-orange-600 transition-all uppercase tracking-wider relative z-10 w-max font-heading">
                         Get Your Smart Card Now
                         <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </a>
@@ -519,11 +530,11 @@
                 
                 <div class="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transform rotate-3 md:rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500 flex flex-col">
                     
-                    <div class="bg-gradient-to-r from-[#1a2f5c] to-kdp-textblue p-5 flex items-center justify-between border-b border-white/10">
-                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold text-kdp-textblue text-sm shadow-inner">
+                    <div class="bg-gradient-to-r from-[#1a2f5c] to-[#0f2042] p-5 flex items-center justify-between border-b border-white/10">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold text-[#0f2042] text-sm shadow-inner font-heading">
                             KDP
                         </div>
-                        <div class="text-right text-white">
+                        <div class="text-right text-white font-heading">
                             <div class="text-[10px] uppercase tracking-widest opacity-80 mb-0.5">Alumni Association</div>
                             <div class="font-bold text-base tracking-wide">SMART I-CARD</div>
                         </div>
@@ -537,7 +548,7 @@
                             </div>
                         </div>
                         
-                        <div class="text-white flex-1">
+                        <div class="text-white flex-1 font-heading">
                             <h4 class="font-bold text-xl leading-tight mb-1">{{ Auth::user()->name ?? 'Alumnus Name' }}</h4>
                             <p class="text-xs text-blue-200 font-mono tracking-wider mb-2">ID: KDP-{{ str_pad(Auth::user()->id ?? '128', 4, '0', STR_PAD_LEFT) }}</p>
                             <span class="inline-block px-2 py-1 bg-white/20 rounded text-[10px] font-bold uppercase tracking-widest border border-white/10">
@@ -547,7 +558,7 @@
                     </div>
                     
                     <div class="bg-black/20 p-3 px-6 flex justify-between items-center">
-                        <p class="text-[9px] text-gray-400 uppercase tracking-widest">Tap or Scan for Access</p>
+                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-heading">Tap or Scan for Access</p>
                         <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                 </div>
@@ -562,10 +573,10 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-gray-200 pb-4">
             <div>
-                <h2 class="font-serif text-4xl font-extrabold text-gray-900 tracking-tight">Memories & Gallery</h2>
-                <p class="text-gray-500 mt-2 font-medium">Relive the golden days at K. D. Polytechnic.</p>
+                <h2 class="font-heading text-4xl font-extrabold text-[#0f2042] tracking-tight">Memories &amp; Gallery</h2>
+                <p class="text-gray-500 mt-2 font-medium">Relive the golden days at K. D. Polytechnic, Patan.</p>
             </div>
-            <a href="{{ route('gallery.index') }}" class="mt-4 md:mt-0 text-sm font-bold text-kdp-textblue border-2 border-gray-200 bg-white px-6 py-2.5 rounded-full shadow-sm hover:border-kdp-textblue hover:bg-kdp-textblue hover:text-white transition-all tracking-wide uppercase">
+            <a href="{{ route('gallery.index') }}" class="mt-4 md:mt-0 text-sm font-bold text-[#0f2042] border-2 border-slate-200 bg-white px-6 py-2.5 rounded-full shadow-xs hover:border-[#0f2042] hover:bg-[#0f2042] hover:text-white transition-all tracking-wide uppercase font-heading">
                 Explore Full Gallery
             </a>
         </div>
@@ -574,37 +585,37 @@
             
             <div class="md:col-span-2 md:row-span-2 relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="{{ asset('images/four.png') }}" alt="Graduation Day" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
-                    <h3 class="text-white font-bold text-2xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Annual Convocation Ceremony</h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2042]/90 via-[#0f2042]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                    <h3 class="text-white font-bold text-2xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 font-heading">Annual Convocation Ceremony</h3>
                     <p class="text-blue-100 text-sm mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Celebrating the Batch of 2025</p>
                 </div>
             </div>
 
             <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="{{ asset('images/one.jpg') }}" alt="Main Gate" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange/90 via-kdp-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">KDP Main Campus</h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#f97316]/90 via-[#f97316]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 font-heading">KDP Main Campus</h3>
                 </div>
             </div>
 
             <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=400&q=80" alt="Campus Life" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Tech Fest Hackathon</h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2042]/90 via-[#0f2042]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 font-heading">Tech Fest Hackathon</h3>
                 </div>
             </div>
 
             <div class="relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=400&q=80" alt="Alumni Meet" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-kdp-orange/90 via-kdp-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">Alumni Reunion</h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#f97316]/90 via-[#f97316]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-lg drop-shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 font-heading">Alumni Reunion</h3>
                 </div>
             </div>
 
             <div class="md:col-span-2 relative group rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 bg-gray-100">
                 <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80" alt="Students Studying" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-kdp-textblue/90 via-kdp-textblue/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                    <h3 class="text-white font-bold text-xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Engineering Workshop</h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0f2042]/90 via-[#0f2042]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <h3 class="text-white font-bold text-xl drop-shadow-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 font-heading">Engineering Workshop</h3>
                     <p class="text-blue-100 text-sm mt-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Department of Computer Engineering</p>
                 </div>
             </div>
@@ -616,10 +627,10 @@
     <!-- 7. STAY CONNECTED / SOCIAL MEDIA WIDGET        -->
     <!-- ============================================== -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-8">
-        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0f2042] via-kdp-textblue to-[#1a2f5c] shadow-2xl border border-blue-900/50">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0f2042] via-[#1e3a8a] to-[#1a2f5c] shadow-2xl border border-blue-900/50">
             
             <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-80 h-80 bg-kdp-orange/10 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-[#f97316]/10 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
 
             <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12 p-10 md:p-16">

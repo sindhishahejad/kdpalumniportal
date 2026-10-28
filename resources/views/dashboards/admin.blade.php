@@ -5,43 +5,86 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <div class="py-12 max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-3xl font-serif font-bold text-[#0f172a]">Admin Dashboard</h1>
-                <p class="text-gray-500 mt-2 text-sm">Manage users, approve job postings, and oversee the KDP Alumni network.</p>
+    <div class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Header Section -->
+        <div class="relative bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-red-50/50 pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[#c2410c] text-xs font-bold tracking-wide font-heading">
+                            <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                            કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+                        </span>
+                        <span class="bg-red-50 text-red-800 text-xs font-extrabold uppercase tracking-wider py-1 px-3 rounded-full border border-red-100 font-heading">
+                            Administrative Secretariat
+                        </span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f2042] font-heading tracking-tight">
+                        Admin Central Command
+                    </h1>
+                    <p class="text-slate-600 mt-2 text-sm sm:text-base max-w-2xl leading-relaxed">
+                        Manage user approvals, oversee job postings, moderate circulars, and monitor alumni donations and campus operations.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
+                    <a href="{{ route('admin.alerts.index') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all font-heading">
+                        <span>📱</span> WhatsApp Alert Hub &rarr;
+                    </a>
+                    <span class="bg-red-50 text-red-700 text-xs font-extrabold uppercase tracking-widest py-3 px-4 rounded-2xl border border-red-200 font-heading">
+                        Root Administrator
+                    </span>
+                </div>
             </div>
-            <span class="bg-red-50 text-red-700 text-xs font-bold uppercase tracking-widest py-2 px-4 rounded-full border border-red-200">
-                Administrator Access
-            </span>
+
+            <!-- Admin Stats Cards Grid (6 Metric Cards) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-8 pt-8 border-t border-slate-100">
+                <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block font-heading">Alumni</span>
+                    <span class="text-2xl sm:text-3xl font-black text-[#0f2042] mt-1 block font-heading">{{ $stats['total_alumni'] ?? 0 }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">Verified Graduates</span>
+                </div>
+                <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block font-heading">Students</span>
+                    <span class="text-2xl sm:text-3xl font-black text-[#0f2042] mt-1 block font-heading">{{ $stats['active_students'] ?? 0 }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">Enrolled Diploma</span>
+                </div>
+                <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block font-heading">Pending Jobs</span>
+                    <span class="text-2xl sm:text-3xl font-black text-[#f97316] mt-1 block font-heading">{{ $stats['pending_jobs'] ?? 0 }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">Requires Approval</span>
+                </div>
+                <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block font-heading">Tool Bank</span>
+                    <span class="text-2xl sm:text-3xl font-black text-blue-700 mt-1 block font-heading">{{ $stats['available_tools'] ?? 0 }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">Available Items</span>
+                </div>
+                <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block font-heading">Pitches</span>
+                    <span class="text-2xl sm:text-3xl font-black text-amber-600 mt-1 block font-heading">{{ $stats['open_pitches'] ?? 0 }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">Open Capstones</span>
+                </div>
+                <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block font-heading">Giving Pool</span>
+                    <span class="text-2xl sm:text-3xl font-black text-emerald-700 mt-1 block font-heading">₹{{ number_format($stats['total_donations'] ?? 0, 0) }}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">Completed Fund</span>
+                </div>
+            </div>
         </div>
 
         @if (session('status'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                <span class="block sm:inline">{{ session('status') }}</span>
+            <div class="bg-emerald-50 border border-emerald-300 text-emerald-800 px-5 py-4 rounded-2xl text-sm font-medium flex items-center gap-3">
+                <span class="text-emerald-600 text-lg">✓</span>
+                <span>{{ session('status') }}</span>
             </div>
         @endif
         @if (session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                <span class="block sm:inline">{{ session('error') }}</span>
+            <div class="bg-red-50 border border-red-300 text-red-800 px-5 py-4 rounded-2xl text-sm font-medium flex items-center gap-3">
+                <span class="text-red-600 text-lg">⚠</span>
+                <span>{{ session('error') }}</span>
             </div>
         @endif
-
-        <!-- Admin Stats Cards Row -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-sm shadow border border-gray-100">
-                <span class="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Total Alumni</span>
-                <span class="text-3xl font-black text-[#1C3661]">{{ $stats['total_alumni'] }}</span>
-            </div>
-            <div class="bg-white p-6 rounded-sm shadow border border-gray-100">
-                <span class="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Pending Jobs</span>
-                <span class="text-3xl font-black text-[#8b0000]">{{ $stats['pending_jobs'] }}</span>
-            </div>
-            <div class="bg-white p-6 rounded-sm shadow border border-gray-100">
-                <span class="block text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Active Students</span>
-                <span class="text-3xl font-black text-[#1C3661]">{{ $stats['active_students'] }}</span>
-            </div>
-        </div>
 
         <!-- Pending Registrations Queue -->
         @if(isset($pendingUsers) && $pendingUsers->count() > 0)
@@ -113,33 +156,118 @@
 
 
         <!-- Document Requests Quick Access -->
-        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-[#1C3661] flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-[#0f2042] border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-900">Document Requests</h3>
-                <p class="text-sm text-gray-500">Manage alumni requests for transcripts, recommendation letters, and certificates.</p>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">📜</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Document Requests Desk</h3>
+                    @if(($stats['pending_documents'] ?? 0) > 0)
+                        <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-800 rounded-full font-heading">{{ $stats['pending_documents'] }} Pending</span>
+                    @endif
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Manage alumni requests for official transcripts, recommendation letters, and bonafide certificates.</p>
             </div>
-            <a href="{{ route('admin.documents.index') }}" class="bg-[#1C3661] hover:bg-blue-800 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap">
+            <a href="{{ route('admin.documents.index') }}" class="bg-[#0f2042] hover:bg-[#1e3a8a] text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
                 Manage Requests &rarr;
             </a>
         </div>
 
         <!-- Contact Inquiries Quick Access -->
-        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-indigo-600 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-600 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-900">Contact Inquiries</h3>
-                <p class="text-sm text-gray-500">Track and manage public messages submitted through the contact page.</p>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">✉️</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Contact Inquiries</h3>
+                    @if(($stats['pending_inquiries'] ?? 0) > 0)
+                        <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 text-blue-800 rounded-full font-heading">{{ $stats['pending_inquiries'] }} New</span>
+                    @endif
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Review, reply to, and resolve public messages and admission queries submitted through the contact portal.</p>
             </div>
-            <a href="{{ route('admin.inquiries.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap">
+            <a href="{{ route('admin.inquiries.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
                 Manage Inquiries &rarr;
             </a>
         </div>
 
+        <!-- Alumni Giving Back & Donations Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-emerald-600 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">💰</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Giving Back &amp; Donations Hub</h3>
+                    <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full font-heading">Razorpay Verified</span>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Track alumni contributions to student scholarships, department lab upgrades, and download official 80G tax receipts.</p>
+            </div>
+            <a href="{{ route('donations.index') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
+                View Donations &rarr;
+            </a>
+        </div>
+
+        <!-- Pay-It-Forward Tool & Book Bank Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-[#f97316] border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">📐</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Pay-It-Forward Tool &amp; Book Bank</h3>
+                    <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-orange-100 text-orange-800 rounded-full font-heading">{{ $stats['available_tools'] ?? 0 }} Items Active</span>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Oversee engineering calculators, mini-drafters, and GTU textbooks shared between alumni and juniors.</p>
+            </div>
+            <a href="{{ route('tools.index') }}" class="bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
+                Manage Tool Bank &rarr;
+            </a>
+        </div>
+
+        <!-- Student Project Incubation & Pitches Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-amber-600 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">💡</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Student Capstone &amp; Project Incubation</h3>
+                    <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-800 rounded-full font-heading">{{ $stats['open_pitches'] ?? 0 }} Open Pitches</span>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Review student minor/major project submissions seeking alumni hardware funding or technical guidance.</p>
+            </div>
+            <a href="{{ route('pitches.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
+                Review Pitches &rarr;
+            </a>
+        </div>
+
+        <!-- GTU Academic Calendar Management Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-700 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">🗓️</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">GTU Academic Calendar &amp; Circulars</h3>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Publish term dates, mid-semester exams, practical submissions, and official GTU notices for students and faculty.</p>
+            </div>
+            <a href="{{ route('calendar.index') }}" class="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
+                Manage Calendar &rarr;
+            </a>
+        </div>
+
+        <!-- Training & Placement (TPO) Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-cyan-600 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">🏢</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Training &amp; Placement (TPO) Partner Cell</h3>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Maintain campus recruiting partners, drive dates, package figures, and annual placement achievements.</p>
+            </div>
+            <a href="{{ route('placement.index') }}" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
+                Manage Placement Cell &rarr;
+            </a>
+        </div>
+
         <!-- Success Stories Quick Access -->
-        <div class="bg-white rounded-2xl shadow-xs p-6 border-l-4 border-[#1e3a8a] border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-[#1e3a8a] border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
                 <div class="flex items-center gap-2 mb-1">
                     <span class="text-xl">🌟</span>
-                    <h3 class="text-lg font-bold text-[#0f172a] font-heading">Alumni Success Stories &amp; Spotlights</h3>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Alumni Success Stories &amp; Spotlights</h3>
                 </div>
                 <p class="text-xs text-slate-500 font-sans">Highlight alumni achievements, executive appointments, and career spotlights across all engineering branches.</p>
             </div>
@@ -149,25 +277,28 @@
         </div>
 
         <!-- Alumni Awards & Nominations Quick Access -->
-        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-amber-500 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h3 class="text-xl font-bold text-gray-900">🏆 Annual Alumni Awards &amp; Hall of Fame</h3>
-                <p class="text-sm text-gray-500">Review community nominations, manage voting stages, and induct distinguished graduates into the permanent Hall of Fame.</p>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">🏆</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Annual Alumni Awards &amp; Hall of Fame</h3>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Review community nominations, manage voting stages, and induct distinguished graduates into the permanent Hall of Fame.</p>
             </div>
-            <a href="{{ route('admin.awards.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm transition-colors whitespace-nowrap shadow-sm">
+            <a href="{{ route('admin.awards.index') }}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs">
                 Manage Awards &amp; Nominations &rarr;
             </a>
         </div>
 
         <!-- Department Labs & Workshops Quick Access -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
             <div class="absolute inset-y-0 left-0 w-2 bg-blue-600"></div>
             <div class="pl-3 mb-4 sm:mb-0">
-                <h3 class="text-lg font-bold text-[#0f172a]">Department Labs & Workshops</h3>
-                <p class="text-sm text-gray-500 mt-0.5">Manage laboratory equipment inventories, room locations, and faculty coordinator records.</p>
+                <h3 class="text-lg font-bold text-[#0f2042] font-heading">Department Labs &amp; Workshops</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Manage laboratory equipment inventories, room locations, and faculty coordinator records.</p>
             </div>
             <div class="flex items-center gap-3 pl-3 sm:pl-0">
-                <a href="{{ route('labs.index') }}" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-all shadow-sm shrink-0">
+                <a href="{{ route('labs.index') }}" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-xs uppercase tracking-wider hover:bg-blue-700 transition-all shadow-xs shrink-0 font-heading">
                     Manage Labs &rarr;
                 </a>
             </div>
@@ -188,12 +319,13 @@
         </div>
 
         <!-- Weekly Newsletter & Campus Digest Automation -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
-            <div class="absolute inset-y-0 left-0 w-2 bg-[#8b0000]"></div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden">
+            <div class="absolute inset-y-0 left-0 w-2 bg-[#0f2042]"></div>
             <div class="pl-3 mb-4 sm:mb-0">
                 <div class="flex items-center gap-2">
-                    <h3 class="text-lg font-bold text-[#0f172a]">Weekly Newsletter &amp; Campus Digest</h3>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">
+                    <span class="text-xl">📰</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Weekly Newsletter &amp; Campus Digest</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800 font-heading">
                         Scheduled: Mondays 8:00 AM
                     </span>
                 </div>
@@ -203,7 +335,7 @@
                 <form method="POST" action="{{ route('admin.newsletter.send') }}">
                     @csrf
                     <input type="hidden" name="test_only" value="1">
-                    <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 px-4 py-2 rounded-xl font-semibold text-xs transition-colors shrink-0 flex items-center gap-1.5" title="Sends test copy to your email">
+                    <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 px-4 py-2 rounded-xl font-semibold text-xs transition-colors shrink-0 flex items-center gap-1.5 font-heading" title="Sends test copy to your email">
                         <svg class="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         Test Email to Me
                     </button>
@@ -211,7 +343,7 @@
 
                 <form method="POST" action="{{ route('admin.newsletter.send') }}" onsubmit="return confirm('Queue and send the weekly digest email to all approved alumni, students, and faculty?');">
                     @csrf
-                    <button type="submit" class="bg-[#8b0000] text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#6b0000] transition-all shadow-sm shrink-0 flex items-center gap-1.5">
+                    <button type="submit" class="bg-[#0f2042] text-white px-5 py-2.5 rounded-xl font-semibold text-xs uppercase tracking-wider hover:bg-[#1e3a8a] transition-all shadow-xs shrink-0 flex items-center gap-1.5 font-heading">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                         Dispatch Digest Now
                     </button>

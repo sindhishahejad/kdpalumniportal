@@ -20,6 +20,11 @@ class AdminController extends Controller
             'total_alumni' => User::where('role', 'alumni')->where('is_approved', true)->count(),
             'pending_jobs' => JobPosting::where('is_active', false)->count(),
             'active_students' => User::where('role', 'student')->where('is_approved', true)->count(),
+            'available_tools' => \App\Models\ToolDonation::where('status', 'available')->count(),
+            'open_pitches' => \App\Models\ProjectPitch::where('status', 'open')->count(),
+            'total_donations' => (float) \App\Models\Donation::where('status', 'completed')->sum('amount'),
+            'pending_inquiries' => \App\Models\ContactInquiry::where('status', 'new')->count(),
+            'pending_documents' => \App\Models\DocumentRequest::where('status', 'pending')->count(),
         ];
 
         // Fetch pending registrations

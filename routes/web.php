@@ -224,6 +224,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/giving-back', [DonationController::class, 'index'])->name('donations.index');
     Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
     Route::get('/giving-back/receipt/{donation}', [DonationController::class, 'downloadReceipt'])->name('donations.receipt');
+    Route::get('/giving-back/whatsapp/{donation}', [DonationController::class, 'whatsappReceipt'])->name('donations.whatsapp');
 
     // 💳 Unified Razorpay Payment Gateway Routes (Donations, Pitch Grants, Tool Bank, Reunion Fees)
     Route::post('/payments/create-order', [\App\Http\Controllers\PaymentController::class, 'createOrder'])->name('payments.create-order');

@@ -66,12 +66,20 @@
         
         <!-- Flash Success Notification -->
         @if(session('success'))
-            <div class="mb-8 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded-r-2xl text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm">
+            <div class="mb-8 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded-r-2xl text-xs sm:text-sm font-semibold flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
                 <div class="flex items-center gap-3">
                     <span class="text-base">✅</span>
                     <span>{{ session('success') }}</span>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-emerald-700 hover:text-emerald-900 font-bold text-lg cursor-pointer">&times;</button>
+                <div class="flex items-center gap-2">
+                    @if(session('whatsapp_url'))
+                        <a href="{{ session('whatsapp_url') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold font-heading shadow-xs transition-colors">
+                            <span>📲</span>
+                            <span>Open 80G Receipt on WhatsApp</span>
+                        </a>
+                    @endif
+                    <button type="button" onclick="this.closest('.mb-8').remove()" class="text-emerald-700 hover:text-emerald-900 font-bold text-lg cursor-pointer leading-none">&times;</button>
+                </div>
             </div>
         @endif
 
@@ -299,11 +307,15 @@
                                             @endif
                                         </div>
 
-                                        <div class="flex items-center gap-3 justify-between sm:justify-end">
-                                            <span class="text-sm font-black text-emerald-700 font-heading">₹{{ number_format($userDonation->amount, 2) }}</span>
+                                        <div class="flex items-center gap-2 justify-between sm:justify-end flex-wrap">
+                                            <span class="text-sm font-black text-emerald-700 font-heading mr-1">₹{{ number_format($userDonation->amount, 2) }}</span>
+                                            <a href="{{ route('donations.whatsapp', $userDonation->id) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 px-3 py-1.5 rounded-xl text-xs font-bold font-heading uppercase tracking-wide shadow-xs border border-emerald-200 transition-colors" title="Send official 80G tax receipt to WhatsApp">
+                                                <span>📲</span>
+                                                <span>WhatsApp 80G</span>
+                                            </a>
                                             <a href="{{ route('donations.receipt', $userDonation->id) }}" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-[#1e3a8a] hover:text-white text-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold font-heading uppercase tracking-wide shadow-xs border border-slate-200 transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                                <span>Download 80G Receipt</span>
+                                                <span>PDF Receipt</span>
                                             </a>
                                         </div>
                                     </div>

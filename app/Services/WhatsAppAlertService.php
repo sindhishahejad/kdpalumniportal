@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\DocumentRequest;
+use App\Models\Donation;
 use App\Models\EventRsvp;
 use App\Models\JobReferral;
 use App\Models\ToolDonation;
@@ -216,5 +217,73 @@ class WhatsAppAlertService
 
         $msg .= "_KDP Alumni Association, Patan_";
         return $msg;
+    }
+
+    /**
+     * Template: Official 80G Tax Exemption Donation Receipt Message.
+     */
+    public static function donationReceiptMessage(Donation $donation): string
+    {
+        $donorName = $donation->is_anonymous ? 'Generous Alumnus' : ($donation->user->name ?? 'Valued Donor');
+        $receiptNo = 'KDP-REC-' . str_pad($donation->id, 5, '0', STR_PAD_LEFT);
+        $amountFormatted = number_format($donation->amount, 2);
+        $amountWords = \App\Http\Controllers\DonationController::amountInWords((float) $donation->amount);
+        $dateFormatted = $donation->created_at ? $donation->created_at->format('d M, Y') : date('d M, Y');
+        $downloadUrl = route('donations.receipt', $donation->id);
+
+        return "🏛️ *K.D. Polytechnic, Patan — Official 80G Tax Receipt*\n\n"
+            . "Namaste *{$donorName}*!\n\n"
+            . "Thank you for your generous contribution supporting Kilachand Devchand Polytechnic, Patan.\n\n"
+            . "📋 *Receipt No:* {$receiptNo}\n"
+            . "💰 *Amount:* ₹{$amountFormatted} ({$amountWords})\n"
+            . "🎯 *Campaign:* {$donation->campaign}\n"
+            . "💳 *Transaction ID:* {$donation->transaction_id}\n"
+            . "📅 *Date:* {$dateFormatted}\n"
+            . "📜 *Tax Deduction:* Eligible under Section 80G of the Income Tax Act.\n\n"
+            . "📥 *Download Official 80G PDF Receipt:*\n{$downloadUrl}\n\n"
+            . "_Your support directly empowers polytechnic students, lab upgrades, and technical workshops._\n"
+            . "_કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961_";
+    }
+
+    /**
+     * Dispatch or prepare automated WhatsApp notification for an 80G donation receipt.
+     */
+    public static function dispatchDonationReceipt(Donation $donation, ?string $phone = null): array
+    {
+        $message = self::donationReceiptMessage($donation);
+        $targetPhone = $phone ?: ($donation->user->phone ?? optional($donation->user->profile)->phone ?? null);
+
+        if ($targetPhone) {
+            $result = self::send(
+                $targetPhone,
+                $message,
+                'donation_80g_receipt',
+                $donation->user->name ?? 'Valued Donor',
+                $donation->user_id
+            );
+            $result['message'] = $message;
+            return $result;
+        }
+
+        // If no phone on profile, provide click-to-chat share URL and log
+        $clickUrl = 'https://wa.me/?text=' . rawurlencode($message);
+        $log = WhatsAppBroadcastLog::create([
+            'sender_id' => $donation->user_id,
+            'recipient_phone' => 'pending_user_selection',
+            'recipient_name' => $donation->user->name ?? 'Valued Donor',
+            'alert_type' => 'donation_80g_receipt',
+            'message' => $message,
+            'channel' => 'direct_click',
+            'status' => 'sent',
+        ]);
+
+        return [
+            'success' => true,
+            'url' => $clickUrl,
+            'phone' => '',
+            'log_id' => $log->id,
+            'channel' => 'direct_click',
+            'message' => $message,
+        ];
     }
 }

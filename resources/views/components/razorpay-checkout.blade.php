@@ -227,6 +227,16 @@
 
             <!-- Action Buttons -->
             <div class="space-y-2 pt-2">
+                <template x-if="successData?.whatsapp_url">
+                    <a :href="successData.whatsapp_url" 
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider py-3 px-4 rounded-xl shadow-md transition-all font-heading flex items-center justify-center gap-2 cursor-pointer">
+                        <span>📱</span>
+                        <span x-text="successData?.whatsapp_dispatched ? 'View Dispatched WhatsApp Receipt' : 'Send 80G Receipt to WhatsApp'"></span>
+                    </a>
+                </template>
+
                 <template x-if="successData?.receipt_url">
                     <a :href="successData.receipt_url" 
                        target="_blank"

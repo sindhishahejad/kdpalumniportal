@@ -196,6 +196,9 @@ class PaymentController extends Controller
             }
         });
 
+        // Automated WhatsApp 80G Tax Receipt Notification Dispatch
+        $whatsAppResult = \App\Services\WhatsAppAlertService::dispatchDonationReceipt($donation);
+
         return response()->json([
             'success' => true,
             'message' => "Thank you! Your contribution of ₹" . number_format($donation->amount, 2) . " to '{$donation->campaign}' has been successfully received via Razorpay.",
@@ -205,6 +208,9 @@ class PaymentController extends Controller
             'amount' => (float) $donation->amount,
             'campaign' => $donation->campaign,
             'receipt_url' => route('donations.receipt', $donation->id),
+            'whatsapp_url' => $whatsAppResult['url'] ?? null,
+            'whatsapp_phone' => $whatsAppResult['phone'] ?? null,
+            'whatsapp_dispatched' => !empty($whatsAppResult['phone']),
         ]);
     }
 }

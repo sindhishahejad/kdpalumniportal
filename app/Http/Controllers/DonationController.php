@@ -109,7 +109,39 @@ class DonationController extends Controller
             'status' => 'completed',
         ]);
 
-        return back()->with('success', "Thank you! Your generous contribution of ₹" . number_format($donation->amount, 2) . " to '{$donation->campaign}' was received. Your official 80G tax receipt is now available below.");
+        // Automated WhatsApp 80G Tax Receipt Dispatch
+        $whatsAppResult = \App\Services\WhatsAppAlertService::dispatchDonationReceipt($donation);
+
+        return back()
+            ->with('success', "Thank you! Your generous contribution of ₹" . number_format($donation->amount, 2) . " to '{$donation->campaign}' was received. Your official 80G tax receipt is now available below.")
+            ->with('whatsapp_url', $whatsAppResult['url'] ?? null);
+    }
+
+    /**
+     * Dispatch or redirect to WhatsApp 80G Tax Receipt for a donation.
+     */
+    public function whatsappReceipt(Donation $donation, Request $request)
+    {
+        $user = Auth::user();
+
+        // Only the donor or an administrator can dispatch or view the receipt
+        if ($donation->user_id !== $user->id && !$user->isAdmin()) {
+            abort(403, 'Unauthorized to access this donation receipt.');
+        }
+
+        $phone = $request->query('phone') ?: $request->input('phone');
+        $result = \App\Services\WhatsAppAlertService::dispatchDonationReceipt($donation, $phone);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'url' => $result['url'],
+                'phone' => $result['phone'],
+                'message' => 'WhatsApp receipt generated successfully.',
+            ]);
+        }
+
+        return redirect()->away($result['url']);
     }
 
     /**

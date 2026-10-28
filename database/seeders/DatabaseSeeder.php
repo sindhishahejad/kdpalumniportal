@@ -36,6 +36,16 @@ class DatabaseSeeder extends Seeder
             'is_approved' => true,
         ]);
 
+        User::factory()->create([
+            'name' => 'Prof. Shahejad Sindhi',
+            'email' => 'shahejadsindhi2008@gmail.com',
+            'password' => Hash::make('shahejad2008'),
+            'role' => 'faculty',
+            'department' => 'Computer Engineering',
+            'designation' => 'Lecturer in Computer Engineering',
+            'is_approved' => true,
+        ]);
+
         $this->call(RegionalChapterSeeder::class);
         $this->call(BatchReunionSeeder::class);
         $this->call(AwardSeeder::class);

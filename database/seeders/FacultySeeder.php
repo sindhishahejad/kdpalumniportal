@@ -47,6 +47,18 @@ class FacultySeeder extends Seeder
                 'is_hod' => false,
                 'order_num' => 3,
             ],
+            [
+                'name' => 'Prof. Shahejad Sindhi',
+                'designation' => 'Lecturer in Computer Engineering',
+                'department' => 'Computer Engineering',
+                'qualification' => 'M.E. (Computer Engineering), B.E.',
+                'experience_years' => 10,
+                'specialization' => 'Full-Stack Web Architectures, Database Systems, Cloud Computing',
+                'email' => 'shahejadsindhi2008@gmail.com',
+                'phone' => '+91 2766 220419',
+                'is_hod' => false,
+                'order_num' => 4,
+            ],
 
             // MECHANICAL ENGINEERING
             [

@@ -103,4 +103,33 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertSessionHasErrors('email');
     }
+
+    public function test_login_screen_displays_faculty_quick_fill_account(): void
+    {
+        $response = $this->get('/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('shahejadsindhi2008@gmail.com');
+        $response->assertSee('Faculty (shahejadsindhi2008@gmail.com)');
+    }
+
+    public function test_faculty_account_can_login_via_dev_login_and_access_faculty_dashboard(): void
+    {
+        $faculty = User::factory()->create([
+            'email' => 'shahejadsindhi2008@gmail.com',
+            'role' => 'faculty',
+            'is_approved' => true,
+        ]);
+
+        $response = $this->post(route('login.email'), [
+            'email' => 'shahejadsindhi2008@gmail.com',
+        ]);
+
+        $this->assertAuthenticatedAs($faculty);
+        $response->assertRedirect(route('dashboard'));
+
+        $dashboardResponse = $this->actingAs($faculty)->get(route('dashboard'));
+        $dashboardResponse->assertStatus(200);
+        $dashboardResponse->assertSee('Faculty');
+    }
 }

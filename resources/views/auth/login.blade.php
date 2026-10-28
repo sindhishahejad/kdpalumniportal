@@ -206,7 +206,7 @@
                 </div>
 
                 <!-- Local Dev Helper (Preserved for testing environments) -->
-                @if(app()->isLocal() && config('app.debug'))
+                @if((app()->isLocal() || app()->environment('testing')) && config('app.debug'))
                     <div class="mt-6 pt-3 border-t border-dashed border-slate-200" x-data="{ devEmail: 'sindhishahejad@gmail.com' }">
                         <button type="button" @click="showDevLogin = !showDevLogin" class="text-[11px] text-slate-400 hover:text-slate-600 flex items-center justify-between w-full font-heading cursor-pointer">
                             <span>🛠 Local Dev Quick Email Login</span>
@@ -224,6 +224,9 @@
                                 </button>
                                 <button type="button" @click="devEmail = 'js1818654@gmail.com'" class="px-2 py-0.5 rounded bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 text-[10px] font-bold text-emerald-900 cursor-pointer">
                                     🎒 Student (js1818654@gmail.com)
+                                </button>
+                                <button type="button" @click="devEmail = 'shahejadsindhi2008@gmail.com'" class="px-2 py-0.5 rounded bg-purple-100 hover:bg-purple-200 border border-purple-300 text-[10px] font-bold text-purple-900 cursor-pointer">
+                                    🏛️ Faculty (shahejadsindhi2008@gmail.com)
                                 </button>
                             </div>
                             <form action="{{ route('login.email') }}" method="POST" class="flex gap-2">

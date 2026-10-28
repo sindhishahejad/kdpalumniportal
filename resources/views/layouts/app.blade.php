@@ -401,96 +401,106 @@
                 </div>
             </div>
 
-            <!-- Desktop Nav Links -->
-            <div class="hidden md:flex flex-wrap justify-center items-center h-14 space-x-5 lg:space-x-8 font-heading">
-                <a href="{{ route('dashboard') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('dashboard') ? 'text-[#f97316] active' : '' }}">
-                    Home
-                </a>
-                
-                <!-- Services Dropdown -->
-                <div class="group relative flex items-center cursor-pointer h-full">
-                    <a href="#" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide flex items-center h-full">
-                        Services 
-                        <svg class="w-3.5 h-3.5 ml-1 stroke-2 text-slate-500 group-hover:text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            <!-- Desktop Navigation Bar -->
+            <div class="hidden md:flex items-center justify-between h-14 font-heading">
+                <!-- Nav Links -->
+                <div class="flex items-center space-x-3.5 lg:space-x-6 xl:space-x-7 h-full">
+                    <a href="{{ route('dashboard') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('dashboard') ? 'text-[#f97316] active' : '' }}">
+                        Home
                     </a>
-                    <div class="absolute top-14 left-0 w-64 bg-white shadow-xl border-t-2 border-[#1e3a8a] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-xl border border-slate-100 overflow-hidden">
-                        <ul class="py-2 text-xs font-semibold">
-                            <li><a href="{{ route('chatbot.index') }}" class="block px-4 py-2.5 text-[#1e3a8a] hover:bg-blue-50 transition-colors flex items-center gap-2 bg-blue-50/50 font-bold border-b border-slate-100"><span>🤖</span> KDP Mitra (AI Counselor)</a></li>
-                            <li><a href="{{ route('id-card.show') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🪪</span> Digital Smart ID Card</a></li>
-                            <li><a href="{{ route('alumni.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎓</span> Alumni Directory</a></li>
-                            <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💼</span> Engineering Job Board</a></li>
-                            <li><a href="{{ route('mentorship.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🤝</span> 1-on-1 Alumni Mentorship</a></li>
-                            <li><a href="{{ route('tools.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🛠️</span> Student Tool &amp; Book Bank</a></li>
-                            <li><a href="{{ route('documents.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🏛️</span> Request Official Documents</a></li>
-                            <li><a href="{{ route('chapters.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📍</span> Regional Chapters &amp; Map</a></li>
-                            <li><a href="{{ route('reunions.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎉</span> Batch Reunions &amp; RSVPs</a></li>
-                            <li><a href="{{ route('pitches.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💡</span> Student Project Pitches</a></li>
-                            <li><a href="{{ route('events.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📅</span> Campus Events &amp; Activities</a></li>
-                            <li><a href="{{ route('elibrary.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📖</span> Digital E-Library &amp; Capstones</a></li>
-                            <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📚</span> Study Resources &amp; Notes</a></li>
-                            <li><a href="{{ route('stories.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🌟</span> Alumni Success Stories</a></li>
-                            <li><a href="{{ route('placement.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🏢</span> Training &amp; Placement (TPO)</a></li>
-                            <li><a href="{{ route('faculty.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>👥</span> Faculty &amp; HOD Directory</a></li>
-                            <li><a href="{{ route('calendar.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🗓️</span> GTU Academic Calendar</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <a href="{{ route('donations.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('donations.*') ? 'text-[#f97316] active' : '' }}">
-                    Giving Back
-                </a>
-
-                <a href="{{ route('awards.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('awards.*') ? 'text-[#f97316] active' : '' }}">
-                    Awards &amp; Honors
-                </a>
-
-                <a href="{{ route('gallery.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('gallery.*') ? 'text-[#f97316] active' : '' }}">
-                    Campus Time-Machine
-                </a>
-
-                <a href="{{ route('labs.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('labs.*') ? 'text-[#f97316] active' : '' }}">
-                    Labs &amp; Workshops
-                </a>
-
-                <a href="{{ route('contact') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('contact') ? 'text-[#f97316] active' : '' }}">
-                    Contact
-                </a>
-            </div>
-
-            <!-- Profile Dropdown (Desktop Right) -->
-            <div class="hidden md:flex absolute right-4 top-0 h-14 items-center">
-                @auth
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center space-x-2 text-slate-700 hover:text-[#1e3a8a] text-xs font-bold uppercase tracking-wider focus:outline-none cursor-pointer">
-                            <span>{{ Auth::user()->name }}</span>
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl py-1.5 border border-slate-100 z-50 text-xs font-semibold">
-                            <div class="px-4 py-2 border-b border-slate-100 bg-slate-50/50">
-                                <p class="text-[10px] text-slate-400 font-bold uppercase">Signed in as</p>
-                                <p class="text-xs font-bold text-slate-800 truncate">{{ Auth::user()->email }}</p>
-                            </div>
-                            @if(Auth::user()->isAdmin())
-                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛡️ Admin Dashboard</a>
-                                <a href="{{ route('admin.awards.index') }}" class="block px-4 py-2 text-amber-700 hover:bg-amber-50">🏆 Awards Management</a>
-                                <a href="{{ route('admin.alerts.index') }}" class="block px-4 py-2 text-emerald-700 hover:bg-emerald-50">📱 WhatsApp Alert Center</a>
-                            @endif
-                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">👤 Edit Profile</a>
-                            <a href="{{ route('id-card.show') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🪪 My Smart ID Card</a>
-                            <a href="{{ route('messages.inbox') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">💬 Messages &amp; Inbox</a>
-                            <a href="{{ route('tools.my-donations') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛠️ My Donated Tools</a>
-                            <a href="{{ route('tools.my-requests') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">📦 My Tool Requests</a>
-                            <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-100 mt-1">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Log Out</button>
-                            </form>
+                    
+                    <!-- Services Dropdown -->
+                    <div class="group relative flex items-center cursor-pointer h-full">
+                        <a href="#" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide flex items-center h-full">
+                            Services 
+                            <svg class="w-3.5 h-3.5 ml-1 stroke-2 text-slate-500 group-hover:text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <div class="absolute top-14 left-0 w-64 bg-white shadow-xl border-t-2 border-[#1e3a8a] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-xl border border-slate-100 overflow-hidden">
+                            <ul class="py-2 text-xs font-semibold">
+                                <li><a href="{{ route('chatbot.index') }}" class="block px-4 py-2.5 text-[#1e3a8a] hover:bg-blue-50 transition-colors flex items-center gap-2 bg-blue-50/50 font-bold border-b border-slate-100"><span>🤖</span> KDP Mitra (AI Counselor)</a></li>
+                                <li><a href="{{ route('id-card.show') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🪪</span> Digital Smart ID Card</a></li>
+                                <li><a href="{{ route('alumni.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎓</span> Alumni Directory</a></li>
+                                <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💼</span> Engineering Job Board</a></li>
+                                <li><a href="{{ route('mentorship.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🤝</span> 1-on-1 Alumni Mentorship</a></li>
+                                <li><a href="{{ route('tools.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🛠️</span> Student Tool &amp; Book Bank</a></li>
+                                <li><a href="{{ route('documents.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🏛️</span> Request Official Documents</a></li>
+                                <li><a href="{{ route('chapters.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📍</span> Regional Chapters &amp; Map</a></li>
+                                <li><a href="{{ route('reunions.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎉</span> Batch Reunions &amp; RSVPs</a></li>
+                                <li><a href="{{ route('pitches.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💡</span> Student Project Pitches</a></li>
+                                <li><a href="{{ route('events.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📅</span> Campus Events &amp; Activities</a></li>
+                                <li><a href="{{ route('elibrary.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📖</span> Digital E-Library &amp; Capstones</a></li>
+                                <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📚</span> Study Resources &amp; Notes</a></li>
+                                <li><a href="{{ route('stories.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🌟</span> Alumni Success Stories</a></li>
+                                <li><a href="{{ route('placement.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🏢</span> Training &amp; Placement (TPO)</a></li>
+                                <li><a href="{{ route('faculty.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>👥</span> Faculty &amp; HOD Directory</a></li>
+                                <li><a href="{{ route('calendar.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🗓️</span> GTU Academic Calendar</a></li>
+                            </ul>
                         </div>
                     </div>
-                @else
-                    <a href="{{ route('login') }}" class="bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors text-xs uppercase tracking-wider font-heading">
-                        Login / Sign Up
+
+                    <a href="{{ route('donations.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('donations.*') ? 'text-[#f97316] active' : '' }}">
+                        Giving Back
                     </a>
-                @endauth
+
+                    <a href="{{ route('awards.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('awards.*') ? 'text-[#f97316] active' : '' }}">
+                        Awards &amp; Honors
+                    </a>
+
+                    <a href="{{ route('gallery.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('gallery.*') ? 'text-[#f97316] active' : '' }}">
+                        Campus Time-Machine
+                    </a>
+
+                    <a href="{{ route('labs.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('labs.*') ? 'text-[#f97316] active' : '' }}">
+                        Labs &amp; Workshops
+                    </a>
+
+                    <a href="{{ route('contact') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('contact') ? 'text-[#f97316] active' : '' }}">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Profile Dropdown / Auth (Desktop Right) -->
+                <div class="flex items-center shrink-0 pl-3">
+                    @auth
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center gap-2 py-1.5 px-3 rounded-xl hover:bg-slate-100 text-slate-700 hover:text-[#1e3a8a] text-xs font-bold uppercase tracking-wider focus:outline-none cursor-pointer transition-colors border border-transparent hover:border-slate-200">
+                                <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center text-xs font-black shrink-0">
+                                    @if(Auth::user()->isAdmin()) 👑
+                                    @elseif(Auth::user()->role === 'faculty') 🏛️
+                                    @elseif(Auth::user()->role === 'student') 🎒
+                                    @else 🎓
+                                    @endif
+                                </span>
+                                <span class="truncate max-w-[130px] lg:max-w-[170px] xl:max-w-[220px]" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
+                                <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-1.5 border border-slate-100 z-50 text-xs font-semibold">
+                                <div class="px-4 py-2 border-b border-slate-100 bg-slate-50/50">
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase">Signed in as</p>
+                                    <p class="text-xs font-bold text-slate-800 truncate">{{ Auth::user()->email }}</p>
+                                </div>
+                                @if(Auth::user()->isAdmin())
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛡️ Admin Dashboard</a>
+                                    <a href="{{ route('admin.awards.index') }}" class="block px-4 py-2 text-amber-700 hover:bg-amber-50">🏆 Awards Management</a>
+                                    <a href="{{ route('admin.alerts.index') }}" class="block px-4 py-2 text-emerald-700 hover:bg-emerald-50">📱 WhatsApp Alert Center</a>
+                                @endif
+                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">👤 Edit Profile</a>
+                                <a href="{{ route('id-card.show') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🪪 My Smart ID Card</a>
+                                <a href="{{ route('messages.inbox') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">💬 Messages &amp; Inbox</a>
+                                <a href="{{ route('tools.my-donations') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛠️ My Donated Tools</a>
+                                <a href="{{ route('tools.my-requests') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">📦 My Tool Requests</a>
+                                <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-100 mt-1">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Log Out</button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}" class="bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold py-2 px-5 rounded-lg shadow-sm transition-colors text-xs uppercase tracking-wider font-heading whitespace-nowrap">
+                            Login / Sign Up
+                        </a>
+                    @endauth
+                </div>
             </div>
         </div>
 

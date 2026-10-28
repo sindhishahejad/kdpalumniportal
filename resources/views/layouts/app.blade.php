@@ -275,6 +275,7 @@
                     </a>
                     <div class="absolute top-14 left-0 w-64 bg-white shadow-xl border-t-2 border-[#1e3a8a] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-xl border border-slate-100 overflow-hidden">
                         <ul class="py-2 text-xs font-semibold">
+                            <li><a href="{{ route('chatbot.index') }}" class="block px-4 py-2.5 text-[#1e3a8a] hover:bg-blue-50 transition-colors flex items-center gap-2 bg-blue-50/50 font-bold border-b border-slate-100"><span>🤖</span> KDP Mitra (AI Counselor)</a></li>
                             <li><a href="{{ route('id-card.show') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🪪</span> Digital Smart ID Card</a></li>
                             <li><a href="{{ route('alumni.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎓</span> Alumni Directory</a></li>
                             <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💼</span> Engineering Job Board</a></li>
@@ -491,10 +492,13 @@
         </div>
 
         <!-- Floating Scroll to Top Button (Alpine controlled) -->
-        <button x-show="showScrollTop" @click="window.scrollTo({top: 0, behavior: 'smooth'})" x-cloak x-transition class="fixed bottom-6 right-6 w-11 h-11 bg-[#f97316] hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 z-50">
+        <button x-show="showScrollTop" @click="window.scrollTo({top: 0, behavior: 'smooth'})" x-cloak x-transition class="fixed bottom-6 right-24 w-11 h-11 bg-[#f97316] hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 z-50">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
         </button>
     </footer>
+
+    <!-- 🤖 KDP Mitra AI Chatbot Floating Concierge -->
+    <x-ai-chatbot-widget />
 
     <!-- ⚡ Global AlumSmart Concierge Modal -->
     <x-alum-smart-modal />

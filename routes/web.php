@@ -349,4 +349,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // ⚡ AlumSmart Natural Language Query Concierge
 Route::get('/api/alum-smart/search', [\App\Http\Controllers\AlumSmartController::class, 'search'])->name('alum-smart.search');
 
+// 🤖 KDP Mitra AI Chatbot (Powered by Groq API)
+Route::get('/chatbot', [\App\Http\Controllers\ChatbotController::class, 'index'])->name('chatbot.index');
+Route::post('/chatbot/message', [\App\Http\Controllers\ChatbotController::class, 'chat'])->name('chatbot.message');
+Route::get('/chatbot/history', [\App\Http\Controllers\ChatbotController::class, 'history'])->name('chatbot.history');
+Route::delete('/chatbot/clear', [\App\Http\Controllers\ChatbotController::class, 'clear'])->name('chatbot.clear');
+
 require __DIR__.'/auth.php';

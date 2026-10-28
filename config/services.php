@@ -41,4 +41,12 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'groq' => [
+        'api_key' => env('GROQ_API_KEY'),
+        'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+        'endpoint' => env('GROQ_API_ENDPOINT', 'https://api.groq.com/openai/v1/chat/completions'),
+        'temperature' => (float) env('GROQ_TEMPERATURE', 0.6),
+        'max_tokens' => (int) env('GROQ_MAX_TOKENS', 1024),
+    ],
+
 ];

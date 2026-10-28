@@ -13,6 +13,8 @@
     <!-- Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>window.marked || document.write('<script src="{{ asset('js/marked.min.js') }}"><\/script>')</script>
 
     <!-- ✨ Add Laravel Vite Directive Here ✨ -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -66,6 +68,144 @@
         .kdp-nav-link:hover::after,
         .kdp-nav-link.active::after {
             width: 75%;
+        }
+
+        /* 🤖 Enhanced AI Chatbot Markdown Formatting & UI Styles */
+        .chat-markdown {
+            color: #1e293b;
+            font-size: 0.8125rem;
+            line-height: 1.55;
+        }
+        .chat-markdown p {
+            margin-bottom: 0.45rem;
+        }
+        .chat-markdown p:last-child {
+            margin-bottom: 0;
+        }
+        .chat-markdown h2, .chat-markdown h3, .chat-markdown h4 {
+            color: #0f2042;
+            font-family: "Poppins", sans-serif;
+            font-weight: 800;
+            margin-top: 0.65rem;
+            margin-bottom: 0.35rem;
+            line-height: 1.3;
+        }
+        .chat-markdown h2 { font-size: 0.95rem; }
+        .chat-markdown h3 { font-size: 0.875rem; }
+        .chat-markdown h4 { font-size: 0.8125rem; }
+        .chat-markdown strong {
+            font-weight: 700;
+            color: #0f2042;
+        }
+        .chat-markdown ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0.35rem 0;
+        }
+        .chat-markdown ol {
+            padding-left: 1.25rem;
+            margin: 0.35rem 0;
+        }
+        .chat-markdown ul > li {
+            position: relative;
+            padding-left: 1.15rem;
+            margin-bottom: 0.3rem;
+            line-height: 1.5;
+        }
+        .chat-markdown ul > li::before {
+            content: "•";
+            position: absolute;
+            left: 0.25rem;
+            color: #f97316;
+            font-weight: 900;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .chat-markdown ol > li {
+            margin-bottom: 0.3rem;
+            line-height: 1.5;
+        }
+        .chat-markdown a {
+            color: #1e3a8a;
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: #f97316;
+            text-underline-offset: 2px;
+            transition: color 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .chat-markdown a:hover {
+            color: #f97316;
+        }
+        /* Responsive Crisp Tables */
+        .chat-markdown .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin: 0.65rem 0;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .chat-markdown table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            text-align: left;
+        }
+        .chat-markdown th {
+            background: linear-gradient(135deg, #0f2042, #1e3a8a);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 2px solid #f97316;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+        .chat-markdown td {
+            padding: 0.45rem 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            background-color: #ffffff;
+            vertical-align: top;
+        }
+        .chat-markdown tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+        .chat-markdown tr:hover td {
+            background-color: #f1f5f9;
+        }
+        .chat-markdown code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: #f1f5f9;
+            color: #0f2042;
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        .chat-markdown pre {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            font-size: 0.75rem;
+            margin: 0.5rem 0;
+        }
+        .chat-markdown hr {
+            border: 0;
+            border-top: 1px dashed #cbd5e1;
+            margin: 0.75rem 0;
+        }
+        .chat-markdown blockquote {
+            border-left: 3px solid #f97316;
+            padding-left: 0.75rem;
+            margin: 0.5rem 0;
+            color: #64748b;
+            font-style: italic;
         }
     </style>
 </head>

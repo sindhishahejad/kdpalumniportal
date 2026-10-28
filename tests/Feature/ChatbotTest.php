@@ -138,4 +138,46 @@ class ChatbotTest extends TestCase
             'model' => 'llama-3.3-70b-versatile',
         ]);
     }
+
+    public function test_chatbot_redirects_gtu_pyq_query_to_official_papers_portal(): void
+    {
+        Config::set('services.groq.api_key', null);
+
+        $response = $this->postJson(route('chatbot.message'), [
+            'message' => 'Where can I get gtu diploma pyq question papers?'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->assertStringContainsString('https://oldquestionpapers.gtu.ac.in/', $response->json('reply'));
+        $this->assertStringContainsString('GTU', $response->json('reply'));
+    }
+
+    public function test_chatbot_redirects_gtu_results_query_to_official_results_portal(): void
+    {
+        Config::set('services.groq.api_key', null);
+
+        $response = $this->postJson(route('chatbot.message'), [
+            'message' => 'When is the gtu diploma result date and where can I check my marks?'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->assertStringContainsString('https://www.gtu.ac.in/result.aspx', $response->json('reply'));
+        $this->assertStringContainsString('student.gtu.ac.in', $response->json('reply'));
+    }
+
+    public function test_chatbot_refuses_non_educational_entertainment_or_jokes(): void
+    {
+        Config::set('services.groq.api_key', null);
+
+        $response = $this->postJson(route('chatbot.message'), [
+            'message' => 'tell me a funny joke about movies'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        $this->assertStringContainsString('KDP Academic & Technical Counseling Scope', $response->json('reply'));
+        $this->assertStringContainsString('I cannot assist with entertainment, jokes, or non-educational topics', $response->json('reply'));
+    }
 }

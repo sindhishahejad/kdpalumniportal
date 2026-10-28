@@ -9,12 +9,12 @@
             <div class="flex items-center gap-2">
                 <a href="{{ route('dashboard') }}" class="hover:text-[#1e3a8a] transition-colors">Portal Home</a>
                 <span>&rarr;</span>
-                <span class="text-slate-800">KDP Mitra (AI Counselor)</span>
+                <span class="text-slate-800">KDP Mitra (Academic Counselor)</span>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                    Groq LLaMA 3.3 Active
+                    Groq AI Active • Academic Guardrails On
                 </span>
             </div>
         </div>
@@ -37,16 +37,16 @@
                         કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
                     </span>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold uppercase tracking-wider border border-white/20">
-                        🤖 AI Campus Counselor &amp; Concierge
+                        🤖 AI Academic Counselor &amp; Concierge
                     </span>
                 </div>
 
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight leading-tight text-white">
-                    KDP Mitra • AI Assistant
+                    KDP Mitra • AI Academic Guide
                 </h1>
 
                 <p class="text-blue-100 text-sm sm:text-base leading-relaxed max-w-2xl font-light">
-                    Your 24/7 intelligent guide for diploma engineering studies, official document applications, campus placements, alumni mentorship, and GTU circulars. Powered by high-speed Groq LLaMA 3.3.
+                    Your dedicated guide for diploma engineering studies, GTU previous year question papers (PYQs), exam results, ACPC D2D admissions, official transcripts, and campus placements.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-blue-200">
@@ -57,7 +57,7 @@
                         <span>🌐</span> Multilingual: English, ગુજરાતી &amp; हिन्दी
                     </span>
                     <span class="flex items-center gap-1.5 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/10">
-                        <span>🏛️</span> Full KDP Portal Knowledge
+                        <span>📖</span> GTU Portals &amp; Official Links
                     </span>
                 </div>
             </div>
@@ -73,23 +73,44 @@
                 <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                         <h3 class="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                            <span>💡</span> Suggested Topics
+                            <span>💡</span> Academic Quick Ask
                         </h3>
-                        <span class="text-[10px] text-slate-400 font-bold">1-Click Ask</span>
+                        <span class="text-[10px] text-slate-400 font-bold">1-Click</span>
                     </div>
 
                     <div class="space-y-2">
                         <button type="button" 
+                                @click="askPrompt('Where can I download GTU diploma old question papers (PYQs)?')" 
+                                class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
+                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">📖 GTU Old Papers (PYQs)</span>
+                            <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
+                        </button>
+
+                        <button type="button" 
+                                @click="askPrompt('How can I check GTU diploma semester results and grade card?')" 
+                                class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
+                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">📊 GTU Results &amp; Grade Cards</span>
+                            <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
+                        </button>
+
+                        <button type="button" 
                                 @click="askPrompt('How do I apply for Transcripts and Bonafide certificates on this portal?')" 
                                 class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
-                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">📜 How to request Transcripts?</span>
+                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">📜 Request Transcripts &amp; LOR</span>
                             <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
                         </button>
 
                         <button type="button" 
                                 @click="askPrompt('Which companies recruit diploma students through KDP Patan TPO?')" 
                                 class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
-                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">🏢 Top TPO Recruiters &amp; Salaries</span>
+                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">🏢 TPO Campus Recruiters &amp; Packages</span>
+                            <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
+                        </button>
+
+                        <button type="button" 
+                                @click="askPrompt('How does ACPC D2D degree engineering admission work after diploma?')" 
+                                class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
+                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">🎓 ACPC D2D Degree Admissions</span>
                             <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
                         </button>
 
@@ -101,56 +122,35 @@
                         </button>
 
                         <button type="button" 
-                                @click="askPrompt('How can I find an alumni mentor for D2D engineering guidance?')" 
+                                @click="askPrompt('કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ નો ઇતિહાસ અને એન્જિનિયરિંગ શાખાઓ વિશે જણાવો')" 
                                 class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
-                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">🤝 Connect with Alumni Mentors</span>
-                            <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
-                        </button>
-
-                        <button type="button" 
-                                @click="askPrompt('કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ માં કઈ એન્જિનિયરિંગ શાખાઓ છે?')" 
-                                class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-[#1e3a8a]/40 text-xs text-slate-700 transition-all flex items-center justify-between group cursor-pointer">
-                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">🇮🇳 ગુજરાતી: એન્જિનિયરિંગ બ્રાન્ચ વિગત</span>
+                            <span class="font-semibold text-slate-800 group-hover:text-[#1e3a8a]">🇮🇳 ગુજરાતી: કૉલેજ ઇતિહાસ અને શાખાઓ</span>
                             <span class="text-slate-400 group-hover:translate-x-1 transition-transform">&rarr;</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Campus Facts Card -->
-                <div class="bg-gradient-to-br from-[#0f2042] via-[#1e3a8a] to-[#0f172a] rounded-3xl p-6 text-white shadow-md border border-blue-900/40 space-y-4">
+                <!-- Academic Scope Notice Card -->
+                <div class="bg-gradient-to-br from-[#0f2042] via-[#1e3a8a] to-[#0f172a] rounded-3xl p-6 text-white shadow-md border border-blue-900/40 space-y-3">
                     <div class="flex items-center gap-2">
-                        <span class="text-xl">🏛️</span>
-                        <h4 class="font-heading font-bold text-sm text-white uppercase tracking-wider">KDP Patan Highlights</h4>
+                        <span class="text-xl">🛡️</span>
+                        <h4 class="font-heading font-bold text-sm text-white uppercase tracking-wider">Academic Counseling Scope</h4>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
-                            <div class="text-[10px] text-blue-200 font-bold uppercase">Established</div>
-                            <div class="font-heading font-black text-lg text-amber-300">1961</div>
-                        </div>
-                        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
-                            <div class="text-[10px] text-blue-200 font-bold uppercase">GTU Code</div>
-                            <div class="font-heading font-black text-lg text-white">622</div>
-                        </div>
-                        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
-                            <div class="text-[10px] text-blue-200 font-bold uppercase">Approval</div>
-                            <div class="font-heading font-black text-sm text-white">AICTE / CTE</div>
-                        </div>
-                        <div class="bg-white/10 p-3 rounded-2xl border border-white/10">
-                            <div class="text-[10px] text-blue-200 font-bold uppercase">Departments</div>
-                            <div class="font-heading font-black text-lg text-amber-300">7 Branches</div>
-                        </div>
-                    </div>
-
-                    <p class="text-[11px] text-blue-100 leading-relaxed font-light">
-                        Located near Patan Railway Station, offering diploma courses in Computer, IT, Mechanical, Electrical, Civil, and Applied Mechanics.
+                    <p class="text-xs text-blue-100 leading-relaxed font-light">
+                        KDP Mitra is an AI counselor dedicated to <strong>technical engineering, diploma academics, GTU portals, and KDP campus services</strong>. It does not entertain non-educational time-wasting or jokes.
                     </p>
+
+                    <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-300 font-semibold">
+                        <span>🏛️ GTU Institute Code: 622</span>
+                        <span>Estd. 1961</span>
+                    </div>
                 </div>
 
             </div>
 
             <!-- Right Column: Interactive Chat Console (8 cols) -->
-            <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[700px]">
+            <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[740px]">
                 
                 <!-- Chat Window Top Bar -->
                 <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
@@ -162,7 +162,7 @@
                             <div class="flex items-center gap-2">
                                 <h3 class="font-heading font-bold text-slate-900 text-sm sm:text-base">KDP Mitra Session</h3>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#1e3a8a]">
-                                    Live
+                                    Active
                                 </span>
                             </div>
                             <p class="text-[11px] text-slate-400">Ask in English, Gujarati, or Hindi</p>
@@ -181,13 +181,19 @@
                 <div x-ref="chatStream" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50 text-xs sm:text-sm">
                     
                     <!-- Intro Card -->
-                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs space-y-2">
-                        <div class="flex items-center gap-2">
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-xs font-semibold border border-amber-200">
+                                <span class="w-2 h-2 rounded-full bg-[#f97316]"></span>
+                                કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+                            </span>
                             <span class="text-xl">🙏</span>
-                            <span class="font-heading font-bold text-slate-900 text-sm">Namaste! How can I assist you today?</span>
+                        </div>
+                        <div class="font-heading font-bold text-slate-900 text-sm">
+                            Namaste! Welcome to KDP Mitra Academic Guide
                         </div>
                         <p class="text-slate-600 leading-relaxed text-xs">
-                            I am your official AI counselor. Ask about **Official Transcripts**, **GTU Circulars**, **Placement Recruiters**, **Mentorship**, or **Book &amp; Tool Bank**.
+                            Ask me about **GTU Old Papers (PYQs)**, **Results**, **Transcripts &amp; LOR**, **Campus Placements**, **D2D Degree Admissions**, or **Book &amp; Tool Bank**.
                         </p>
                     </div>
 
@@ -206,14 +212,15 @@
 
                             <!-- Assistant Message -->
                             <template x-if="msg.role === 'assistant'">
-                                <div class="flex justify-start pr-10 gap-3">
+                                <div class="flex justify-start pr-8 gap-3">
                                     <div class="w-8 h-8 rounded-2xl bg-gradient-to-br from-[#1e3a8a] to-[#0f2042] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-2xs">
                                         🤖
                                     </div>
-                                    <div class="bg-white border border-slate-200 text-slate-800 p-4 sm:p-5 rounded-2xl rounded-tl-xs shadow-2xs leading-relaxed max-w-[90%] space-y-2">
-                                        <div class="prose prose-sm max-w-none text-slate-800" x-html="parseMarkdown(msg.content)"></div>
+                                    <div class="bg-white border border-slate-200 text-slate-800 p-4 sm:p-5 rounded-2xl rounded-tl-xs shadow-2xs leading-relaxed max-w-[92%] space-y-2 overflow-hidden">
+                                        <!-- Enhanced Markdown with Table & Link Support -->
+                                        <div class="chat-markdown max-w-none text-slate-800" x-html="parseMarkdown(msg.content)"></div>
                                         <div class="flex items-center justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-100">
-                                            <span x-text="msg.model || 'Groq LLaMA 3.3'"></span>
+                                            <span x-text="msg.model || 'Groq AI'"></span>
                                             <span x-text="msg.time"></span>
                                         </div>
                                     </div>
@@ -231,7 +238,7 @@
                             <span class="w-2 h-2 rounded-full bg-[#1e3a8a] animate-bounce"></span>
                             <span class="w-2 h-2 rounded-full bg-[#f97316] animate-bounce [animation-delay:0.2s]"></span>
                             <span class="w-2 h-2 rounded-full bg-[#1e3a8a] animate-bounce [animation-delay:0.4s]"></span>
-                            <span class="text-xs text-slate-500 ml-2 font-medium">KDP Mitra is thinking with Groq...</span>
+                            <span class="text-xs text-slate-500 ml-2 font-medium">KDP Mitra is consulting GTU &amp; KDP resources...</span>
                         </div>
                     </div>
 
@@ -244,7 +251,7 @@
                                x-ref="pageInput"
                                x-model="currentInput" 
                                :disabled="isLoading"
-                               placeholder="Type your question in English, ગુજરાતી, or हिन्दी... (Press Enter)" 
+                               placeholder="Ask about GTU papers, results, transcripts, subjects... (English, ગુજરાતી, हिन्दी)" 
                                class="flex-1 px-4 py-3 text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-xl focus:border-[#1e3a8a] focus:ring-[#1e3a8a] focus:bg-white text-slate-800 transition-colors">
                         
                         <button type="submit" 
@@ -256,7 +263,7 @@
                     </form>
 
                     <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
-                        <span>⚡ Powered by <strong>Groq API</strong> • Meta LLaMA 3.3 70B Versatile</span>
+                        <span>⚡ Powered by <strong>Groq API</strong> • Academic Counseling Engine</span>
                         <span>K. D. Polytechnic, Patan</span>
                     </div>
                 </div>
@@ -316,7 +323,7 @@ function kdpChatbotFullPage() {
                     this.messages.push({
                         role: 'assistant',
                         content: data.reply,
-                        model: data.model || 'Groq LLaMA 3.3',
+                        model: data.model || 'Groq AI',
                         source: data.source || 'groq',
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     });
@@ -366,22 +373,37 @@ function kdpChatbotFullPage() {
 
         parseMarkdown(text) {
             if (!text) return '';
-            let html = text
-                // Headers
-                .replace(/^### (.*$)/gim, '<h4 class="font-bold text-sm text-slate-900 mt-2 mb-1">$1</h4>')
-                .replace(/^## (.*$)/gim, '<h3 class="font-bold text-base text-slate-900 mt-2 mb-1">$1</h3>')
-                // Bold
-                .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold text-slate-900">$1</strong>')
-                // Italic
-                .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
-                // Markdown Links [text](url)
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" class="text-[#1e3a8a] font-bold underline hover:text-[#f97316] transition-colors">$1</a>')
-                // Bullet points
-                .replace(/^\s*• (.*$)/gim, '<div class="flex items-start gap-1.5 my-1"><span class="text-[#f97316] font-bold">•</span><span>$1</span></div>')
-                .replace(/^\s*\- (.*$)/gim, '<div class="flex items-start gap-1.5 my-1"><span class="text-[#f97316] font-bold">•</span><span>$1</span></div>')
-                // Line breaks
-                .replace(/\n/gim, '<br>');
-            return html;
+            try {
+                // 1. Normalize unicode bullets into markdown dashes so lists render as clean <ul><li>
+                let normalized = text.replace(/^[\s]*[•·●○▪▫]\s*/gm, '- ');
+
+                // 2. Auto-link bare portal relative paths (e.g. " /alumni " -> " [/alumni](/alumni) ")
+                normalized = normalized.replace(/(^|[^(\[])(\/(?:alumni|mentorship|placement|documents|tools|donations|events|pitches|awards|card|faculty|jobs|stories|academic-calendar|contact|dashboard)[a-zA-Z0-9_\-\/]*)/g, function(match, prefix, path) {
+                    return prefix + '[' + path + '](' + path + ')';
+                });
+
+                if (typeof marked !== 'undefined') {
+                    marked.setOptions({
+                        gfm: true,
+                        breaks: false
+                    });
+                    let parsed = marked.parse(normalized);
+                    // Wrap tables in responsive overflow container
+                    parsed = parsed.replace(/<table>/gi, '<div class="table-responsive"><table>');
+                    parsed = parsed.replace(/<\/table>/gi, '</table></div>');
+                    // Ensure external links open in new tab
+                    parsed = parsed.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"/gi, function(match, url) {
+                        if (url.startsWith('http://') || url.startsWith('https://')) {
+                            return '<a href="' + url + '" target="_blank" rel="noopener noreferrer"';
+                        }
+                        return match;
+                    });
+                    return parsed;
+                }
+            } catch (e) {
+                console.warn('marked.js parse error:', e);
+            }
+            return text.replace(/\n/g, '<br>');
         }
     };
 }

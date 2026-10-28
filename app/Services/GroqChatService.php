@@ -14,10 +14,10 @@ class GroqChatService
     public function chat(array $history, string $userMessage, ?User $user = null): array
     {
         $apiKey = config('services.groq.api_key');
-        $model = config('services.groq.model', 'llama-3.3-70b-versatile');
+        $model = config('services.groq.model', 'openai/gpt-oss-120b');
         $endpoint = config('services.groq.endpoint', 'https://api.groq.com/openai/v1/chat/completions');
-        $temperature = config('services.groq.temperature', 0.6);
-        $maxTokens = config('services.groq.max_tokens', 1024);
+        $temperature = config('services.groq.temperature', 0.5);
+        $maxTokens = config('services.groq.max_tokens', 1200);
 
         // If no API key is set, immediately provide the built-in intelligent institutional counselor
         if (empty($apiKey)) {
@@ -99,7 +99,7 @@ class GroqChatService
     }
 
     /**
-     * Build the institutional system prompt with comprehensive KDP Patan knowledge.
+     * Build the institutional system prompt with comprehensive KDP Patan & GTU Academic knowledge.
      */
     protected function buildSystemPrompt(?User $user = null): string
     {
@@ -109,38 +109,56 @@ class GroqChatService
         }
 
         return <<<PROMPT
-You are "KDP Mitra" (કિલાચંદ એઆઈ મિત્ર), the official, intelligent AI Counselor and Campus Assistant for K. D. Polytechnic, Patan (Kilachand Devchand Polytechnic, Patan).
+You are "KDP Mitra" (કિલાચંદ એઆઈ મિત્ર), the official AI Academic Counselor and Campus Assistant for K. D. Polytechnic, Patan (Kilachand Devchand Polytechnic, Patan).
 
-INSTITUTE BACKGROUND:
+INSTITUTE IDENTITY:
 - Established: 1961 in Patan, North Gujarat, India.
-- Governance: Premier Government Polytechnic under Commissionerate of Technical Education (CTE), Government of Gujarat.
-- Affiliation & Approvals: Affiliated with Gujarat Technological University (GTU, Code: 622), Approved by AICTE, New Delhi.
+- Governance: Premier State Government Polytechnic under Commissionerate of Technical Education (CTE), Government of Gujarat.
+- Affiliation & Approvals: Affiliated with Gujarat Technological University (GTU, Institute Code: 622), Approved by AICTE, New Delhi.
 - Campus Address: K. D. Polytechnic, Opp. T.B. Hospital, Near Railway Station, Patan - 384265, Gujarat.
-- Departments: Computer Engineering, Information Technology, Mechanical Engineering, Electrical Engineering, Civil Engineering, Applied Mechanics, General Science & Humanities.
+- Academic Departments: Computer Engineering, Information Technology, Mechanical Engineering, Electrical Engineering, Civil Engineering, Applied Mechanics, General Science & Humanities.
 
 CURRENT USER CONTEXT:
 {$userInfo}
 
-PORTAL URLS & CAPABILITIES (Always provide clickable Markdown links when relevant):
-- Alumni Directory: [Alumni Directory](/alumni) - Search and network with KDP diploma engineers worldwide.
-- 1-on-1 Mentorship: [Mentorship Hub](/mentorship) - Connect students with senior alumni for career guidance.
-- Training & Placement: [TPO Placement Wall](/placement) - Check placement statistics, recruited companies (Adani, L&T, Tata, Torrent, AM/NS), and drives.
-- Official Document Request Desk: [Document Request Desk](/documents) - Apply for official Transcripts, Bonafide, Migration, and Recommendation letters.
-- Student Book & Tool Bank: [Pay-It-Forward Tool Bank](/tools) - Free mini drafters, GTU textbooks, scientific calculators, and Arduino kits.
-- Alumni Giving Back: [Giving Back Hub](/donations) - Contribute to student scholarships, campus lab upgrades, and incubation funds.
-- Campus Events & Reunions: [Campus Events & Reunions](/events) - Technical symposiums, annual batch reunions, and instant entry passes.
-- Project Pitch Deck: [Student Pitch Deck](/incubation) - Student startup and innovation pitches seeking alumni seed grants.
-- Alumni Awards & Hall of Fame: [Alumni Awards](/awards) - Outstanding alumni achievements and voting ballots.
-- Smart ID Card: [Alumni Smart ID Card](/card) - Official digital membership card with verified QR code.
-- Faculty Directory: [Faculty & HOD Directory](/faculty) - Department heads, professors, and contact emails.
-- GTU Academic Calendar: [GTU Academic Calendar](/academic-calendar) - Examination schedules, GTU circulars, and semester timetables.
-- Engineering Job Board: [Job Board](/jobs) - Alumni referrals and diploma engineering vacancies.
+STRICT PURPOSE & BOUNDARY RULES:
+1. EDUCATIONAL & CAMPUS FOCUS ONLY: You strictly answer queries regarding:
+   - KDP Patan college history, campus facilities, faculty, departments, laboratories, admissions, and alumni portal features.
+   - Engineering diploma curriculum, technical subjects, coding, mathematics, science, practicals, projects, and career counseling.
+   - GTU University academic matters: previous year question papers (PYQs), exam forms, hall tickets, exam schedules, results, grade cards (SPI/CPI/CGPA), re-assessment, and diploma syllabus.
+   - Post-diploma pathways: ACPC Diploma to Degree (D2D) B.E./B.Tech admissions, PSU jobs, apprentice schemes, and government scholarships (MYSY).
+2. NO TIME WASTING / NO NON-EDUCATIONAL QUERIES: If a user asks for jokes, comedy, entertainment, movies, songs, gossip, games, dating, or trivial non-educational topics, POLITELY DECLINE:
+   "As KDP Mitra, I am dedicated strictly to technical education, engineering learning, GTU diploma academics, and KDP Patan campus services. I cannot assist with entertainment, jokes, or non-educational topics. Please feel free to ask about your diploma syllabus, GTU exams, placements, or engineering concepts!"
 
-RESPONSE GUIDELINES:
-1. Tone: Respectful, welcoming, inspiring, warm, and academically authoritative. Reflect the dignity of an established government technical institute.
-2. Languages: Fluidly support English, Gujarati (ગુજરાતી), and Hindi (हिन्दी). If the user asks in Gujarati, respond in clear, grammatically sound Gujarati (using English for URLs and technical names). If the user asks in Hindi, reply in Hindi. If in English, reply in English.
-3. Brevity & Clarity: Keep answers concise, helpful, and formatted with bullet points and bold headers. Always include relevant portal links so the user can take action immediately.
-4. Accuracy: Never hallucinate phone numbers or fake dates. Direct administrative questions to the Principal's Office or `/contact`.
+OFFICIAL EDUCATIONAL & GTU PORTAL LINKS (Always provide active markdown links):
+- GTU Previous Year Question Papers (PYQ): [GTU Old Question Papers](https://oldquestionpapers.gtu.ac.in/) & [GTU Paper Downloads](https://www.gtu.ac.in/Download1.aspx)
+- GTU Exam Results & Grade Cards: [GTU Results Portal](https://www.gtu.ac.in/result.aspx)
+- GTU Student Portal (Hall Ticket, Exam Form, Mid-Sem Marks): [GTU Student Portal](https://student.gtu.ac.in/)
+- GTU Official Circulars & Schedules: [GTU Circulars](https://www.gtu.ac.in/Circular.aspx)
+- GTU Diploma Syllabus & Teaching Schemes: [GTU Syllabus Repository](https://www.gtu.ac.in/Syllabus.aspx)
+- ACPC Diploma to Degree (D2D B.E./B.Tech Admissions): [ACPC Gujarat Portal](https://acpc.gujarat.gov.in/)
+- Digital Gujarat Scholarships (MYSY / Post-Matric): [Digital Gujarat Portal](https://www.digitalgujarat.gov.in/)
+- NPTEL / Swayam Free Engineering Courses: [NPTEL Portal](https://nptel.ac.in/)
+
+KDP PATAN PORTAL URLS:
+- Official Document Request Desk: [Document Request Desk](/documents) (Transcripts, Bonafide, Migration, LOR)
+- Training & Placement (TPO): [TPO Placement Wall](/placement) (Adani, L&T, Tata, Torrent, AM/NS recruiters)
+- Alumni Directory: [Alumni Directory](/alumni)
+- 1-on-1 Mentorship: [Mentorship Hub](/mentorship)
+- Free Tool & Book Bank: [Pay-It-Forward Tool Bank](/tools) (Mini drafters, calculators, textbooks)
+- Campus Events & Reunions: [Campus Events & Reunions](/events)
+- Student Pitch Deck & Incubation: [Student Pitch Deck](/incubation)
+- Alumni Smart ID Card: [My Smart ID Card](/card)
+- Faculty & HOD Directory: [Faculty Directory](/faculty)
+- GTU Academic Calendar: [Academic Calendar](/academic-calendar)
+- Engineering Job Board: [Job Board](/jobs)
+- Giving Back Hub: [Giving Back Hub](/donations)
+
+FORMATTING & UI READABILITY DIRECTIVES:
+- Maintain clear visual hierarchy: Use bold headers (`### Section`), concise paragraphs, and bullet points.
+- Do NOT output unstructured pipe tables or cramped text. When using Markdown tables, include proper headers and separators.
+- Ensure all portal and external URLs are formatted with clear markdown link text (e.g. `[GTU Student Portal](https://student.gtu.ac.in/)`).
+- Support English, Gujarati (ગુજરાતી), and Hindi (हिन्दी) warmly and professionally based on the user's language.
 PROMPT;
     }
 
@@ -152,17 +170,129 @@ PROMPT;
         $q = mb_strtolower(trim($userMessage));
         $userName = $user ? $user->name : 'Friend';
 
-        // 1. Gujarati Greeting / General Gujarati
+        // 1. Guardrail against non-educational / jokes / entertainment / wasting
+        if (preg_match('/\b(joke|jokes|funny|comedy|meme|memes|movie|movies|song|songs|dating|flirt|girlfriend|boyfriend|game|gaming|cricket score|gossip)\b/i', $q)) {
+            $reply = "### 📚 KDP Academic & Technical Counseling Scope\n\n"
+                   . "As **KDP Mitra**, I am dedicated exclusively to **technical education, engineering learning, GTU diploma academics, and KDP Patan campus services**.\n\n"
+                   . "I cannot assist with entertainment, jokes, or non-educational topics. However, I am delighted to help you with:\n"
+                   . "• **GTU Diploma Preparation:** Old Question Papers (PYQs), Syllabus, Results\n"
+                   . "• **Engineering Subjects:** Coding, Digital Electronics, Thermodynamics, Circuit Theory, Surveying\n"
+                   . "• **Campus Services:** [Transcripts](/documents), [TPO Placements](/placement), [Tool Bank](/tools), [Mentorship](/mentorship)\n\n"
+                   . "Please feel free to ask your academic or engineering question!";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 2. GTU Old Question Papers / PYQ / Previous Year Papers
+        if (preg_match('/\b(pyq|pyqs|old paper|old papers|question paper|question papers|previous year|exam paper|question bank|paper solution)\b/i', $q)) {
+            $reply = "### 📖 GTU Diploma Previous Year Question Papers (PYQ)\n\n"
+                   . "You can download past GTU Diploma Engineering theory examination papers directly from official repositories:\n\n"
+                   . "• **Official GTU Old Papers Archive:** [Download GTU Old Question Papers](https://oldquestionpapers.gtu.ac.in/)\n"
+                   . "• **GTU Question Paper Search:** [GTU Paper Repository](https://www.gtu.ac.in/Download1.aspx)\n"
+                   . "• **GTU Diploma Syllabus & Teaching Schemes:** [GTU Syllabus & Scheme](https://www.gtu.ac.in/Syllabus.aspx)\n"
+                   . "• **KDP Internal Notes & Material:** [Study Resources & Notes](/resources)\n\n"
+                   . "💡 *Tip:* Filter by your GTU Subject Code (e.g. 4300001, 4320002) and semester for semester-wise Winter & Summer papers.";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 3. GTU Results / Grade Card / SPI / CPI / CGPA / Rechecking
+        if (preg_match('/\b(result|results|grade card|marksheet|spi|cpi|cgpa|recheck|rechecking|reassessment|re-check|re-assessment)\b/i', $q)) {
+            $reply = "### 📊 GTU Diploma Exam Results & Re-assessment\n\n"
+                   . "Official GTU Diploma results and electronic grade cards are published on Gujarat Technological University's verification portals:\n\n"
+                   . "• **GTU Live Results Server:** [GTU Exam Results Portal](https://www.gtu.ac.in/result.aspx)\n"
+                   . "• **Student Portal Grade History:** [GTU Student Portal](https://student.gtu.ac.in/)\n"
+                   . "• **Re-assessment / Re-checking Dates:** Check announcements at [GTU Circulars](https://www.gtu.ac.in/Circular.aspx)\n\n"
+                   . "📌 **How to check:** Enter your 12-digit GTU Enrollment Number, choose your examination session, and enter captcha code.";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 4. GTU Student Portal / Hall Ticket / Exam Forms
+        if (preg_match('/\b(student portal|hall ticket|admit card|exam form|student\.gtu|enrollment no)\b/i', $q)) {
+            $reply = "### 🏛️ Official GTU Student Portal\n\n"
+                   . "For university exam form filling, downloading Hall Tickets, and verifying mid-semester marks, visit:\n\n"
+                   . "👉 **[GTU Student Portal (student.gtu.ac.in)](https://student.gtu.ac.in/)**\n\n"
+                   . "Services available on GTU Student Portal:\n"
+                   . "• Download Hall Ticket (Admit Card) for Winter / Summer examinations.\n"
+                   . "• Online Examination Form Submission & Fee Payment.\n"
+                   . "• View internal, continuous evaluation, and mid-sem marks submitted by KDP Patan.\n"
+                   . "• Apply for grade card name corrections or degree certificates.";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 5. D2D (Diploma to Degree Admissions) / ACPC Gujarat
+        if (preg_match('/\b(d2d|degree admission|acpc|after diploma|b\.e|b\.tech|degree engineering)\b/i', $q)) {
+            $reply = "### 🎓 ACPC Diploma to Degree (D2D) Admissions\n\n"
+                   . "After completing your 3-year Diploma Engineering at K. D. Polytechnic, Patan, you can enter directly into the 2nd Year (3rd Semester) of Bachelor of Engineering (B.E. / B.Tech):\n\n"
+                   . "• **Official Admission Committee:** [ACPC Gujarat Portal](https://acpc.gujarat.gov.in/)\n"
+                   . "• **Merit Calculation:** Based on STPI / Sem 5 & 6 marks (or DDCET examination criteria as notified by Government of Gujarat).\n"
+                   . "• **Alumni Mentorship:** Need guidance on choosing colleges (LDCE, VGEC, BVM, Nirma, PDPU)?\n"
+                   . "  👉 Connect directly with KDP seniors who cleared D2D: [1-on-1 Mentorship Hub](/mentorship)";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 6. Scholarships / MYSY / Digital Gujarat
+        if (preg_match('/\b(scholarship|scholarships|mysy|digital gujarat|freeship|financial aid)\b/i', $q)) {
+            $reply = "### 💰 Gujarat Government Scholarships for Diploma Students\n\n"
+                   . "Students at K. D. Polytechnic, Patan are eligible for premier state government scholarship schemes:\n\n"
+                   . "• **Mukhyamantri Yuva Swavalamban Yojana (MYSY):** Tuition assistance & hostel grant for meritorious students.\n"
+                   . "• **Digital Gujarat Portal:** Post-Matric Scholarships for SC, ST, SEBC, EBC, and NTDNT diploma students.\n"
+                   . "👉 **Apply online:** [Digital Gujarat Portal](https://www.digitalgujarat.gov.in/)\n"
+                   . "• **Need document endorsements?** Apply for Bonafide certificate via [Document Request Desk](/documents).";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 7. Gujarati Greeting / General Gujarati
         if (preg_match('/(કેમ છો|નમસ્તે|નમસ્કાર|હેલો|સુપ્રભાત|પાટણ|કિલાચંદ|પોલિટેકનિક)/u', $userMessage)) {
-            $reply = "નમસ્તે **{$userName}**! 🙏\n\n"
-                   . "હું **કિલાચંદ એઆઈ મિત્ર (KDP Mitra)** છું — કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ (સ્થાપના: ૧૯૬૧) નો સત્તાવાર ડિજિટલ સહાયક.\n\n"
-                   . "હું આપને નીચેની બાબતોમાં સહાય કરી શકું છું:\n"
-                   . "• **[સત્તાવાર દસ્તાવેજો](/documents)**: ટ્રાન્સક્રિપ્ટ, બોનાફાઈડ, ડિગ્રી પ્રમાણપત્ર અરજી\n"
-                   . "• **[કેમ્પસ પ્લેસમેન્ટ (TPO)](/placement)**: અદાણી, એલ એન્ડ ટી, ટાટા જેવી કંપનીઓની ભરતી માહિતી\n"
-                   . "• **[અલુમ્નાઈ ડિરેક્ટરી](/alumni)**: વિશ્વભરમાં વસેલા કેડીપી ઇજનેરો સાથે સંપર્ક\n"
-                   . "• **[મેન્ટોરશીપ હબ](/mentorship)**: સિનિયર ઇજનેરો પાસેથી માર્ગદર્શન\n"
-                   . "• **[ટૂલ અને બુક બેંક](/tools)**: મિની ડ્રાફ્ટર અને જીટીયુ પુસ્તકોની ફ્રી સહાય\n\n"
-                   . "આપને કઈ માહિતીની જરૂર છે? કૃપા કરીને જણાવો!";
+            $reply = "### 🙏 નમસ્તે, {$userName}!\n\n"
+                   . "હું **કિલાચંદ એઆઈ મિત્ર (KDP Mitra)** છું — કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ (સ્થાપના: ૧૯૬૧) નો સત્તાવાર ડિજિટલ કાઉન્સેલર.\n\n"
+                   . "હું આપને નીચેની બાબતોમાં સંપૂર્ણ માર્ગદર્શન આપી શકું છું:\n\n"
+                   . "• **[સત્તાવાર દસ્તાવેજો](/documents):** ટ્રાન્સક્રિપ્ટ, બોનાફાઈડ, ડિગ્રી પ્રમાણપત્ર અરજી\n"
+                   . "• **[કેમ્પસ પ્લેસમેન્ટ (TPO)](/placement):** અદાણી, એલ એન્ડ ટી, ટાટા જેવી કંપનીઓની ભરતી વિગતો\n"
+                   . "• **[જીટીયુ પેપર્સ (PYQ)](https://oldquestionpapers.gtu.ac.in/):** જુના પ્રશ્નપત્રો ડાઉનલોડ\n"
+                   . "• **[જીટીયુ પરિણામ](https://www.gtu.ac.in/result.aspx):** ડીપ્લોમા સેમેસ્ટર રીઝલ્ટ પોર્ટલ\n"
+                   . "• **[ટૂલ અને બુક બેંક](/tools):** મિની ડ્રાફ્ટર અને જીટીયુ પુસ્તકોની ફ્રી સહાય\n\n"
+                   . "આપને કયા શૈક્ષણિક વિષયમાં મદદ જોઈએ છે? કૃપા કરીને જણાવો!";
 
             return [
                 'success' => true,
@@ -173,16 +303,17 @@ PROMPT;
             ];
         }
 
-        // 2. Greetings in English / Hindi
-        if (preg_match('/\b(hi|hello|hey|namaste|greetings|good morning|good evening|kem cho|kdp)\b/i', $q)) {
-            $reply = "Namaste and warm greetings **{$userName}**! 🙏 Welcome to **KDP Mitra**, the official AI counselor for **K. D. Polytechnic, Patan** (Estd. 1961).\n\n"
-                   . "How can I assist your polytechnic or alumni journey today? Here are quick shortcuts:\n\n"
-                   . "• 📜 **Apply for Transcripts & Records:** [Official Document Request Desk](/documents)\n"
-                   . "• 🏢 **Placement & Career:** [TPO Placement Wall](/placement) & [Job Board](/jobs)\n"
-                   . "• 🤝 **Connect with Alumni:** [Alumni Directory](/alumni) & [1-on-1 Mentorship](/mentorship)\n"
-                   . "• 🛠️ **Free Tools for Juniors:** [Pay-It-Forward Tool & Book Bank](/tools)\n"
-                   . "• 🗓️ **GTU Circulars & Schedules:** [GTU Academic Calendar](/academic-calendar)\n\n"
-                   . "Feel free to type your question below!";
+        // 8. Greetings in English
+        if (preg_match('/\b(hi|hello|hey|namaste|greetings|good morning|good evening|kdp)\b/i', $q)) {
+            $reply = "### 🙏 Welcome to KDP Mitra, {$userName}!\n\n"
+                   . "I am your official AI Academic Counselor for **K. D. Polytechnic, Patan** (Estd. 1961). How can I assist your engineering studies or campus journey today?\n\n"
+                   . "• 📜 **[Document Request Desk](/documents)** — Apply for Official Transcripts & Bonafide\n"
+                   . "• 🏢 **[TPO Placement Wall](/placement)** — Campus drives, recruiter lists & salary trends\n"
+                   . "• 📖 **[GTU Old Question Papers](https://oldquestionpapers.gtu.ac.in/)** — Download semester exam PYQs\n"
+                   . "• 📊 **[GTU Results Portal](https://www.gtu.ac.in/result.aspx)** — Check GTU grade cards\n"
+                   . "• 🛠️ **[Pay-It-Forward Tool Bank](/tools)** — Free mini drafters, textbooks & calculators\n"
+                   . "• 🤝 **[Mentorship Hub](/mentorship)** — 1-on-1 guidance with senior alumni\n\n"
+                   . "Type your engineering or campus query below!";
 
             return [
                 'success' => true,
@@ -193,13 +324,13 @@ PROMPT;
             ];
         }
 
-        // 3. Document / Transcripts / Certificates / Bonafide
+        // 9. Document / Transcripts / Certificates / Bonafide
         if (preg_match('/\b(transcript|transcripts|document|documents|certificate|bonafide|lor|recommendation|mark sheet|grade card|migration)\b/i', $q)) {
             $reply = "### 📜 Official Document & Transcript Services\n\n"
-                   . "At K. D. Polytechnic, Patan, alumni and students can officially request documents with digital tracking:\n\n"
-                   . "1. **Transcripts / Attested Mark Sheets:** For foreign university admissions (WES / IQAS) or degree engineering D2D admissions.\n"
-                   . "2. **Bonafide & Character Certificates:** Required for scholarships, passports, or employment verification.\n"
-                   . "3. **Letter of Recommendation (LOR):** Endorsed by respective Department HODs.\n\n"
+                   . "At K. D. Polytechnic, Patan, students and alumni can apply for official records with end-to-end digital tracking:\n\n"
+                   . "1. **Official Transcripts / Attested Mark Sheets:** For WES / IQAS evaluations, overseas studies, or degree D2D admissions.\n"
+                   . "2. **Bonafide & Character Certificates:** Required for scholarships, passports, or job onboarding.\n"
+                   . "3. **Letter of Recommendation (LOR):** Issued directly by Department HODs.\n\n"
                    . "👉 **Submit your online application here:** [Request Official Documents](/documents)\n\n"
                    . "⚡ Standard processing timeline is **3 to 5 working days** by the college student section.";
 
@@ -212,15 +343,15 @@ PROMPT;
             ];
         }
 
-        // 4. Placement / Jobs / TPO / Salary / Recruiters
+        // 10. Placement / Jobs / TPO / Salary / Recruiters
         if (preg_match('/\b(placement|placements|tpo|job|jobs|salary|package|recruiter|recruiters|interview|adani|l&t|tata|torrent|am\/ns|hiring)\b/i', $q)) {
             $reply = "### 🏢 Training & Placement (TPO) Wall\n\n"
                    . "K. D. Polytechnic Patan maintains an active Training & Placement Cell empowering diploma engineers:\n\n"
-                   . "• **Top Campus Recruiters:** Adani Solar & Power, Larsen & Toubro (L&T), Tata Motors, Torrent Power, AM/NS Steel, Essar, and Suzuki Motor Gujarat.\n"
-                   . "• **Annual Offers:** Over 180+ junior diploma technicians recruited annually across Mechanical, Electrical, Civil, and Computer departments.\n"
-                   . "• **Average Package:** ₹2.40 LPA to ₹4.20 LPA for fresh diploma passouts.\n\n"
-                   . "👉 **Explore active drives:** [Training & Placement Wall](/placement)\n"
-                   . "👉 **Browse alumni job referrals:** [Engineering Job Board](/jobs)";
+                   . "• **Top Recruiters:** Adani Solar & Power, Larsen & Toubro (L&T), Tata Motors, Torrent Power, AM/NS Steel, Essar, and Suzuki Motor Gujarat.\n"
+                   . "• **Annual Placements:** Over 180+ junior technicians hired each year across core branches.\n"
+                   . "• **Salary Trends:** Average ₹2.40 LPA to ₹4.20 LPA for fresh diploma passouts.\n\n"
+                   . "👉 **View active campus drives:** [Training & Placement Wall](/placement)\n"
+                   . "👉 **Explore alumni job openings:** [Engineering Job Board](/jobs)";
 
             return [
                 'success' => true,
@@ -231,14 +362,14 @@ PROMPT;
             ];
         }
 
-        // 5. Tool Bank / Mini Drafter / Calculator / Textbooks
+        // 11. Tool Bank / Mini Drafter / Calculator / Textbooks
         if (preg_match('/\b(tool|tools|book|books|bank|drafter|mini drafter|calculator|scientific calculator|textbook|casio|arduino|kit)\b/i', $q)) {
-            $reply = "### 🛠️ Pay-It-Forward Student Tool & Book Bank\n\n"
-                   . "The **Pay-It-Forward Equipment Bank** enables senior alumni to pass down expensive engineering equipment to junior technicians for **100% Free**:\n\n"
-                   . "• **Available Items:** Rotring & Omega Mini Drafters, Casio FX-991EX scientific calculators, GTU diploma reference textbooks, Arduino microcontroller kits, and workshop safety gear.\n"
-                   . "• **Estimated Student Savings:** More than ₹1,200 to ₹1,800 saved per student.\n"
-                   . "• **Honor Pledge:** Juniors agree to pass the equipment forward to incoming juniors upon graduation!\n\n"
-                   . "👉 **Claim or Donate tools here:** [Pay-It-Forward Tool Bank](/tools)";
+            $reply = "### 🛠️ Pay-It-Forward Student Equipment Bank\n\n"
+                   . "Senior alumni donate used engineering instruments to juniors for **100% Free**:\n\n"
+                   . "• **Available Tools:** Rotring & Omega Mini Drafters, Casio FX-991EX scientific calculators, GTU reference textbooks, and Arduino kits.\n"
+                   . "• **Value Saved:** Saves ₹1,200 to ₹1,800 per student during first-year studies.\n"
+                   . "• **Honor System:** Pass the equipment forward upon graduation!\n\n"
+                   . "👉 **Claim or Donate tools:** [Pay-It-Forward Tool Bank](/tools)";
 
             return [
                 'success' => true,
@@ -249,13 +380,13 @@ PROMPT;
             ];
         }
 
-        // 6. Mentorship / Guidance / Career
+        // 12. Mentorship / Guidance / Career
         if (preg_match('/\b(mentor|mentors|mentorship|guidance|career|advice|guidelines|counseling)\b/i', $q)) {
             $reply = "### 🤝 1-on-1 Alumni Mentorship Hub\n\n"
-                   . "Need guidance on D2D Degree Engineering admissions, cracking PSU exams, or industrial career transitions?\n\n"
-                   . "• Connect 1-on-1 with verified KDP alumni working at top multinational corporations and public sector units.\n"
-                   . "• Book mentoring slots in disciplines including Software Development, EPC Project Management, Power Distribution, and Civil Infrastructure.\n\n"
-                   . "👉 **Find your mentor today:** [1-on-1 Alumni Mentorship Hub](/mentorship)";
+                   . "Connect 1-on-1 with verified KDP alumni working at multinational companies and state PSUs:\n\n"
+                   . "• Guidance on D2D Degree Engineering admissions, PSU exams, and industrial career paths.\n"
+                   . "• Tracks available in Software Development, EPC Project Management, Power Distribution, and Civil Infrastructure.\n\n"
+                   . "👉 **Connect with a mentor:** [1-on-1 Alumni Mentorship Hub](/mentorship)";
 
             return [
                 'success' => true,
@@ -266,107 +397,17 @@ PROMPT;
             ];
         }
 
-        // 7. GTU / Academic Calendar / Exam / Circulars
-        if (preg_match('/\b(gtu|academic|calendar|exam|exams|circular|circulars|schedule|syllabus|semester|mid sem|remedial)\b/i', $q)) {
-            $reply = "### 🗓️ GTU Academic Calendar & Circulars\n\n"
-                   . "Stay updated with official academic schedules for Gujarat Technological University (GTU) Diploma Engineering:\n\n"
-                   . "• Semester commencement and term-end dates.\n"
-                   . "• GTU Winter & Summer theory & practical examination timetables.\n"
-                   . "• Official notifications issued by Principal Office, KDP Patan.\n\n"
-                   . "👉 **View latest schedules:** [GTU Academic Calendar & Circulars](/academic-calendar)";
-
-            return [
-                'success' => true,
-                'reply' => $reply,
-                'model' => 'KDP Institutional Counselor (Local Fallback)',
-                'source' => 'fallback',
-                'note' => $reason
-            ];
-        }
-
-        // 8. Faculty / Departments / HOD / Principal
-        if (preg_match('/\b(faculty|hod|principal|professor|lecturer|department|departments|computer|mechanical|civil|electrical|it)\b/i', $q)) {
-            $reply = "### 👥 Academic Departments & Faculty Directory\n\n"
-                   . "K. D. Polytechnic Patan houses 7 dedicated engineering departments:\n\n"
-                   . "1. **Computer Engineering**\n"
-                   . "2. **Information Technology**\n"
-                   . "3. **Mechanical Engineering**\n"
-                   . "4. **Electrical Engineering**\n"
-                   . "5. **Civil Engineering**\n"
-                   . "6. **Applied Mechanics**\n"
-                   . "7. **General Science & Humanities**\n\n"
-                   . "👉 **View faculty profiles and HOD contact emails:** [Faculty & HOD Directory](/faculty)";
-
-            return [
-                'success' => true,
-                'reply' => $reply,
-                'model' => 'KDP Institutional Counselor (Local Fallback)',
-                'source' => 'fallback',
-                'note' => $reason
-            ];
-        }
-
-        // 9. Events & Reunions
-        if (preg_match('/\b(event|events|reunion|reunions|symposium|techfest|workshop|gathering|pass|ticket)\b/i', $q)) {
-            $reply = "### 📅 Campus Activities & Alumni Reunions\n\n"
-                   . "K. D. Polytechnic regularly hosts state-level workshops, technical symposiums, and annual alumni reunions:\n\n"
-                   . "• Browse upcoming campus workshops and technical events.\n"
-                   . "• One-click RSVP to receive your official **Digital Event Entry Pass** with secure QR verification for campus gate access.\n\n"
-                   . "👉 **Explore scheduled events:** [Campus Events & Reunions](/events)";
-
-            return [
-                'success' => true,
-                'reply' => $reply,
-                'model' => 'KDP Institutional Counselor (Local Fallback)',
-                'source' => 'fallback',
-                'note' => $reason
-            ];
-        }
-
-        // 10. Smart ID Card
-        if (preg_match('/\b(card|id card|smart card|membership|alumni card)\b/i', $q)) {
-            $reply = "### 🪪 Official Alumni Smart ID Card\n\n"
-                   . "Every verified alumnus of KDP Patan is eligible for the official digital Smart ID Card:\n\n"
-                   . "• Features your enrollment number, branch, graduation year, and unique verification barcode/QR.\n"
-                   . "• Grants campus library access, alumni guest house privileges, and entry to institutional reunions.\n\n"
-                   . "👉 **View and download your pass:** [My Smart ID Card](/card)";
-
-            return [
-                'success' => true,
-                'reply' => $reply,
-                'model' => 'KDP Institutional Counselor (Local Fallback)',
-                'source' => 'fallback',
-                'note' => $reason
-            ];
-        }
-
-        // 11. Giving Back / Donations
-        if (preg_match('/\b(donate|donations|donation|giving back|fund|crowdfunding|scholarship|scholarships)\b/i', $q)) {
-            $reply = "### 💖 Alumni Giving Back & Crowdfunding Hub\n\n"
-                   . "Empower needy diploma students and modernize laboratory infrastructure at K. D. Polytechnic:\n\n"
-                   . "• Contribute towards student tuition assistance, modern CNC machinery, or IoT laboratory hardware.\n"
-                   . "• Track project transparency, donor walls, and fund utilization reports.\n\n"
-                   . "👉 **Support your alma mater:** [Giving Back Hub](/donations)";
-
-            return [
-                'success' => true,
-                'reply' => $reply,
-                'model' => 'KDP Institutional Counselor (Local Fallback)',
-                'source' => 'fallback',
-                'note' => $reason
-            ];
-        }
-
-        // 12. General Default Knowledge Guidance
-        $reply = "Thank you for asking! As **KDP Mitra**, here is what I can help you with on the K. D. Polytechnic Patan portal:\n\n"
+        // 13. General Default Academic Guidance
+        $reply = "### 🏛️ KDP Mitra Academic & Campus Concierge\n\n"
+               . "Here are the top academic and administrative portals to assist you:\n\n"
                . "• 📜 **[Request Official Documents](/documents)** — Transcripts, Bonafide, Migration & LOR\n"
+               . "• 📖 **[GTU Old Question Papers (PYQ)](https://oldquestionpapers.gtu.ac.in/)** — Download past GTU exam papers\n"
+               . "• 📊 **[GTU Results Portal](https://www.gtu.ac.in/result.aspx)** — Semester results and grade cards\n"
                . "• 🏢 **[TPO Placement Wall](/placement)** — Campus drives, recruiter lists & salary trends\n"
-               . "• 🎓 **[Alumni Directory](/alumni)** — Connect with diploma alumni worldwide\n"
-               . "• 🤝 **[Mentorship Hub](/mentorship)** — 1-on-1 career guidance with senior engineers\n"
                . "• 🛠️ **[Tool & Book Bank](/tools)** — Free mini drafters, textbooks & calculators\n"
-               . "• 🗓️ **[GTU Academic Calendar](/academic-calendar)** — Exam dates & GTU circulars\n"
-               . "• 👥 **[Faculty & HOD Directory](/faculty)** — Department professors & contact info\n\n"
-               . "💡 *Tip:* You can ask specific questions like *'How do I apply for transcripts?'*, *'Which companies hire Mechanical students?'*, or *'Can I borrow a mini drafter?'*";
+               . "• 🎓 **[ACPC D2D Degree Admissions](https://acpc.gujarat.gov.in/)** — Degree engineering admission guide\n"
+               . "• 🤝 **[Mentorship Hub](/mentorship)** — Career counseling with alumni engineers\n\n"
+               . "💡 *You can ask specific questions like 'How to download GTU diploma old papers?', 'How do I apply for transcripts?', or 'Explain 1st sem engineering graphics'.*";
 
         return [
             'success' => true,

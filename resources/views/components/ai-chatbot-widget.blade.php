@@ -33,7 +33,7 @@
          x-transition:leave="transition ease-in duration-200 transform"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-6 scale-95"
-         class="bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col w-[92vw] sm:w-[410px] h-[580px] max-h-[85vh] overflow-hidden">
+         class="bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col w-[94vw] sm:w-[440px] h-[600px] max-h-[86vh] overflow-hidden">
         
         <!-- Header with Institutional Branding -->
         <div class="bg-gradient-to-r from-[#0f2042] via-[#1e3a8a] to-[#0f172a] text-white p-4 sm:p-4.5 flex items-center justify-between border-b-2 border-[#f97316] shrink-0">
@@ -45,9 +45,9 @@
                 <div class="leading-tight">
                     <div class="flex items-center gap-1.5">
                         <h3 class="font-heading font-black text-sm text-white tracking-wide">KDP Mitra</h3>
-                        <span class="px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">AI</span>
+                        <span class="px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">AI Academic Counselor</span>
                     </div>
-                    <p class="text-[10px] text-blue-200 font-medium">કિલાચંદ એઆઈ મિત્ર • Groq LLaMA 3.3</p>
+                    <p class="text-[10px] text-blue-200 font-medium">કિલાચંદ એઆઈ મિત્ર • K. D. Polytechnic, Patan</p>
                 </div>
             </div>
 
@@ -78,31 +78,43 @@
             
             <!-- Welcome Greeting -->
             <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-2">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-50 text-amber-900 text-[11px] font-semibold border border-amber-200">
+                        <span class="w-2 h-2 rounded-full bg-[#f97316]"></span>
+                        કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+                    </span>
                     <span class="text-base">🏛️</span>
-                    <span class="font-heading font-bold text-slate-900 text-xs">Welcome to K. D. Polytechnic Patan!</span>
                 </div>
-                <p class="text-slate-600 leading-relaxed">
-                    I am **KDP Mitra**, your AI counselor. I can guide you on **Transcripts &amp; Documents**, **TPO Placements**, **Mentorship**, **Tool Bank claims**, and **GTU Exam circulars** in English, ગુજરાતી, or हिन्दी.
+                <div class="font-heading font-bold text-slate-900 text-xs">
+                    Welcome to KDP Mitra Academic Counselor!
+                </div>
+                <p class="text-slate-600 leading-relaxed text-xs">
+                    Ask me about **Official Transcripts**, **GTU Old Papers (PYQs)**, **GTU Results**, **TPO Placements**, **D2D Admissions**, or **Book &amp; Tool Bank**.
                 </p>
-                <div class="text-[10px] text-slate-400 font-medium">Click any topic below or ask your own question:</div>
+                <div class="text-[10px] text-slate-400 font-medium">Quick academic inquiries:</div>
             </div>
 
             <!-- Quick Starter Chips (Visible initially or when conversation is short) -->
             <div x-show="messages.length === 0" class="flex flex-wrap gap-1.5 pt-1">
-                <button type="button" @click="sendPrompt('How do I apply for Transcripts and Bonafide certificates?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs">
+                <button type="button" @click="sendPrompt('How do I apply for Transcripts and Bonafide certificates?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
                     📜 Apply for Transcripts
                 </button>
-                <button type="button" @click="sendPrompt('Which companies recruit diploma students through TPO?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs">
+                <button type="button" @click="sendPrompt('Where can I download GTU diploma old question papers (PYQs)?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
+                    📖 GTU Old Papers (PYQ)
+                </button>
+                <button type="button" @click="sendPrompt('How can I check GTU diploma exam results and grade card?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
+                    📊 GTU Results Portal
+                </button>
+                <button type="button" @click="sendPrompt('Which companies recruit diploma students through TPO?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
                     🏢 TPO Placement Recruiters
                 </button>
-                <button type="button" @click="sendPrompt('How can I claim free mini drafter or books from the tool bank?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs">
+                <button type="button" @click="sendPrompt('How does ACPC D2D degree engineering admission work?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
+                    🎓 ACPC D2D Admissions
+                </button>
+                <button type="button" @click="sendPrompt('How can I claim free mini drafter or books from the tool bank?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
                     🛠️ Free Tools &amp; Drafters
                 </button>
-                <button type="button" @click="sendPrompt('How can I connect with an alumni mentor?')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs">
-                    🤝 1-on-1 Mentorship
-                </button>
-                <button type="button" @click="sendPrompt('કેડીપી પાટણ પોલિટેકનિક વિશે માહિતી આપો')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs">
+                <button type="button" @click="sendPrompt('કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ વિશે ગુજરાતીમાં માહિતી આપો')" class="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-[#1e3a8a] hover:bg-blue-50 font-semibold text-[11px] transition-colors shadow-2xs cursor-pointer">
                     🇮🇳 ગુજરાતી માહિતી
                 </button>
             </div>
@@ -121,15 +133,16 @@
 
                     <!-- Assistant Message -->
                     <template x-if="msg.role === 'assistant'">
-                        <div class="flex justify-start pr-6 gap-2">
-                            <div class="w-6 h-6 rounded-full bg-gradient-to-br from-[#1e3a8a] to-[#0f2042] text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 shadow-2xs">
+                        <div class="flex justify-start pr-4 gap-2.5">
+                            <div class="w-7 h-7 rounded-2xl bg-gradient-to-br from-[#1e3a8a] to-[#0f2042] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-2xs">
                                 🤖
                             </div>
-                            <div class="bg-white border border-slate-200 text-slate-800 p-3.5 rounded-2xl rounded-tl-xs shadow-2xs leading-relaxed max-w-[92%] space-y-1.5">
-                                <div class="prose prose-xs max-w-none text-slate-800" x-html="renderMarkdown(msg.content)"></div>
-                                <div class="flex items-center justify-between text-[9px] text-slate-400 pt-1 border-t border-slate-100">
+                            <div class="bg-white border border-slate-200 text-slate-800 p-3.5 rounded-2xl rounded-tl-xs shadow-2xs leading-relaxed max-w-[92%] space-y-2">
+                                <!-- Enhanced Clean Markdown Rendering -->
+                                <div class="chat-markdown max-w-none" x-html="renderMarkdown(msg.content)"></div>
+                                <div class="flex items-center justify-between text-[9px] text-slate-400 pt-1.5 border-t border-slate-100">
                                     <span x-text="msg.model ? msg.model : 'KDP Mitra'"></span>
-                                    <button type="button" @click="copyText(msg.content)" class="text-slate-400 hover:text-slate-600 transition-colors">
+                                    <button type="button" @click="copyText(msg.content)" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                                         Copy
                                     </button>
                                 </div>
@@ -141,14 +154,14 @@
 
             <!-- Loading Typing Indicator -->
             <div x-show="isLoading" class="flex justify-start gap-2">
-                <div class="w-6 h-6 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                <div class="w-7 h-7 rounded-2xl bg-[#1e3a8a] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                     🤖
                 </div>
                 <div class="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-tl-xs shadow-2xs flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-[#1e3a8a] animate-bounce"></span>
                     <span class="w-2 h-2 rounded-full bg-[#f97316] animate-bounce [animation-delay:0.2s]"></span>
                     <span class="w-2 h-2 rounded-full bg-[#1e3a8a] animate-bounce [animation-delay:0.4s]"></span>
-                    <span class="text-[10px] text-slate-400 ml-1.5 font-medium">Consulting KDP database...</span>
+                    <span class="text-[10px] text-slate-400 ml-1.5 font-medium">Consulting KDP &amp; GTU database...</span>
                 </div>
             </div>
 
@@ -161,7 +174,7 @@
                        x-ref="messageInput"
                        x-model="inputMessage" 
                        :disabled="isLoading"
-                       placeholder="Ask KDP Mitra... (English, ગુજરાતી, हिन्दी)" 
+                       placeholder="Ask about GTU papers, results, transcripts, subjects... (English/ગુજરાતી)" 
                        class="flex-1 px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:border-[#1e3a8a] focus:ring-[#1e3a8a] focus:bg-white text-slate-800 disabled:opacity-60 transition-colors">
                 
                 <button type="submit" 
@@ -172,10 +185,10 @@
             </form>
             
             <div class="flex items-center justify-between text-[10px] text-slate-400 px-1">
-                <span>⚡ Powered by <strong>Groq API</strong> (LLaMA 3.3)</span>
+                <span>⚡ Powered by <strong>Groq API</strong></span>
                 <span class="text-emerald-600 font-bold flex items-center gap-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Online
+                    Academic Counselor
                 </span>
             </div>
         </div>
@@ -254,7 +267,7 @@ function kdpChatbotWidget() {
                     this.messages.push({
                         role: 'assistant',
                         content: data.reply,
-                        model: data.model || 'Groq LLaMA 3.3',
+                        model: data.model || 'Groq LLaMA',
                         source: data.source || 'groq',
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     });
@@ -309,22 +322,37 @@ function kdpChatbotWidget() {
 
         renderMarkdown(text) {
             if (!text) return '';
-            let html = text
-                // Headers
-                .replace(/^### (.*$)/gim, '<h4 class="font-bold text-xs text-slate-900 mt-2 mb-1">$1</h4>')
-                .replace(/^## (.*$)/gim, '<h3 class="font-bold text-sm text-slate-900 mt-2 mb-1">$1</h3>')
-                // Bold
-                .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold text-slate-900">$1</strong>')
-                // Italic
-                .replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>')
-                // Markdown Links [text](url)
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" class="text-[#1e3a8a] font-bold underline hover:text-[#f97316] transition-colors">$1</a>')
-                // Bullet points
-                .replace(/^\s*• (.*$)/gim, '<div class="flex items-start gap-1.5 my-0.5"><span class="text-[#f97316] font-bold">•</span><span>$1</span></div>')
-                .replace(/^\s*\- (.*$)/gim, '<div class="flex items-start gap-1.5 my-0.5"><span class="text-[#f97316] font-bold">•</span><span>$1</span></div>')
-                // Line breaks
-                .replace(/\n/gim, '<br>');
-            return html;
+            try {
+                // 1. Normalize unicode bullets into markdown dashes so lists render as clean <ul><li>
+                let normalized = text.replace(/^[\s]*[•·●○▪▫]\s*/gm, '- ');
+
+                // 2. Auto-link bare portal relative paths (e.g. " /alumni " -> " [/alumni](/alumni) ")
+                normalized = normalized.replace(/(^|[^(\[])(\/(?:alumni|mentorship|placement|documents|tools|donations|events|pitches|awards|card|faculty|jobs|stories|academic-calendar|contact|dashboard)[a-zA-Z0-9_\-\/]*)/g, function(match, prefix, path) {
+                    return prefix + '[' + path + '](' + path + ')';
+                });
+
+                if (typeof marked !== 'undefined') {
+                    marked.setOptions({
+                        gfm: true,
+                        breaks: false
+                    });
+                    let parsed = marked.parse(normalized);
+                    // Wrap tables in responsive overflow container
+                    parsed = parsed.replace(/<table>/gi, '<div class="table-responsive"><table>');
+                    parsed = parsed.replace(/<\/table>/gi, '</table></div>');
+                    // Ensure external links open in new tab
+                    parsed = parsed.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"/gi, function(match, url) {
+                        if (url.startsWith('http://') || url.startsWith('https://')) {
+                            return '<a href="' + url + '" target="_blank" rel="noopener noreferrer"';
+                        }
+                        return match;
+                    });
+                    return parsed;
+                }
+            } catch (e) {
+                console.warn('marked.js parse error:', e);
+            }
+            return text.replace(/\n/g, '<br>');
         }
     };
 }

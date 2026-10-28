@@ -34,14 +34,24 @@
             </p>
             
             <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{{ route('register') }}" class="group inline-flex justify-center items-center bg-[#f97316] hover:bg-orange-600 text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] transition-all transform hover:-translate-y-0.5 tracking-wider uppercase font-heading">
-                    Join Alumni Network
-                    <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </a>
-                
-                <a href="{{ route('login') }}" class="group inline-flex justify-center items-center bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-[#1e3a8a] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-0.5 tracking-wider uppercase font-heading">
-                    Member Login &rarr;
-                </a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="group inline-flex justify-center items-center bg-[#f97316] hover:bg-orange-600 text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] transition-all transform hover:-translate-y-0.5 tracking-wider uppercase font-heading">
+                        Go to My Dashboard
+                        <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="{{ route('alumni.index') }}" class="group inline-flex justify-center items-center bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-[#1e3a8a] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-0.5 tracking-wider uppercase font-heading">
+                        🎓 Alumni Directory &rarr;
+                    </a>
+                @else
+                    <a href="{{ route('register') }}" class="group inline-flex justify-center items-center bg-[#f97316] hover:bg-orange-600 text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] transition-all transform hover:-translate-y-0.5 tracking-wider uppercase font-heading">
+                        Join Alumni Network
+                        <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    
+                    <a href="{{ route('login') }}" class="group inline-flex justify-center items-center bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-[#1e3a8a] text-white font-bold text-sm sm:text-base py-3.5 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-0.5 tracking-wider uppercase font-heading">
+                        Member Login &rarr;
+                    </a>
+                @endauth
             </div>
             
         </div>
@@ -165,6 +175,62 @@
                     </div>
                     <span class="text-xs font-bold text-[#1e3a8a] group-hover:text-[#f97316] mt-4 flex items-center gap-1 font-heading">
                         Connect Now &rarr;
+                    </span>
+                </a>
+
+                <!-- AI Academic Counselor -->
+                <a href="{{ route('chatbot.index') }}" class="group bg-white rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 border border-slate-200/80 hover:border-[#1e3a8a] flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#1e3a8a] flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            🤖
+                        </div>
+                        <h4 class="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1e3a8a] mb-2">KDP Mitra (AI Counselor)</h4>
+                        <p class="text-slate-600 text-xs leading-relaxed">24/7 AI guide for GTU old papers (PYQs), exam results, ACPC D2D admissions, and campus services.</p>
+                    </div>
+                    <span class="text-xs font-bold text-[#1e3a8a] group-hover:text-[#f97316] mt-4 flex items-center gap-1 font-heading">
+                        Ask KDP Mitra &rarr;
+                    </span>
+                </a>
+
+                <!-- Tool Bank -->
+                <a href="{{ route('tools.index') }}" class="group bg-white rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 border border-slate-200/80 hover:border-[#1e3a8a] flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            🛠️
+                        </div>
+                        <h4 class="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1e3a8a] mb-2">Book &amp; Tool Bank</h4>
+                        <p class="text-slate-600 text-xs leading-relaxed">Claim free mini-drafters, Casio scientific calculators, textbooks, and Arduino kits passed on by alumni.</p>
+                    </div>
+                    <span class="text-xs font-bold text-[#1e3a8a] group-hover:text-[#f97316] mt-4 flex items-center gap-1 font-heading">
+                        Explore Tool Bank &rarr;
+                    </span>
+                </a>
+
+                <!-- Student Pitch Deck -->
+                <a href="{{ route('pitches.index') }}" class="group bg-white rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 border border-slate-200/80 hover:border-[#1e3a8a] flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            💡
+                        </div>
+                        <h4 class="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1e3a8a] mb-2">Student Pitch Deck</h4>
+                        <p class="text-slate-600 text-xs leading-relaxed">Support student engineering prototypes, Robocon rigs, and startup projects with alumni seed grants.</p>
+                    </div>
+                    <span class="text-xs font-bold text-[#1e3a8a] group-hover:text-[#f97316] mt-4 flex items-center gap-1 font-heading">
+                        View Innovation Pitches &rarr;
+                    </span>
+                </a>
+
+                <!-- Giving Back Hub -->
+                <a href="{{ route('donations.index') }}" class="group bg-white rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 border border-slate-200/80 hover:border-[#1e3a8a] flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            🎁
+                        </div>
+                        <h4 class="font-heading text-lg font-bold text-slate-900 group-hover:text-[#1e3a8a] mb-2">Giving Back Hub</h4>
+                        <p class="text-slate-600 text-xs leading-relaxed">Contribute to student scholarship funds and computer lab upgrades with instant 80G tax exemption receipts.</p>
+                    </div>
+                    <span class="text-xs font-bold text-[#1e3a8a] group-hover:text-[#f97316] mt-4 flex items-center gap-1 font-heading">
+                        Support Alma Mater &rarr;
                     </span>
                 </a>
             </div>

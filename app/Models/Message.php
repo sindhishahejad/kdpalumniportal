@@ -13,6 +13,11 @@ class Message extends Model
         'sender_id',
         'recipient_id',
         'message',
+        'is_read',
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
     ];
 
     public function sender()

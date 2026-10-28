@@ -303,6 +303,25 @@
                 </div>
             </a>
 
+            <!-- Card 13: Digital E-Library & Project Vault -->
+            <a href="{{ route('elibrary.index') }}" class="group p-5 bg-white rounded-2xl border border-slate-100 hover:border-indigo-600 hover:shadow-lg transition-all flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform"></div>
+                <div>
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-700 rounded-xl flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 transition-transform text-xl">
+                        📖
+                    </div>
+                    <div class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-extrabold uppercase tracking-wider mb-2 font-heading">
+                        Project Vault &amp; E-Books
+                    </div>
+                    <h3 class="text-[#0f2042] font-bold text-base mb-1 font-heading group-hover:text-indigo-700 transition-colors">Digital E-Library</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Download GTU diploma e-books, previous capstone project synopses, and lab manuals.</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-700 font-heading">
+                    <span>Open E-Library</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </a>
+
         </div>
     </div>
 

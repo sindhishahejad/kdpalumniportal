@@ -201,6 +201,20 @@
                 </div>
             </a>
 
+            <!-- Module 10: Digital E-Library & Capstone Vault -->
+            <a href="{{ route('elibrary.index') }}" class="group p-6 bg-white rounded-3xl border border-slate-100 hover:border-[#0f2042] hover:shadow-lg transition-all flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-700 rounded-2xl flex items-center justify-center shadow-xs mb-4 group-hover:scale-110 transition-transform text-xl">
+                        📖
+                    </div>
+                    <h3 class="text-[#0f2042] font-bold text-lg mb-1 font-heading group-hover:text-indigo-700 transition-colors">Digital E-Library &amp; Vault</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Publish department capstone project synopses, GTU e-books, and lab reference manual sheets.</p>
+                </div>
+                <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-indigo-700 group-hover:translate-x-1 transition-transform font-heading">
+                    Manage E-Library &rarr;
+                </div>
+            </a>
+
         </div>
     </div>
 

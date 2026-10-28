@@ -176,6 +176,13 @@ Route::put('/events/{event}', [EventController::class, 'update'])->name('events.
 Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy')->middleware(['auth']);
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show')->middleware(['auth']);
 
+// 📖 Digital E-Library & Project Vault (/e-library)
+Route::get('/e-library', [\App\Http\Controllers\ELibraryController::class, 'index'])->name('elibrary.index');
+Route::get('/e-library/{identifier}', [\App\Http\Controllers\ELibraryController::class, 'show'])->name('elibrary.show');
+Route::get('/e-library/{item}/download', [\App\Http\Controllers\ELibraryController::class, 'download'])->name('elibrary.download');
+Route::post('/e-library', [\App\Http\Controllers\ELibraryController::class, 'store'])->name('elibrary.store')->middleware('auth');
+Route::delete('/e-library/{item}', [\App\Http\Controllers\ELibraryController::class, 'destroy'])->name('elibrary.destroy')->middleware('auth');
+
 // Standard User & Event Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

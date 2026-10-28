@@ -426,6 +426,7 @@
                             <li><a href="{{ route('reunions.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎉</span> Batch Reunions &amp; RSVPs</a></li>
                             <li><a href="{{ route('pitches.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💡</span> Student Project Pitches</a></li>
                             <li><a href="{{ route('events.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📅</span> Campus Events &amp; Activities</a></li>
+                            <li><a href="{{ route('elibrary.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📖</span> Digital E-Library &amp; Capstones</a></li>
                             <li><a href="{{ route('resources.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>📚</span> Study Resources &amp; Notes</a></li>
                             <li><a href="{{ route('stories.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🌟</span> Alumni Success Stories</a></li>
                             <li><a href="{{ route('placement.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🏢</span> Training &amp; Placement (TPO)</a></li>
@@ -503,6 +504,7 @@
                 <a href="{{ route('mentorship.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🤝 Mentorship</a>
                 <a href="{{ route('donations.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🎁 Giving Back</a>
                 <a href="{{ route('events.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">📅 Campus Events &amp; Activities</a>
+                <a href="{{ route('elibrary.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">📖 Digital E-Library &amp; Vault</a>
                 <a href="{{ route('stories.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🌟 Success Stories</a>
                 <a href="{{ route('placement.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🏢 Training &amp; Placement (TPO)</a>
                 <a href="{{ route('faculty.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">👥 Faculty &amp; HOD Directory</a>

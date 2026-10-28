@@ -146,10 +146,81 @@ class WhatsAppAlertService
             $msg .= "💬 *Recruiter Note:* \"{$feedback}\"\n\n";
         }
 
-        $msg .= "Check your full status & updates on the portal: " . route('jobs.my-applications') . "\n"
-            . "_Best of luck for your career progression!_";
+        $msg .= "Check your full status & updates on the portal: " . route('jobs.my-applications') . "\n\n"
+            . "_Best of luck for your career progression!_\n"
+            . "_કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961_";
 
         return $msg;
+    }
+
+    /**
+     * Template: New Job Referral Application Alert for Alumni Job Poster.
+     */
+    public static function jobReferralNewSubmissionMessage(JobReferral $referral): string
+    {
+        $posterName = $referral->jobPosting->user->name ?? 'KDP Alumnus';
+        $jobTitle = $referral->jobPosting->title ?? 'Engineering Role';
+        $company = $referral->jobPosting->company ?? 'Enterprise';
+        $dept = $referral->department ? " ({$referral->department})" : '';
+        $cpiInfo = $referral->cpi ? " • CPI: {$referral->cpi}" : '';
+        $pipelineUrl = route('jobs.pipeline', ['job_id' => $referral->job_posting_id]);
+
+        return "🏛️ *K.D. Polytechnic, Patan — New Referral Application*\n\n"
+            . "Namaste Er. *{$posterName}*!\n\n"
+            . "Student *{$referral->candidate_name}*{$dept}{$cpiInfo} has requested an internal employee referral for your posted role:\n\n"
+            . "🎯 *Position:* {$jobTitle}\n"
+            . "🏢 *Company:* {$company}\n"
+            . "📧 *Email:* {$referral->candidate_email}\n"
+            . ($referral->candidate_phone ? "📱 *Phone:* {$referral->candidate_phone}\n" : "")
+            . "\n📥 *Review Candidate Profile & Resume in Pipeline:*\n{$pipelineUrl}\n\n"
+            . "_Empowering KDP polytechnic talent across Gujarat industries._\n"
+            . "_કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961_";
+    }
+
+    /**
+     * Dispatch WhatsApp alert to job poster when a new referral is submitted.
+     */
+    public static function dispatchNewReferralAlert(JobReferral $referral): ?array
+    {
+        $poster = $referral->jobPosting->user ?? null;
+        if (!$poster) {
+            return null;
+        }
+
+        $phone = $poster->phone ?? optional($poster->profile)->phone ?? null;
+        if (!$phone) {
+            return null;
+        }
+
+        $message = self::jobReferralNewSubmissionMessage($referral);
+        return self::send(
+            $phone,
+            $message,
+            'job_referral_submitted',
+            $poster->name,
+            $referral->user_id
+        );
+    }
+
+    /**
+     * Dispatch WhatsApp status update to the candidate when an alumni updates their referral status.
+     */
+    public static function dispatchReferralStatusUpdate(JobReferral $referral, string $status, ?string $feedback = null): ?array
+    {
+        $phone = $referral->candidate_phone ?: ($referral->user->phone ?? null);
+        $message = self::jobReferralStatusMessage($referral, $status, $feedback);
+
+        if ($phone) {
+            return self::send(
+                $phone,
+                $message,
+                'job_referral_status_updated',
+                $referral->candidate_name,
+                auth()->id()
+            );
+        }
+
+        return null;
     }
 
     /**

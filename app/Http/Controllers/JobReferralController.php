@@ -39,6 +39,11 @@ class JobReferralController extends Controller
             'candidate_email' => ['required', 'email', 'max:255'],
             'candidate_phone' => ['nullable', 'string', 'max:25'],
             'candidate_linkedin' => ['nullable', 'url', 'max:255'],
+            'department' => ['nullable', 'string', 'max:100'],
+            'enrollment_no' => ['nullable', 'string', 'max:50'],
+            'graduation_year' => ['nullable', 'string', 'max:20'],
+            'cpi' => ['nullable', 'string', 'max:10'],
+            'portfolio_url' => ['nullable', 'url', 'max:255'],
             'cover_note' => ['nullable', 'string', 'max:2000'],
             'resume' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'], // 5MB max
         ]);
@@ -54,6 +59,11 @@ class JobReferralController extends Controller
             'candidate_email' => $request->candidate_email,
             'candidate_phone' => $request->candidate_phone,
             'candidate_linkedin' => $request->candidate_linkedin,
+            'department' => $request->department,
+            'enrollment_no' => $request->enrollment_no,
+            'graduation_year' => $request->graduation_year,
+            'cpi' => $request->cpi,
+            'portfolio_url' => $request->portfolio_url,
             'resume_path' => $resumePath,
             'cover_note' => $request->cover_note,
             'status' => 'pending',
@@ -66,6 +76,9 @@ class JobReferralController extends Controller
                 "{$user->name} requested a referral for '{$job->title}' at {$job->company}.",
                 route('jobs.pipeline', ['job_id' => $job->id])
             ));
+
+            // Automated WhatsApp alert to alumni job poster
+            \App\Services\WhatsAppAlertService::dispatchNewReferralAlert($referral);
         }
 
         return back()->with('success', 'Your resume and referral request have been submitted to the alumni poster!');
@@ -211,6 +224,9 @@ class JobReferralController extends Controller
                 $msg,
                 route('jobs.my-applications')
             ));
+
+            // Automated WhatsApp status alert to candidate
+            \App\Services\WhatsAppAlertService::dispatchReferralStatusUpdate($referral, $request->status, $request->feedback);
         }
 
         return back()->with('success', 'Candidate referral status updated successfully!');

@@ -326,12 +326,39 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Phone / WhatsApp</label>
-                                <input type="text" name="candidate_phone" value="{{ auth()->user()->profile->phone ?? '' }}" placeholder="+91 98765 43210" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                                <input type="text" name="candidate_phone" value="{{ auth()->user()->phone ?? '' }}" placeholder="+91 98765 43210" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">LinkedIn or Portfolio URL</label>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">LinkedIn URL</label>
                                 <input type="url" name="candidate_linkedin" value="{{ auth()->user()->profile->linkedin ?? '' }}" placeholder="https://linkedin.com/in/username" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Engineering Branch / Dept</label>
+                                <input type="text" name="department" value="{{ auth()->user()->department ?? '' }}" placeholder="e.g. Computer Engineering" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">GTU Enrollment No</label>
+                                <input type="text" name="enrollment_no" value="{{ auth()->user()->entry_no ?? '' }}" placeholder="e.g. 216220107001" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Passing Year / Semester</label>
+                                <input type="text" name="graduation_year" value="{{ auth()->user()->graduation_year ?? '' }}" placeholder="e.g. 2024 or Sem 6" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">GTU CPI / CGPA / SPI</label>
+                                <input type="text" name="cpi" placeholder="e.g. 8.45" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">GitHub / Project Portfolio URL</label>
+                            <input type="url" name="portfolio_url" placeholder="https://github.com/username or portfolio link" class="w-full text-sm border-gray-300 rounded-lg shadow-sm focus:border-[#1c3272] focus:ring-[#1c3272]">
                         </div>
 
                         <div>

@@ -4,16 +4,16 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
     <!-- Top Sub-Navigation -->
-    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
-        <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all">
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-200 font-heading">
+        <a href="{{ route('jobs.index') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-[#0f2042] hover:bg-slate-100 transition-all">
             &larr; Browse All Opportunities
         </a>
-        <a href="{{ route('jobs.my-applications') }}" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#1c3272] text-white shadow-sm">
+        <a href="{{ route('jobs.my-applications') }}" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#0f2042] text-white shadow-xs">
             My Referral Requests
         </a>
         @auth
             @if(in_array(auth()->user()->role, ['admin', 'alumni', 'faculty']))
-                <a href="{{ route('jobs.pipeline') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all">
+                <a href="{{ route('jobs.pipeline') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-[#0f2042] hover:bg-slate-100 transition-all">
                     Referral Review Pipeline
                 </a>
             @endif
@@ -21,11 +21,17 @@
     </div>
 
     <!-- Header Section -->
-    <div class="mb-8">
-        <span class="text-xs font-bold uppercase tracking-widest text-[#f97316]">Career Mentorship</span>
-        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] mt-1">My Referral & Resume Applications</h1>
-        <p class="text-gray-500 mt-2 text-sm max-w-2xl">
-            Track your alumni job referral requests, monitor employer screening status, and view guidance notes left by alumni mentors.
+    <div class="mb-8 pb-6 border-b border-slate-200">
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[#c2410c] text-xs font-bold tracking-wide font-heading">
+                <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+            </span>
+            <span class="text-xs font-bold uppercase tracking-widest text-[#f97316] font-heading">Career Mentorship &amp; Placement</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f2042] font-heading tracking-tight mt-1">My Referral &amp; Resume Applications</h1>
+        <p class="text-slate-600 mt-2 text-sm max-w-2xl leading-relaxed">
+            Track your alumni job referral requests, monitor employer screening status, and view guidance notes left by alumni mentors across Gujarat industrial corridors.
         </p>
     </div>
 
@@ -65,15 +71,49 @@
                                 {{ $referral->jobPosting->location ?? 'Gujarat' }} &bull;
                                 Posted by: <span class="font-semibold text-gray-700">{{ $referral->jobPosting->user->name ?? 'KDP Alumnus' }}</span>
                             </p>
+
+                            <!-- Academic Credentials Submitted -->
+                            <div class="flex items-center gap-2 mt-2 flex-wrap text-[11px]">
+                                @if($referral->department)
+                                    <span class="inline-flex items-center gap-1 bg-blue-50 text-[#1e3a8a] border border-blue-200 px-2.5 py-0.5 rounded-full font-bold">
+                                        <span>🎓</span> {{ $referral->department }}
+                                    </span>
+                                @endif
+                                @if($referral->enrollment_no)
+                                    <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-full font-mono">
+                                        GTU: {{ $referral->enrollment_no }}
+                                    </span>
+                                @endif
+                                @if($referral->cpi)
+                                    <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
+                                        ⭐ CPI: {{ $referral->cpi }}
+                                    </span>
+                                @endif
+                                @if($referral->portfolio_url)
+                                    <a href="{{ $referral->portfolio_url }}" target="_blank" class="inline-flex items-center gap-1 text-purple-700 hover:underline font-semibold">
+                                        <span>🔗</span> Portfolio
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2 shrink-0">
+                    <div class="flex items-center gap-2 shrink-0 flex-wrap">
                         <a href="{{ route('jobs.referrals.download-resume', $referral->id) }}" 
-                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#1c3272] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#1c3272] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             Submitted Resume
                         </a>
+
+                        @php
+                            $mentorPhone = $referral->jobPosting->user->phone ?? null;
+                            $followUpWaUrl = $mentorPhone ? \App\Services\WhatsAppAlertService::generateClickToChatUrl($mentorPhone, "Namaste Er. " . ($referral->jobPosting->user->name ?? 'Mentor') . ", I submitted a referral request for " . ($referral->jobPosting->title ?? 'Opening') . " on the KDP Alumni Portal...") : null;
+                        @endphp
+                        @if($followUpWaUrl)
+                            <a href="{{ $followUpWaUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors border border-emerald-200">
+                                <span>📱</span> WhatsApp Poster
+                            </a>
+                        @endif
                     </div>
                 </div>
 

@@ -49,30 +49,47 @@ class GroqChatService
                 'content' => $userMessage
             ];
 
-            $response = Http::withToken($apiKey)
-                ->timeout(25)
-                ->post($endpoint, [
-                    'model' => $model,
-                    'messages' => $messages,
-                    'temperature' => (float) $temperature,
-                    'max_tokens' => (int) $maxTokens,
-                ]);
+            $candidateModels = array_unique(array_filter([
+                $model,
+                'openai/gpt-oss-120b',
+                'qwen/qwen3.8-27b',
+                'openai/gpt-oss-20b',
+                'llama-3.3-70b-versatile',
+                'llama-3.1-8b-instant',
+            ]));
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $reply = $data['choices'][0]['message']['content'] ?? null;
+            foreach ($candidateModels as $candidateModel) {
+                $response = Http::withToken($apiKey)
+                    ->timeout(25)
+                    ->post($endpoint, [
+                        'model' => $candidateModel,
+                        'messages' => $messages,
+                        'temperature' => (float) $temperature,
+                        'max_tokens' => (int) $maxTokens,
+                    ]);
 
-                if (!empty($reply)) {
-                    return [
-                        'success' => true,
-                        'reply' => trim($reply),
-                        'model' => $model,
-                        'source' => 'groq',
-                    ];
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $reply = $data['choices'][0]['message']['content'] ?? null;
+
+                    if (!empty($reply)) {
+                        return [
+                            'success' => true,
+                            'reply' => trim($reply),
+                            'model' => $candidateModel,
+                            'source' => 'groq',
+                        ];
+                    }
+                }
+
+                // If error is not model-related (e.g. 401 unauthorized), break early
+                if ($response->status() === 401) {
+                    Log::warning('Groq API authentication failed (401). Please check GROQ_API_KEY in .env.');
+                    break;
                 }
             }
 
-            Log::warning('Groq API response error: ' . $response->status() . ' - ' . $response->body());
+            Log::warning('Groq API response error: ' . ($response->status() ?? 'none') . ' - ' . ($response->body() ?? 'no body'));
             return $this->getInstitutionalFallback($userMessage, $user, 'Groq API service temporarily unavailable');
 
         } catch (\Throwable $e) {

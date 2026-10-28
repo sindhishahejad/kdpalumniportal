@@ -4,11 +4,17 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" x-data="{ showPlanModal: false }">
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-gray-200 gap-4">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b border-slate-200 gap-4">
         <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-[#f97316]">Alumni Milestone Gatherings</span>
-            <h1 class="text-3xl sm:text-4xl font-serif font-bold text-[#0f172a] mt-1">Batch Reunion Planner & Homecomings</h1>
-            <p class="text-gray-500 mt-2 text-sm max-w-2xl">
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[#c2410c] text-xs font-bold tracking-wide font-heading">
+                    <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                    કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+                </span>
+                <span class="text-xs font-bold uppercase tracking-widest text-[#f97316] font-heading">Alumni Milestone Gatherings</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#0f2042] font-heading tracking-tight mt-1">Batch Reunion Planner &amp; Homecomings</h1>
+            <p class="text-slate-600 mt-2 text-sm max-w-2xl leading-relaxed">
                 Reconnect with your diploma classmates, celebrate milestone anniversaries (Silver Jubilee, 10-Year, 5-Year), track attendee RSVPs, and share throwback campus memories.
             </p>
         </div>
@@ -17,7 +23,7 @@
             @if(in_array(auth()->user()->role, ['admin', 'alumni', 'faculty']))
                 <button type="button" 
                         @click="showPlanModal = true" 
-                        class="inline-flex items-center gap-2 bg-[#1c3272] hover:bg-[#152554] text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all whitespace-nowrap">
+                        class="inline-flex items-center gap-2 bg-[#0f2042] hover:bg-[#1e3a8a] text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-xl shadow-xs transition-all whitespace-nowrap font-heading">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Plan a Batch Reunion
                 </button>

@@ -411,15 +411,15 @@
 
             <!-- Desktop Navigation Bar -->
             <div class="hidden md:flex items-center justify-between h-14 font-heading">
-                <!-- Nav Links -->
-                <div class="flex items-center space-x-3.5 lg:space-x-6 xl:space-x-7 h-full">
-                    <a href="{{ route('dashboard') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('dashboard') ? 'text-[#f97316] active' : '' }}">
+                <!-- Nav Links (Properly distributed with balanced breathing room) -->
+                <div class="flex-1 flex items-center justify-between gap-2 lg:gap-3 xl:gap-5 mr-4 lg:mr-6 xl:mr-8 h-full">
+                    <a href="{{ route('dashboard') }}" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider h-full flex items-center px-1 lg:px-2 whitespace-nowrap {{ request()->routeIs('dashboard') ? 'text-[#f97316] active' : '' }}">
                         Home
                     </a>
                     
                     <!-- Services Dropdown -->
                     <div class="group relative flex items-center cursor-pointer h-full">
-                        <a href="#" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide flex items-center h-full">
+                        <a href="#" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider flex items-center h-full px-1 lg:px-2 whitespace-nowrap">
                             Services 
                             <svg class="w-3.5 h-3.5 ml-1 stroke-2 text-slate-500 group-hover:text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
@@ -446,29 +446,29 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('donations.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('donations.*') ? 'text-[#f97316] active' : '' }}">
+                    <a href="{{ route('donations.index') }}" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider h-full flex items-center px-1 lg:px-2 whitespace-nowrap {{ request()->routeIs('donations.*') ? 'text-[#f97316] active' : '' }}">
                         Giving Back
                     </a>
 
-                    <a href="{{ route('awards.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('awards.*') ? 'text-[#f97316] active' : '' }}">
+                    <a href="{{ route('awards.index') }}" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider h-full flex items-center px-1 lg:px-2 whitespace-nowrap {{ request()->routeIs('awards.*') ? 'text-[#f97316] active' : '' }}">
                         Awards &amp; Honors
                     </a>
 
-                    <a href="{{ route('gallery.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('gallery.*') ? 'text-[#f97316] active' : '' }}">
+                    <a href="{{ route('gallery.index') }}" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider h-full flex items-center px-1 lg:px-2 whitespace-nowrap {{ request()->routeIs('gallery.*') ? 'text-[#f97316] active' : '' }}">
                         Campus Time-Machine
                     </a>
 
-                    <a href="{{ route('labs.index') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('labs.*') ? 'text-[#f97316] active' : '' }}">
+                    <a href="{{ route('labs.index') }}" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider h-full flex items-center px-1 lg:px-2 whitespace-nowrap {{ request()->routeIs('labs.*') ? 'text-[#f97316] active' : '' }}">
                         Labs &amp; Workshops
                     </a>
 
-                    <a href="{{ route('contact') }}" class="kdp-nav-link text-slate-800 text-[13px] lg:text-[14px] font-semibold uppercase tracking-wide h-full flex items-center {{ request()->routeIs('contact') ? 'text-[#f97316] active' : '' }}">
+                    <a href="{{ route('contact') }}" class="kdp-nav-link text-slate-800 text-[12px] lg:text-[13px] xl:text-[14px] font-semibold uppercase tracking-wider h-full flex items-center px-1 lg:px-2 whitespace-nowrap {{ request()->routeIs('contact') ? 'text-[#f97316] active' : '' }}">
                         Contact
                     </a>
                 </div>
 
                 <!-- Profile Dropdown / Auth (Desktop Right) -->
-                <div class="flex items-center shrink-0 pl-3">
+                <div class="flex items-center shrink-0">
                     @auth
                         @php
                             $globalUnreadMsgCount = Auth::user()->unreadMessagesCount();

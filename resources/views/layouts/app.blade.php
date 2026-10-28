@@ -394,6 +394,17 @@
                 </button>
                 <div class="flex items-center gap-2">
                     @auth
+                        @php
+                            $globalUnreadMsgCountMobile = Auth::user()->unreadMessagesCount();
+                        @endphp
+                        <a href="{{ route('messages.inbox') }}" class="relative p-1.5 text-slate-700 hover:text-[#1e3a8a] transition-colors" title="Messages & Inbox">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                            @if($globalUnreadMsgCountMobile > 0)
+                                <span class="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-[#f97316] text-white text-[9px] font-black shadow-sm animate-pulse border border-white">
+                                    {{ $globalUnreadMsgCountMobile > 9 ? '9+' : "+{$globalUnreadMsgCountMobile}" }}
+                                </span>
+                            @endif
+                        </a>
                         <a href="{{ route('dashboard') }}" class="text-xs font-bold text-[#1e3a8a] uppercase tracking-wider">Dashboard &rarr;</a>
                     @else
                         <a href="{{ route('login') }}" class="bg-[#1e3a8a] hover:bg-blue-900 text-white text-xs font-bold py-1.5 px-3.5 rounded-lg uppercase tracking-wider">Login / Register</a>
@@ -462,16 +473,48 @@
                 <!-- Profile Dropdown / Auth (Desktop Right) -->
                 <div class="flex items-center shrink-0 pl-3">
                     @auth
+                        @php
+                            $globalUnreadMsgCount = Auth::user()->unreadMessagesCount();
+                        @endphp
+
+                        <!-- Direct Messenger Icon Shortcut with Pulse Notification Bubble -->
+                        <a href="{{ route('messages.inbox') }}" 
+                           class="relative p-2 rounded-xl text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-100 transition-colors mr-2 cursor-pointer flex items-center justify-center border border-transparent hover:border-slate-200"
+                           title="Messages &amp; Campus Inbox @if($globalUnreadMsgCount > 0)({{ $globalUnreadMsgCount }} unread)@endif">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            @if($globalUnreadMsgCount > 0)
+                                <span class="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-[#f97316] text-white text-[9px] font-black shadow-sm animate-pulse border-2 border-white">
+                                    {{ $globalUnreadMsgCount > 9 ? '9+' : "+{$globalUnreadMsgCount}" }}
+                                </span>
+                            @endif
+                        </a>
+
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center gap-2 py-1.5 px-3 rounded-xl hover:bg-slate-100 text-slate-700 hover:text-[#1e3a8a] text-xs font-bold uppercase tracking-wider focus:outline-none cursor-pointer transition-colors border border-transparent hover:border-slate-200">
-                                <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center text-xs font-black shrink-0">
-                                    @if(Auth::user()->isAdmin()) 👑
-                                    @elseif(Auth::user()->role === 'faculty') 🏛️
-                                    @elseif(Auth::user()->role === 'student') 🎒
-                                    @else 🎓
+                                <div class="relative shrink-0">
+                                    <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center text-xs font-black shrink-0">
+                                        @if(Auth::user()->isAdmin()) 👑
+                                        @elseif(Auth::user()->role === 'faculty') 🏛️
+                                        @elseif(Auth::user()->role === 'student') 🎒
+                                        @else 🎓
+                                        @endif
+                                    </span>
+                                    @if($globalUnreadMsgCount > 0)
+                                        <span class="absolute -top-1.5 -right-1.5 flex h-3.5 min-w-3.5 px-0.5 items-center justify-center rounded-full bg-[#f97316] text-white text-[8px] font-black shadow-xs animate-pulse border border-white">
+                                            {{ $globalUnreadMsgCount > 9 ? '9+' : $globalUnreadMsgCount }}
+                                        </span>
                                     @endif
-                                </span>
+                                </div>
                                 <span class="truncate max-w-[130px] lg:max-w-[170px] xl:max-w-[220px]" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
+                                
+                                @if($globalUnreadMsgCount > 0)
+                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[#f97316] text-white shadow-2xs shrink-0 animate-pulse">
+                                        {{ $globalUnreadMsgCount > 9 ? '9+' : "+{$globalUnreadMsgCount}" }}
+                                    </span>
+                                @endif
+
                                 <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                             <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-1.5 border border-slate-100 z-50 text-xs font-semibold">
@@ -486,7 +529,14 @@
                                 @endif
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">👤 Edit Profile</a>
                                 <a href="{{ route('id-card.show') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🪪 My Smart ID Card</a>
-                                <a href="{{ route('messages.inbox') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">💬 Messages &amp; Inbox</a>
+                                <a href="{{ route('messages.inbox') }}" class="flex items-center justify-between px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors">
+                                    <span class="flex items-center gap-2">💬 Messages &amp; Inbox</span>
+                                    @if($globalUnreadMsgCount > 0)
+                                        <span class="bg-[#f97316] text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-2xs animate-pulse">
+                                            {{ $globalUnreadMsgCount > 9 ? '9+' : "+{$globalUnreadMsgCount}" }}
+                                        </span>
+                                    @endif
+                                </a>
                                 <a href="{{ route('tools.my-donations') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛠️ My Donated Tools</a>
                                 <a href="{{ route('tools.my-requests') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">📦 My Tool Requests</a>
                                 <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-100 mt-1">
@@ -542,6 +592,16 @@
 
                 @auth
                     <div class="pt-2 border-t border-slate-100">
+                        <a href="{{ route('messages.inbox') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a] font-bold">
+                            <span class="flex items-center gap-2">💬 Messages &amp; Inbox</span>
+                            @if($globalUnreadMsgCountMobile > 0)
+                                <span class="bg-[#f97316] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs animate-pulse">
+                                    {{ $globalUnreadMsgCountMobile > 9 ? '9+' : "+{$globalUnreadMsgCountMobile}" }}
+                                </span>
+                            @endif
+                        </a>
+                        <a href="{{ route('tools.my-donations') }}" class="block px-3 py-2 text-xs font-semibold text-slate-700 hover:text-[#1e3a8a]">🛠️ My Donated Tools</a>
+                        <a href="{{ route('tools.my-requests') }}" class="block px-3 py-2 text-xs font-semibold text-slate-700 hover:text-[#1e3a8a]">📦 My Tool Requests</a>
                         <a href="{{ route('profile.edit') }}" class="block px-3 py-2 text-xs font-bold text-slate-600 hover:text-[#1e3a8a]">Signed in as {{ Auth::user()->name }} (Edit Profile)</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-1">
                             @csrf

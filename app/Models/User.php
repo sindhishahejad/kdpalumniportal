@@ -97,6 +97,14 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'recipient_id'); 
     }
 
+    /**
+     * Get count of unread incoming messages.
+     */
+    public function unreadMessagesCount(): int
+    {
+        return $this->receivedMessages()->where('is_read', false)->count();
+    }
+
     public function donations()
     {
         return $this->hasMany(Donation::class);

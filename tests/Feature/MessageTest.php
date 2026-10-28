@@ -144,4 +144,55 @@ class MessageTest extends TestCase
 
         $response->assertStatus(404);
     }
+
+    public function test_user_unread_messages_count_helper_and_navbar_notification_badge(): void
+    {
+        $user = User::factory()->create(['name' => 'Prof. Shahejad Sindhi', 'is_approved' => true, 'role' => 'faculty']);
+        $sender = User::factory()->create(['name' => 'Alumni Hardik', 'is_approved' => true, 'role' => 'alumni']);
+
+        $this->assertEquals(0, $user->unreadMessagesCount());
+
+        // Create 2 unread messages
+        Message::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $user->id,
+            'message' => 'First unread message',
+            'is_read' => false,
+        ]);
+        Message::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $user->id,
+            'message' => 'Second unread message',
+            'is_read' => false,
+        ]);
+
+        $this->assertEquals(2, $user->fresh()->unreadMessagesCount());
+
+        // Verify navbar renders +2 badge
+        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee('+2');
+        $response->assertSee('Messages &amp; Inbox', false);
+    }
+
+    public function test_navbar_notification_badge_shows_plus_nine_when_unread_count_exceeds_nine(): void
+    {
+        $user = User::factory()->create(['name' => 'Prof. Shahejad Sindhi', 'is_approved' => true, 'role' => 'faculty']);
+        $sender = User::factory()->create(['name' => 'Alumni Hardik', 'is_approved' => true, 'role' => 'alumni']);
+
+        for ($i = 0; $i < 12; $i++) {
+            Message::create([
+                'sender_id' => $sender->id,
+                'recipient_id' => $user->id,
+                'message' => "Message {$i}",
+                'is_read' => false,
+            ]);
+        }
+
+        $this->assertEquals(12, $user->fresh()->unreadMessagesCount());
+
+        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee('9+');
+    }
 }

@@ -387,24 +387,21 @@
             
             <!-- Mobile Menu Toggle & Auth -->
             <div class="md:hidden flex items-center justify-between py-2.5">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-700 hover:text-[#1e3a8a] p-1.5 focus:outline-none cursor-pointer">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="relative text-gray-700 hover:text-[#1e3a8a] p-1.5 focus:outline-none cursor-pointer">
                     <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
+                    @auth
+                        @if(Auth::user()->unreadMessagesCount() > 0)
+                            <span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#f97316] ring-2 ring-white animate-pulse"></span>
+                        @endif
+                    @endauth
                 </button>
                 <div class="flex items-center gap-2">
                     @auth
                         @php
                             $globalUnreadMsgCountMobile = Auth::user()->unreadMessagesCount();
                         @endphp
-                        <a href="{{ route('messages.inbox') }}" class="relative p-1.5 text-slate-700 hover:text-[#1e3a8a] transition-colors" title="Messages & Inbox">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                            @if($globalUnreadMsgCountMobile > 0)
-                                <span class="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-[#f97316] text-white text-[9px] font-black shadow-sm animate-pulse border border-white">
-                                    {{ $globalUnreadMsgCountMobile > 9 ? '9+' : "+{$globalUnreadMsgCountMobile}" }}
-                                </span>
-                            @endif
-                        </a>
                         <a href="{{ route('dashboard') }}" class="text-xs font-bold text-[#1e3a8a] uppercase tracking-wider">Dashboard &rarr;</a>
                     @else
                         <a href="{{ route('login') }}" class="bg-[#1e3a8a] hover:bg-blue-900 text-white text-xs font-bold py-1.5 px-3.5 rounded-lg uppercase tracking-wider">Login / Register</a>
@@ -476,20 +473,6 @@
                         @php
                             $globalUnreadMsgCount = Auth::user()->unreadMessagesCount();
                         @endphp
-
-                        <!-- Direct Messenger Icon Shortcut with Pulse Notification Bubble -->
-                        <a href="{{ route('messages.inbox') }}" 
-                           class="relative p-2 rounded-xl text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-100 transition-colors mr-2 cursor-pointer flex items-center justify-center border border-transparent hover:border-slate-200"
-                           title="Messages &amp; Campus Inbox @if($globalUnreadMsgCount > 0)({{ $globalUnreadMsgCount }} unread)@endif">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                            </svg>
-                            @if($globalUnreadMsgCount > 0)
-                                <span class="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-[#f97316] text-white text-[9px] font-black shadow-sm animate-pulse border-2 border-white">
-                                    {{ $globalUnreadMsgCount > 9 ? '9+' : "+{$globalUnreadMsgCount}" }}
-                                </span>
-                            @endif
-                        </a>
 
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center gap-2 py-1.5 px-3 rounded-xl hover:bg-slate-100 text-slate-700 hover:text-[#1e3a8a] text-xs font-bold uppercase tracking-wider focus:outline-none cursor-pointer transition-colors border border-transparent hover:border-slate-200">

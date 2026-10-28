@@ -9,16 +9,31 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        // Added 'comments.user' to eager loading for optimized performance
         $query = Post::with(['user.profile', 'comments.user'])->latest();
 
-        if ($request->has('type') && in_array($request->type, ['knowledge', 'challenge'])) {
+        // Type filter: knowledge vs challenge
+        if ($request->filled('type') && in_array($request->type, ['knowledge', 'challenge'])) {
             $query->where('type', $request->type);
         }
 
-        $posts = $query->paginate(10);
+        // Keyword search in title or body
+        if ($request->filled('q')) {
+            $search = trim($request->q);
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('body', 'like', "%{$search}%");
+            });
+        }
 
-        return view('posts.index', compact('posts'));
+        $counts = [
+            'all' => Post::count(),
+            'knowledge' => Post::where('type', 'knowledge')->count(),
+            'challenge' => Post::where('type', 'challenge')->count(),
+        ];
+
+        $posts = $query->paginate(10)->withQueryString();
+
+        return view('posts.index', compact('posts', 'counts'));
     }
 
     public function store(Request $request)
@@ -35,7 +50,7 @@ class PostController extends Controller
             'type' => $request->type,
         ]);
 
-        return redirect()->route('posts.index')->with('status', 'Post published successfully!');
+        return redirect()->route('posts.index')->with('status', 'Post published to the campus feed!');
     }
 
     public function destroy(Post $post)

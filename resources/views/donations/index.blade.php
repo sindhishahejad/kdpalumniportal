@@ -132,9 +132,10 @@
                                 </div>
                             </div>
 
-                            <button type="button" @click="selectedCampaign = '{{ $camp['title'] }}'; window.location.hash = 'donate-form'" 
+                            <button type="button" 
+                                    @click="openRazorpayPayment({ amount: 2500, purpose: 'giving_back', campaign: '{{ $camp['title'] }}' })" 
                                     class="w-full text-center text-xs font-bold uppercase tracking-wider text-white bg-[#1e3a8a] hover:bg-blue-900 py-2.5 rounded-xl shadow-xs transition-colors font-heading cursor-pointer flex items-center justify-center gap-1.5">
-                                <span>Support This Fund</span>
+                                <span>💳 Support with Razorpay</span>
                                 <span>&rarr;</span>
                             </button>
                         </div>
@@ -234,11 +235,19 @@
                             </label>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Submit Button with Razorpay Gateway Trigger -->
                         <div class="pt-2">
-                            <button type="submit" class="w-full bg-[#1e3a8a] hover:bg-blue-900 text-white font-bold text-xs uppercase tracking-wider py-3 px-4 rounded-xl shadow-md transition-all font-heading cursor-pointer flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                <span>Complete Contribution</span>
+                            <button type="button" 
+                                    @click="openRazorpayPayment({ 
+                                        amount: customAmount, 
+                                        purpose: 'giving_back', 
+                                        campaign: selectedCampaign, 
+                                        is_anonymous: $el.form.querySelector('input[name=is_anonymous]')?.checked, 
+                                        notes: $el.form.querySelector('input[name=notes]')?.value 
+                                    })"
+                                    class="w-full bg-[#1e3a8a] hover:bg-[#0f2042] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all font-heading cursor-pointer flex items-center justify-center gap-2">
+                                <span>🔒</span>
+                                <span>Pay Securely with Razorpay (₹<span x-text="Number(customAmount).toLocaleString('en-IN')"></span>)</span>
                             </button>
                         </div>
 

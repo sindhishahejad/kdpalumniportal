@@ -640,6 +640,9 @@
     <!-- 🤖 KDP Mitra AI Chatbot Floating Concierge -->
     <x-ai-chatbot-widget />
 
+    <!-- 💳 Unified Razorpay Payment Gateway Component -->
+    <x-razorpay-checkout />
+
     <!-- ⚡ Global AlumSmart Concierge Modal -->
     <x-alum-smart-modal />
 

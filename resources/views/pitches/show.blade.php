@@ -165,6 +165,92 @@
                     </div>
                 </div>
 
+                <!-- ========================================== -->
+                <!-- 🚀 ALUMNI SEED FUNDING & PROTOTYPE GRANTS -->
+                <!-- ========================================== -->
+                <div class="bg-gradient-to-br from-slate-900 via-[#0f2042] to-[#1e3a8a] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-blue-900/50 relative overflow-hidden" 
+                     x-data="{ grantAmount: 1000 }">
+                    
+                    <!-- Glow & Watermark -->
+                    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-300 border border-orange-500/30 font-heading">
+                                    🚀 Student Innovation Grant
+                                </span>
+                                <span class="text-[10px] text-blue-200 font-bold font-heading flex items-center gap-1">
+                                    <span>🔒</span> Razorpay Secured &bull; 80G Eligible
+                                </span>
+                            </div>
+                            <h3 class="text-lg sm:text-xl font-heading font-black text-white">
+                                Sponsor This Student Prototype
+                            </h3>
+                            <p class="text-xs text-blue-100 font-sans mt-0.5 max-w-xl leading-relaxed">
+                                Provide seed grant funding to help this student team purchase electronic sensors, IoT relays, raw prototype components, and development kits.
+                            </p>
+                        </div>
+
+                        <!-- Funds Metric Box -->
+                        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/15 shrink-0 text-center sm:text-right">
+                            <span class="text-[10px] uppercase font-bold text-blue-200 block font-heading">Seed Funds Raised</span>
+                            <span class="text-xl sm:text-2xl font-black font-heading text-amber-300">
+                                ₹{{ number_format($pitch->funds_raised, 2) }}
+                            </span>
+                            @if($pitch->funding_goal > 0)
+                                <span class="text-[10px] text-blue-200 block mt-0.5 font-mono">
+                                    Goal: ₹{{ number_format($pitch->funding_goal) }} ({{ $pitch->percentFunded() }}%)
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Preset Grant Buttons & Custom Input -->
+                    <div class="space-y-4 pt-2 border-t border-white/10">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-blue-200 mb-2 font-heading">
+                                Choose Seed Grant Amount:
+                            </label>
+                            <div class="grid grid-cols-4 gap-2 mb-3">
+                                @foreach([500, 1000, 2500, 5000] as $preset)
+                                    <button type="button" @click="grantAmount = {{ $preset }}"
+                                            class="py-2.5 px-2 rounded-xl text-xs font-bold font-heading uppercase transition-all cursor-pointer border text-center"
+                                            :class="grantAmount == {{ $preset }} ? 'bg-[#f97316] text-white border-[#f97316] shadow-md scale-102' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'">
+                                        ₹{{ $preset }}
+                                    </button>
+                                @endforeach
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <div class="relative flex-1">
+                                    <span class="absolute left-3.5 top-3 text-blue-300 font-bold text-xs font-heading">₹</span>
+                                    <input type="number" min="50" step="50" x-model="grantAmount" placeholder="Or enter custom grant amount"
+                                           class="w-full pl-8 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300/60 font-heading font-bold text-xs focus:bg-white/20 focus:border-amber-400 focus:ring-0">
+                                </div>
+
+                                <button type="button"
+                                        @click="openRazorpayPayment({
+                                            amount: grantAmount,
+                                            purpose: 'pitch_seed',
+                                            campaign: 'Student Innovation Grant: {{ addslashes($pitch->title) }}',
+                                            payable_type: 'App\\Models\\ProjectPitch',
+                                            payable_id: {{ $pitch->id }}
+                                        })"
+                                        class="bg-[#f97316] hover:bg-orange-600 text-white font-heading font-black text-xs uppercase tracking-wider px-6 py-3 rounded-xl shadow-lg hover:shadow-orange-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0">
+                                    <span>💳</span>
+                                    <span>Grant Seed Fund (Razorpay)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[10px] text-blue-200/80 pt-1">
+                            <span>⚡ 100% of seed funds empower this student innovation project</span>
+                            <span>Official 80G Tax Exemption Receipt generated instantly</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Guidance Section Anchor -->
                 <div id="guidance"></div>
 

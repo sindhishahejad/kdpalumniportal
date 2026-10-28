@@ -16,6 +16,14 @@ class ReunionRsvp extends Model
         'guests_count',
         'carpool_note',
         'nostalgic_quote',
+        'payment_status',
+        'amount_paid',
+        'donation_id',
+    ];
+
+    protected $casts = [
+        'amount_paid' => 'decimal:2',
+        'guests_count' => 'integer',
     ];
 
     public function reunion()
@@ -26,6 +34,22 @@ class ReunionRsvp extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function donation()
+    {
+        return $this->belongsTo(Donation::class);
+    }
+
+    public function totalFee(): int
+    {
+        $feePerPerson = $this->reunion?->fee_per_person ?? 0;
+        return (int) ($feePerPerson * (1 + ($this->guests_count ?? 0)));
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === 'paid' || $this->totalFee() === 0;
     }
 
     public function getStatusLabelAttribute(): string

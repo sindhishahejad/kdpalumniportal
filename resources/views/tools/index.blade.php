@@ -101,6 +101,100 @@
             </div>
         </div>
 
+        <!-- ============================================== -->
+        <!-- 💳 ALUMNI EQUIPMENT CASH SPONSORSHIP BANNER     -->
+        <!-- ============================================== -->
+        <div class="bg-gradient-to-r from-[#0f2042] via-[#1e3a8a] to-[#0f172a] rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-blue-900/40 relative overflow-hidden" 
+             x-data="{ sponsorKit: 'drafter', sponsorAmt: 350, customAmt: '' }">
+            
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="space-y-2 max-w-2xl">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30 font-heading">
+                            🎁 Cash Tool Sponsorship
+                        </span>
+                        <span class="text-[10px] text-blue-200 font-bold font-heading flex items-center gap-1">
+                            <span>🔒</span> Razorpay Secured &bull; 80G Tax Exemption
+                        </span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-heading font-black text-white">
+                        Don't have used tools at home? Sponsor fresh kits for juniors!
+                    </h3>
+                    <p class="text-xs sm:text-sm text-blue-100 font-sans leading-relaxed">
+                        Your direct financial contribution allows the college tool bank coordinator to purchase brand-new mini drafters, Casio scientific calculators, and Arduino kits for incoming polytechnic freshers.
+                    </p>
+
+                    <!-- Kit Selector Options -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+                        <button type="button" 
+                                @click="sponsorKit = 'drafter'; sponsorAmt = 350; customAmt = ''"
+                                class="p-2.5 rounded-xl border text-left transition-all cursor-pointer"
+                                :class="sponsorKit === 'drafter' ? 'bg-[#f97316] text-white border-[#f97316] shadow-md' : 'bg-white/10 text-blue-100 border-white/15 hover:bg-white/20'">
+                            <span class="block text-base">📐</span>
+                            <span class="block text-xs font-heading font-bold mt-1">Mini Drafter Kit</span>
+                            <span class="block text-[11px] font-mono text-amber-200">₹350</span>
+                        </button>
+
+                        <button type="button" 
+                                @click="sponsorKit = 'calculator'; sponsorAmt = 850; customAmt = ''"
+                                class="p-2.5 rounded-xl border text-left transition-all cursor-pointer"
+                                :class="sponsorKit === 'calculator' ? 'bg-[#f97316] text-white border-[#f97316] shadow-md' : 'bg-white/10 text-blue-100 border-white/15 hover:bg-white/20'">
+                            <span class="block text-base">🖩</span>
+                            <span class="block text-xs font-heading font-bold mt-1">Casio FX-991CW</span>
+                            <span class="block text-[11px] font-mono text-amber-200">₹850</span>
+                        </button>
+
+                        <button type="button" 
+                                @click="sponsorKit = 'arduino'; sponsorAmt = 1500; customAmt = ''"
+                                class="p-2.5 rounded-xl border text-left transition-all cursor-pointer"
+                                :class="sponsorKit === 'arduino' ? 'bg-[#f97316] text-white border-[#f97316] shadow-md' : 'bg-white/10 text-blue-100 border-white/15 hover:bg-white/20'">
+                            <span class="block text-base">⚡</span>
+                            <span class="block text-xs font-heading font-bold mt-1">Arduino IoT Kit</span>
+                            <span class="block text-[11px] font-mono text-amber-200">₹1,500</span>
+                        </button>
+
+                        <button type="button" 
+                                @click="sponsorKit = 'full_pack'; sponsorAmt = 3000; customAmt = ''"
+                                class="p-2.5 rounded-xl border text-left transition-all cursor-pointer"
+                                :class="sponsorKit === 'full_pack' ? 'bg-[#f97316] text-white border-[#f97316] shadow-md' : 'bg-white/10 text-blue-100 border-white/15 hover:bg-white/20'">
+                            <span class="block text-base">🎒</span>
+                            <span class="block text-xs font-heading font-bold mt-1">Full Fresher Pack</span>
+                            <span class="block text-[11px] font-mono text-amber-200">₹3,000</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pay CTA Column -->
+                <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/15 space-y-3 shrink-0 sm:min-w-[280px]">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-blue-200 font-heading font-bold uppercase tracking-wider text-[10px]">Sponsorship Value</span>
+                        <span class="text-2xl font-heading font-black text-amber-400" x-text="'₹' + Number(customAmt || sponsorAmt).toLocaleString('en-IN')"></span>
+                    </div>
+
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-blue-300 font-bold text-xs font-heading">₹</span>
+                        <input type="number" min="50" step="50" x-model="customAmt" placeholder="Custom Amount"
+                               class="w-full pl-7 pr-3 py-2 text-xs rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-300/60 font-heading font-bold focus:bg-white/20 focus:border-amber-400 focus:ring-0">
+                    </div>
+
+                    <button type="button" 
+                            @click="openRazorpayPayment({
+                                amount: customAmt ? parseFloat(customAmt) : sponsorAmt,
+                                purpose: 'tool_bank_sponsor',
+                                campaign: 'Pay-It-Forward Tool Bank: ' + (sponsorKit === 'drafter' ? 'Mini Drafter Kit' : sponsorKit === 'calculator' ? 'Casio FX-991 Calculator' : sponsorKit === 'arduino' ? 'Arduino IoT Kit' : 'Full Fresher Pack')
+                            })"
+                            class="w-full bg-[#f97316] hover:bg-orange-600 text-white font-heading font-black text-xs uppercase tracking-wider py-3 px-4 rounded-xl shadow-lg hover:shadow-orange-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <span>💳</span>
+                        <span>Sponsor via Razorpay</span>
+                    </button>
+
+                    <p class="text-[10px] text-blue-200/80 text-center font-sans">
+                        Instant 80G Tax Deduction PDF receipt &bull; 100% used for tool procurement
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Filter & Search Toolbar -->
         <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4">

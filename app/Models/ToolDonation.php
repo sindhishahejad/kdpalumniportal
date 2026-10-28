@@ -50,6 +50,11 @@ class ToolDonation extends Model
         return $this->hasMany(ToolDonationRequest::class);
     }
 
+    public function sponsorships()
+    {
+        return $this->morphMany(Donation::class, 'payable');
+    }
+
     public function gratitude()
     {
         return $this->hasOne(ToolDonationGratitude::class);

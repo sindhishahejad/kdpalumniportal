@@ -82,6 +82,19 @@
                         @if($myRsvp->guests_count > 0)
                             <span class="text-[11px] text-emerald-700 block mt-0.5">(+{{ $myRsvp->guests_count }} Guests)</span>
                         @endif
+                        @if($reunion->fee_per_person > 0)
+                            <div class="mt-2 pt-2 border-t border-emerald-200">
+                                @if($myRsvp->isPaid())
+                                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full inline-block">
+                                        ✓ Fee Paid: ₹{{ number_format($myRsvp->amount_paid) }}
+                                    </span>
+                                @else
+                                    <span class="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full inline-block">
+                                        ⚠️ Fee Pending: ₹{{ number_format($myRsvp->totalFee()) }}
+                                    </span>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 @endif
 
@@ -165,9 +178,46 @@
                                class="w-full text-xs text-gray-900 border-0 rounded-xl focus:ring-2 focus:ring-[#f97316]">
                     </div>
 
+                    @if($reunion->fee_per_person > 0)
+                        <div x-show="rsvpStatus === 'attending'" 
+                             class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 space-y-3">
+                            <div class="flex items-center justify-between text-xs">
+                                <div>
+                                    <span class="text-[10px] uppercase font-bold text-amber-300 block font-heading">Reunion Registration Fee</span>
+                                    <span class="text-xs text-blue-100 font-sans">
+                                        ₹{{ number_format($reunion->fee_per_person) }} per person
+                                    </span>
+                                </div>
+                                <span class="text-xs text-blue-200 font-mono">
+                                    Secure Razorpay Checkout
+                                </span>
+                            </div>
+
+                            @if($myRsvp && $myRsvp->isPaid())
+                                <div class="bg-emerald-500/20 border border-emerald-400/30 rounded-xl p-2.5 text-center text-xs font-bold text-emerald-200">
+                                    ✓ Registration fee already paid (₹{{ number_format($myRsvp->amount_paid) }})
+                                </div>
+                            @else
+                                <button type="button" 
+                                        @click="openRazorpayPayment({
+                                            amount: {{ $reunion->fee_per_person }} * (1 + Number($el.closest('form').querySelector('select[name=guests_count]')?.value || 0)),
+                                            purpose: 'reunion_fee',
+                                            campaign: 'Batch Reunion Fee: {{ addslashes($reunion->title) }}',
+                                            payable_type: 'App\\Models\\BatchReunion',
+                                            payable_id: {{ $reunion->id }},
+                                            guests_count: Number($el.closest('form').querySelector('select[name=guests_count]')?.value || 0)
+                                        })"
+                                        class="w-full bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-heading font-black uppercase tracking-wider py-3 px-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                    <span>💳</span>
+                                    <span>Pay Reunion Fee with Razorpay</span>
+                                </button>
+                            @endif
+                        </div>
+                    @endif
+
                     <div class="pt-2">
-                        <button type="submit" class="bg-[#f97316] hover:bg-[#ea580c] text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-xl shadow-lg transition-colors">
-                            {{ $myRsvp ? 'Update My RSVP Decision &rarr;' : 'Confirm My RSVP &rarr;' }}
+                        <button type="submit" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold uppercase tracking-wider py-2.5 px-6 rounded-xl border border-white/30 transition-colors">
+                            {{ $myRsvp ? 'Save RSVP Details &rarr;' : 'Save RSVP (Pay on Arrival) &rarr;' }}
                         </button>
                     </div>
                 </form>

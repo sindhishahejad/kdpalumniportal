@@ -49,4 +49,12 @@ return [
         'max_tokens' => (int) env('GROQ_MAX_TOKENS', 1024),
     ],
 
+    'razorpay' => [
+        'key_id' => env('RAZORPAY_KEY_ID', ''),
+        'key_secret' => env('RAZORPAY_KEY_SECRET', ''),
+        'currency' => env('RAZORPAY_CURRENCY', 'INR'),
+        'merchant_name' => 'K. D. Polytechnic, Patan',
+        'theme_color' => '#1e3a8a',
+    ],
+
 ];

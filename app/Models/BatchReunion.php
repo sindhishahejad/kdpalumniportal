@@ -59,6 +59,11 @@ class BatchReunion extends Model
         return $this->hasMany(ReunionMemory::class)->latest();
     }
 
+    public function payments()
+    {
+        return $this->morphMany(Donation::class, 'payable');
+    }
+
     public function userRsvp(?User $user)
     {
         if (!$user) {

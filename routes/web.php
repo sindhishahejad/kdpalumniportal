@@ -208,6 +208,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/giving-back', [DonationController::class, 'store'])->name('donations.store');
     Route::get('/giving-back/receipt/{donation}', [DonationController::class, 'downloadReceipt'])->name('donations.receipt');
 
+    // 💳 Unified Razorpay Payment Gateway Routes (Donations, Pitch Grants, Tool Bank, Reunion Fees)
+    Route::post('/payments/create-order', [\App\Http\Controllers\PaymentController::class, 'createOrder'])->name('payments.create-order');
+    Route::post('/payments/verify', [\App\Http\Controllers\PaymentController::class, 'verifyPayment'])->name('payments.verify');
+
     // 🗺️ Geographic Distribution Map & Regional Chapters
     Route::get('/chapters', [RegionalChapterController::class, 'index'])->name('chapters.index');
     Route::get('/chapters/{chapter:slug}', [RegionalChapterController::class, 'show'])->name('chapters.show');

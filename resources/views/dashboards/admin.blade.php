@@ -248,6 +248,23 @@
             </a>
         </div>
 
+        <!-- Faculty & HOD Directory Management Quick Access -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-[#0f2042] border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xl">👥</span>
+                    <h3 class="text-lg font-bold text-[#0f2042] font-heading">Department Faculty &amp; HOD Directory</h3>
+                    <span class="bg-blue-50 text-[#1e3a8a] text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border border-blue-200 font-heading">
+                        {{ $stats['total_faculty'] ?? \App\Models\FacultyMember::count() }} Faculty ({{ $stats['total_hods'] ?? \App\Models\FacultyMember::where('is_hod', true)->count() }} HODs)
+                    </span>
+                </div>
+                <p class="text-xs text-slate-500 font-sans">Add new faculty members, appoint Heads of Departments (HOD), update qualifications, teaching focus, email contacts, or remove profiles.</p>
+            </div>
+            <a href="{{ route('faculty.index') }}" class="bg-[#0f2042] hover:bg-[#1e3a8a] text-white font-bold py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-colors whitespace-nowrap font-heading shadow-xs flex items-center gap-1.5">
+                <span>Manage Faculty &amp; HODs &rarr;</span>
+            </a>
+        </div>
+
         <!-- Training & Placement (TPO) Quick Access -->
         <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-cyan-600 border border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>

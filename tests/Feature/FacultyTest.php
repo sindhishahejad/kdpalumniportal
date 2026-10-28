@@ -196,4 +196,25 @@ class FacultyTest extends TestCase
 
         $response->assertSessionHasErrors(['name', 'designation', 'department', 'qualification']);
     }
+
+    public function test_admin_dashboard_renders_faculty_management_card_and_dropdown_link(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_approved' => true]);
+
+        FacultyMember::create([
+            'name' => 'Prof. P. V. Patel',
+            'designation' => 'Head of Department',
+            'department' => 'Computer Engineering',
+            'qualification' => 'M.E.',
+            'is_hod' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Department Faculty &amp; HOD Directory', false);
+        $response->assertSee('Manage Faculty &amp; HODs', false);
+        $response->assertSee('Faculty &amp; HOD Management', false);
+        $response->assertSee(route('faculty.index'));
+    }
 }

@@ -25,6 +25,8 @@ class AdminController extends Controller
             'total_donations' => (float) \App\Models\Donation::where('status', 'completed')->sum('amount'),
             'pending_inquiries' => \App\Models\ContactInquiry::where('status', 'new')->count(),
             'pending_documents' => \App\Models\DocumentRequest::where('status', 'pending')->count(),
+            'total_faculty' => \App\Models\FacultyMember::count(),
+            'total_hods' => \App\Models\FacultyMember::where('is_hod', true)->count(),
         ];
 
         // Fetch pending registrations

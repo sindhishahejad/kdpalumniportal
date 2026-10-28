@@ -507,6 +507,7 @@
                                 </div>
                                 @if(Auth::user()->isAdmin())
                                     <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛡️ Admin Dashboard</a>
+                                    <a href="{{ route('faculty.index') }}" class="block px-4 py-2 text-blue-900 hover:bg-blue-50 font-bold">👥 Faculty &amp; HOD Management</a>
                                     <a href="{{ route('admin.awards.index') }}" class="block px-4 py-2 text-amber-700 hover:bg-amber-50">🏆 Awards Management</a>
                                     <a href="{{ route('admin.alerts.index') }}" class="block px-4 py-2 text-emerald-700 hover:bg-emerald-50">📱 WhatsApp Alert Center</a>
                                 @endif

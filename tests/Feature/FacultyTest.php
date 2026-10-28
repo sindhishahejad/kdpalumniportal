@@ -217,4 +217,49 @@ class FacultyTest extends TestCase
         $response->assertSee('Faculty &amp; HOD Management', false);
         $response->assertSee(route('faculty.index'));
     }
+
+    public function test_faculty_pill_badge_on_admin_dashboard_updates_dynamically_in_real_time(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_approved' => true]);
+
+        // Start with 1 HOD and 1 Faculty
+        $hod = FacultyMember::create([
+            'name' => 'Prof. HOD One',
+            'designation' => 'Head of Department',
+            'department' => 'Computer Engineering',
+            'qualification' => 'Ph.D.',
+            'is_hod' => true,
+        ]);
+        $lecturer = FacultyMember::create([
+            'name' => 'Prof. Lecturer One',
+            'designation' => 'Lecturer',
+            'department' => 'Computer Engineering',
+            'qualification' => 'M.E.',
+            'is_hod' => false,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee('2 Faculty (1 HODs)');
+
+        // Add a 2nd HOD dynamically
+        $hod2 = FacultyMember::create([
+            'name' => 'Prof. HOD Two',
+            'designation' => 'Head of Department',
+            'department' => 'Mechanical Engineering',
+            'qualification' => 'M.Tech',
+            'is_hod' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee('3 Faculty (2 HODs)');
+
+        // Delete a member dynamically
+        $lecturer->delete();
+
+        $response = $this->actingAs($admin)->get(route('dashboard'));
+        $response->assertStatus(200);
+        $response->assertSee('2 Faculty (2 HODs)');
+    }
 }

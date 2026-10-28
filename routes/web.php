@@ -117,6 +117,8 @@ Route::get('/dashboard', function (Illuminate\Http\Request $request) {
             'total_donations' => (float) \App\Models\Donation::where('status', 'completed')->sum('amount'),
             'pending_inquiries' => \App\Models\ContactInquiry::where('status', 'new')->count(),
             'pending_documents' => \App\Models\DocumentRequest::where('status', 'pending')->count(),
+            'total_faculty' => \App\Models\FacultyMember::count(),
+            'total_hods' => \App\Models\FacultyMember::where('is_hod', true)->count(),
         ];
         
         return view('dashboards.admin', compact('albums', 'events', 'jobs', 'pendingUsers', 'users', 'notices', 'stats', 'mapPins', 'clusters', 'spots', 'recentStories'));

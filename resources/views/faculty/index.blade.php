@@ -69,7 +69,7 @@
             <span class="text-xs text-slate-500 font-semibold mt-1">Heads of Departments (HOD)</span>
         </div>
         <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs text-center col-span-2 md:col-span-1">
-            <span class="text-2xl sm:text-3xl font-black text-emerald-700 font-heading block">5 Core</span>
+            <span class="text-2xl sm:text-3xl font-black text-emerald-700 font-heading block">{{ $departmentStats['departments_count'] }} Core</span>
             <span class="text-xs text-slate-500 font-semibold mt-1">GTU Diploma Disciplines</span>
         </div>
     </div>

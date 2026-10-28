@@ -50,7 +50,7 @@
             </div>
 
             <!-- Form Content -->
-            <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="p-6 sm:p-10 space-y-10">
+            <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="p-6 sm:p-10 space-y-10" x-data="{ selectedRole: '{{ old('role', 'alumni') }}' }">
                 @csrf
 
                 <!-- ========================================== -->
@@ -174,7 +174,7 @@
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
                                 I am registering as: <span class="text-red-500">*</span>
                             </label>
-                            <select name="role" required class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] text-slate-800 font-semibold cursor-pointer">
+                            <select name="role" x-model="selectedRole" required class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] text-slate-800 font-semibold cursor-pointer">
                                 <option value="alumni" {{ old('role') == 'alumni' ? 'selected' : '' }}>🎓 Alumni Graduate</option>
                                 <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>📚 Current Diploma Student</option>
                                 <option value="faculty" {{ old('role') == 'faculty' ? 'selected' : '' }}>👨‍🏫 Faculty / Professor</option>
@@ -253,23 +253,43 @@
                 <!-- SECTION 3: CAREER & PROFESSIONAL JOURNEY   -->
                 <!-- ========================================== -->
                 <div>
-                    <div class="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-6">
+                    <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-2.5 mb-6 gap-2">
                         <div class="flex items-center gap-2">
                             <span class="text-lg">💼</span>
                             <h3 class="text-base font-bold font-heading text-[#1e3a8a] uppercase tracking-wide">
                                 3. Professional Details &amp; Industry Profile
                             </h3>
                         </div>
-                        <span class="text-[11px] text-slate-400 font-semibold font-sans">(For Alumni Directory &amp; Peer Networking)</span>
+                        <div class="flex items-center gap-2">
+                            <span x-show="selectedRole === 'student'" x-cloak class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                                <span>🎒</span> Optional for Current Diploma Students
+                            </span>
+                            <span class="text-[11px] text-slate-400 font-semibold font-sans hidden sm:inline">(For Alumni Directory &amp; Peer Networking)</span>
+                        </div>
+                    </div>
+
+                    <!-- Helpful Notice for Current Diploma Students -->
+                    <div x-show="selectedRole === 'student'" x-cloak class="mb-5 bg-amber-50/80 border border-amber-200/80 p-3.5 rounded-2xl flex items-start gap-2.5 text-xs text-amber-950">
+                        <span class="text-base shrink-0">🎒</span>
+                        <div>
+                            <p class="font-bold font-heading text-[11px] text-amber-900 uppercase tracking-wider">Current Diploma Student</p>
+                            <p class="text-amber-800 text-[11px] leading-relaxed mt-0.5">
+                                As an active student at K. D. Polytechnic, Patan, you are <strong>not required</strong> to fill company and designation fields. You can leave them blank, or list your academic focus, projects, and learning technical skills.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                         <!-- Company -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
-                                Current Company / Organization <span class="text-red-500">*</span>
+                                Current Company / Organization 
+                                <span class="text-red-500" x-show="selectedRole !== 'student'">*</span>
+                                <span class="text-slate-400 text-[10px] font-normal" x-show="selectedRole === 'student'" x-cloak>(Optional)</span>
                             </label>
-                            <input type="text" name="company" value="{{ old('company') }}" required placeholder="e.g. L&T, Siemens, Adani, or 'Student'"
+                            <input type="text" name="company" value="{{ old('company') }}" 
+                                   :required="selectedRole !== 'student'"
+                                   :placeholder="selectedRole === 'student' ? 'e.g. Current Student / KDP Patan (Optional)' : 'e.g. L&T, Siemens, Adani, or Freelance'"
                                    class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] shadow-2xs font-sans">
                             @error('company') <span class="text-red-500 text-[11px] font-semibold mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -277,9 +297,13 @@
                         <!-- Designation -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
-                                Designation / Role <span class="text-red-500">*</span>
+                                Designation / Role 
+                                <span class="text-red-500" x-show="selectedRole !== 'student'">*</span>
+                                <span class="text-slate-400 text-[10px] font-normal" x-show="selectedRole === 'student'" x-cloak>(Optional)</span>
                             </label>
-                            <input type="text" name="designation" value="{{ old('designation') }}" required placeholder="e.g. Diploma Engineer Trainee, Senior Engineer"
+                            <input type="text" name="designation" value="{{ old('designation') }}" 
+                                   :required="selectedRole !== 'student'"
+                                   :placeholder="selectedRole === 'student' ? 'e.g. Diploma Student / 4th Sem (Optional)' : 'e.g. Diploma Engineer Trainee, Senior Engineer'"
                                    class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] shadow-2xs font-sans">
                             @error('designation') <span class="text-red-500 text-[11px] font-semibold mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -287,9 +311,13 @@
                         <!-- Work Industry -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
-                                Industry Sector <span class="text-red-500">*</span>
+                                Industry Sector 
+                                <span class="text-red-500" x-show="selectedRole !== 'student'">*</span>
+                                <span class="text-slate-400 text-[10px] font-normal" x-show="selectedRole === 'student'" x-cloak>(Optional)</span>
                             </label>
-                            <input type="text" name="work_industry" value="{{ old('work_industry') }}" required placeholder="e.g. EPC & Construction, Power Grid, Automotive, IT"
+                            <input type="text" name="work_industry" value="{{ old('work_industry') }}" 
+                                   :required="selectedRole !== 'student'"
+                                   :placeholder="selectedRole === 'student' ? 'e.g. Technical Diploma Education (Optional)' : 'e.g. EPC & Construction, Power Grid, Automotive, IT'"
                                    class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] shadow-2xs font-sans">
                             @error('work_industry') <span class="text-red-500 text-[11px] font-semibold mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -297,9 +325,13 @@
                         <!-- Core Skills -->
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 font-heading">
-                                Core Technical Skills <span class="text-red-500">*</span>
+                                Core Technical Skills 
+                                <span class="text-red-500" x-show="selectedRole !== 'student'">*</span>
+                                <span class="text-slate-400 text-[10px] font-normal" x-show="selectedRole === 'student'" x-cloak>(Optional)</span>
                             </label>
-                            <input type="text" name="skills" value="{{ old('skills') }}" required placeholder="e.g. AutoCAD, Python, PLC Automation, Surveying"
+                            <input type="text" name="skills" value="{{ old('skills') }}" 
+                                   :required="selectedRole !== 'student'"
+                                   :placeholder="selectedRole === 'student' ? 'e.g. C, Python, AutoCAD, Basic Electronics (Optional)' : 'e.g. AutoCAD, Python, PLC Automation, Surveying'"
                                    class="w-full text-xs rounded-xl border border-slate-300 py-2.5 px-3 bg-slate-50/50 focus:bg-white focus:border-[#1e3a8a] shadow-2xs font-sans">
                             @error('skills') <span class="text-red-500 text-[11px] font-semibold mt-1 block">{{ $message }}</span> @enderror
                         </div>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -44,10 +45,10 @@ class RegisteredUserController extends Controller
             'department' => ['required', 'string', 'max:255'],
             'year_joining' => ['required', 'integer'],
             'graduation_year' => ['required', 'integer'],
-            'company' => ['required', 'string', 'max:255'],
-            'designation' => ['required', 'string', 'max:255'],
-            'work_industry' => ['required', 'string', 'max:255'],
-            'skills' => ['required', 'string', 'max:255'],
+            'company' => [Rule::requiredIf(fn () => $request->role !== 'student'), 'nullable', 'string', 'max:255'],
+            'designation' => [Rule::requiredIf(fn () => $request->role !== 'student'), 'nullable', 'string', 'max:255'],
+            'work_industry' => [Rule::requiredIf(fn () => $request->role !== 'student'), 'nullable', 'string', 'max:255'],
+            'skills' => [Rule::requiredIf(fn () => $request->role !== 'student'), 'nullable', 'string', 'max:255'],
         ]);
 
         $photoPath = null;

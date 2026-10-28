@@ -33,11 +33,17 @@
     @endif
 
     <!-- Institutional Hero Banner (KDP Patan Navy & Saffron) -->
-    <div class="bg-gradient-to-r from-[#1e3a8a] via-[#1c3272] to-[#0f172a] rounded-2xl text-white p-6 sm:p-10 shadow-lg relative overflow-hidden mb-8 border-b-4 border-[#f97316]">
+    <div class="bg-gradient-to-r from-[#1e3a8a] via-[#1c3272] to-[#0f172a] rounded-3xl text-white p-6 sm:p-10 shadow-lg relative overflow-hidden mb-8 border-b-4 border-[#f97316]">
         <div class="relative z-10 max-w-3xl">
-            <span class="inline-block text-[11px] font-black uppercase tracking-widest text-[#f97316] bg-orange-500/10 px-3 py-1 rounded-full border border-orange-400/30 mb-3 font-heading">
-                Academic Leadership • K. D. Polytechnic Patan
-            </span>
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-400/30 text-amber-200 text-xs font-bold tracking-wide font-heading">
+                    <span class="w-2 h-2 rounded-full bg-[#f97316] animate-pulse"></span>
+                    કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
+                </span>
+                <span class="inline-block text-[11px] font-black uppercase tracking-widest text-[#f97316] bg-orange-500/10 px-3 py-1 rounded-full border border-orange-400/30 font-heading">
+                    GTU Code: 622
+                </span>
+            </div>
             <h1 class="text-2xl sm:text-4xl font-black font-heading tracking-tight leading-tight">
                 Department Faculty &amp; HOD Directory
             </h1>

@@ -387,4 +387,11 @@ Route::post('/chatbot/message', [\App\Http\Controllers\ChatbotController::class,
 Route::get('/chatbot/history', [\App\Http\Controllers\ChatbotController::class, 'history'])->name('chatbot.history');
 Route::delete('/chatbot/clear', [\App\Http\Controllers\ChatbotController::class, 'clear'])->name('chatbot.clear');
 
+// 👨‍💻 Developer Authorship / humans.txt
+Route::get('/humans.txt', function () {
+    return response(file_get_contents(public_path('humans.txt')), 200, [
+        'Content-Type' => 'text/plain; charset=UTF-8',
+    ]);
+});
+
 require __DIR__.'/auth.php';

@@ -1,2 +1,4 @@
+# K. D. Polytechnic, Patan - Alumni Association Portal
+# Architected & Developed by Sindhi Shahejad (Sole Lead Developer)
 User-agent: *
 Disallow:

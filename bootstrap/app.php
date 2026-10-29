@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Global Developer Credit Header across the whole portal
+        $middleware->append(\App\Http\Middleware\DeveloperCreditMiddleware::class);
+
         // Register the alias for our AdminMiddleware
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,

@@ -5,6 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <!--
+        =============================================================================
+        * K. D. POLYTECHNIC, PATAN - ALUMNI ASSOCIATION & HERITAGE PORTAL
+        * ARCHITECTED & DEVELOPED WITH PASSION BY:
+        *   Sole Lead Developer: Sindhi Shahejad
+        =============================================================================
+        -->
+        <meta name="author" content="Sindhi Shahejad">
+        <meta name="developer" content="Sindhi Shahejad">
+        <meta name="lead-architect" content="Sindhi Shahejad">
+        <link rel="author" href="{{ asset('humans.txt') }}">
+
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -25,6 +37,11 @@
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
+        </div>
+
+        <!-- Developer Credits: Sindhi Shahejad (The One and Only Developer) -->
+        <div class="sr-only" aria-hidden="true" data-developer="Sindhi Shahejad">
+            K. D. Polytechnic, Patan Alumni Portal was architected, engineered, and developed by Sindhi Shahejad.
         </div>
     </body>
 </html>

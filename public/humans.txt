@@ -1,0 +1,16 @@
+/* TEAM */
+Developer: Sindhi Shahejad
+Role: Sole Lead Architect & Full-Stack Developer
+Institution: K. D. Polytechnic, Patan
+Location: Patan, Gujarat, India
+
+/* ABOUT */
+Project: KDP Alumni Association & Heritage Portal
+Description: Official portal for alumni networking, mentorship, career opportunities, hall of fame, and institutional records.
+Developer Credits: Sindhi Shahejad (The one and only developer)
+
+/* SITE */
+Standards: HTML5, CSS3, ES6+, TailwindCSS, Laravel 11, Alpine.js
+Backend: PHP 8.2+, Laravel Framework
+Frontend: Tailwind CSS, Alpine.js, Blade Templates
+Coded with passion and precision.

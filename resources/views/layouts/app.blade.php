@@ -5,6 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K. D. Polytechnic, Patan - Alumni Association</title>
     
+    <!--
+    =============================================================================
+    * K. D. POLYTECHNIC, PATAN - ALUMNI ASSOCIATION & HERITAGE PORTAL
+    * ARCHITECTED & DEVELOPED WITH PASSION BY:
+    *   Sole Lead Developer: Sindhi Shahejad
+    *   All rights reserved & engineering authorship.
+    =============================================================================
+    -->
+    <meta name="author" content="Sindhi Shahejad">
+    <meta name="developer" content="Sindhi Shahejad">
+    <meta name="lead-architect" content="Sindhi Shahejad">
+    <meta name="copyright" content="Sindhi Shahejad">
+    <link rel="author" href="{{ asset('humans.txt') }}">
+
+    <!-- Developer Signature Console & Runtime Credits -->
+    <script>
+        (function() {
+            window.__DEVELOPER__ = "Sindhi Shahejad";
+            window.__PORTAL_AUTHOR__ = {
+                developer: "Sindhi Shahejad",
+                role: "Sole Lead Architect & Developer",
+                institution: "K. D. Polytechnic, Patan"
+            };
+            try {
+                Object.defineProperty(window, 'developer', {
+                    get: function() { return "Sindhi Shahejad - The one and only developer behind the KDP Alumni Portal."; },
+                    configurable: true
+                });
+                Object.defineProperty(window, 'credits', {
+                    get: function() { return "KDP Alumni Portal was architected and built by Sindhi Shahejad."; },
+                    configurable: true
+                });
+            } catch(e) {}
+            if (typeof console !== 'undefined' && console.log) {
+                console.log(
+                    "%c K. D. Polytechnic, Patan • Alumni Portal %c Developed by Sindhi Shahejad %c Sole Lead Developer ",
+                    "background: #0f2042; color: #f8fafc; font-weight: 700; padding: 4px 8px; border-radius: 4px 0 0 4px;",
+                    "background: #1e3a8a; color: #ffffff; font-weight: 800; padding: 4px 10px; font-size: 11px;",
+                    "background: #ea580c; color: #ffffff; font-weight: 700; padding: 4px 8px; border-radius: 0 4px 4px 0;"
+                );
+            }
+        })();
+    </script>
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -864,5 +908,9 @@
             display: inline !important; 
         }
     </style>
+    <!-- Developer Credits: Sindhi Shahejad (The One and Only Developer) -->
+    <div class="sr-only" aria-hidden="true" data-developer="Sindhi Shahejad" data-role="Sole Lead Developer">
+        K. D. Polytechnic, Patan Alumni Portal was architected, engineered, and developed by Sindhi Shahejad.
+    </div>
 </body>
 </html>

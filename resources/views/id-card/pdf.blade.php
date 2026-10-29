@@ -219,8 +219,8 @@
                     @endif
 
                     <div class="field-row">
-                        <span class="field-label">Dept</span>
-                        <span class="field-val-normal">: {{ $user->department ?? optional($user->profile)->department ?? 'Civil Engineering' }}</span>
+                        <span class="field-label">Department</span>
+                        <span class="field-val-normal">: {{ $user->department ?? optional($user->profile)->department ?? 'Diploma Engineering' }}</span>
                     </div>
 
                     @php

@@ -528,7 +528,13 @@
             <div class="md:w-1/2 min-h-[350px] relative overflow-hidden bg-gray-900 flex items-center justify-center p-8 group">
                 <img src="{{ asset('images/three.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 group-hover:opacity-40 transition-all duration-1000 blur-sm" alt="Campus Background">
                 
-                <div class="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transform rotate-3 md:rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500 flex flex-col">
+                @php
+                    $cardUser = Auth::user();
+                    $cardPhoto = $cardUser ? ($cardUser->photo_path ?? (optional($cardUser->profile)->photo_path ?? null)) : null;
+                    $cardPhotoUrl = $cardPhoto ? (filter_var($cardPhoto, FILTER_VALIDATE_URL) ? $cardPhoto : asset('storage/' . $cardPhoto)) : null;
+                @endphp
+
+                <a href="{{ route('id-card.show') }}" title="Click to view & download official Smart ID Card" class="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transform rotate-3 md:rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500 flex flex-col block group/card">
                     
                     <div class="bg-gradient-to-r from-[#1a2f5c] to-[#0f2042] p-5 flex items-center justify-between border-b border-white/10">
                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold text-[#0f2042] text-sm shadow-inner font-heading">
@@ -541,27 +547,31 @@
                     </div>
                     
                     <div class="p-6 flex items-center gap-5 relative bg-gradient-to-br from-white/5 to-transparent">
-                        <div class="relative">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'Alumnus') }}&background=ea580c&color=fff&size=120" class="w-20 h-20 rounded-xl shadow-lg border-2 border-white/30">
-                            <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 border-2 border-[#203154] rounded-full flex items-center justify-center shadow-sm">
+                        <div class="relative shrink-0">
+                            @if($cardPhotoUrl)
+                                <img src="{{ $cardPhotoUrl }}" alt="{{ $cardUser->name ?? 'Profile Photo' }}" class="w-20 h-20 rounded-xl shadow-lg border-2 border-white/30 object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($cardUser->name ?? 'Alumnus') }}&background=ea580c&color=fff&size=120" alt="{{ $cardUser->name ?? 'Avatar' }}" class="w-20 h-20 rounded-xl shadow-lg border-2 border-white/30 object-cover">
+                            @endif
+                            <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 border-2 border-[#203154] rounded-full flex items-center justify-center shadow-sm" title="Verified Member">
                                 <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                             </div>
                         </div>
                         
-                        <div class="text-white flex-1 font-heading">
-                            <h4 class="font-bold text-xl leading-tight mb-1">{{ Auth::user()->name ?? 'Alumnus Name' }}</h4>
-                            <p class="text-xs text-blue-200 font-mono tracking-wider mb-2">ID: KDP-{{ str_pad(Auth::user()->id ?? '128', 4, '0', STR_PAD_LEFT) }}</p>
+                        <div class="text-white flex-1 min-w-0 font-heading">
+                            <h4 class="font-bold text-xl leading-tight mb-1 truncate">{{ $cardUser->name ?? 'Alumnus Name' }}</h4>
+                            <p class="text-xs text-blue-200 font-mono tracking-wider mb-2">ID: KDP-{{ str_pad($cardUser->id ?? '1', 4, '0', STR_PAD_LEFT) }}</p>
                             <span class="inline-block px-2 py-1 bg-white/20 rounded text-[10px] font-bold uppercase tracking-widest border border-white/10">
-                                Verified Member
+                                {{ $cardUser && $cardUser->role === 'faculty' ? 'Faculty Member' : ($cardUser && $cardUser->role === 'student' ? 'Student Member' : 'Verified Member') }}
                             </span>
                         </div>
                     </div>
                     
-                    <div class="bg-black/20 p-3 px-6 flex justify-between items-center">
-                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-heading">Tap or Scan for Access</p>
-                        <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div class="bg-black/20 group-hover/card:bg-black/40 p-3 px-6 flex justify-between items-center transition-colors">
+                        <p class="text-[9px] text-gray-400 group-hover/card:text-white uppercase tracking-widest font-heading transition-colors">Tap or Scan for Access</p>
+                        <svg class="w-6 h-6 text-white/50 group-hover/card:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                </div>
+                </a>
             </div>
             
         </div>

@@ -126,4 +126,45 @@ class IdCardTest extends TestCase
         $response->assertSee('Commissionerate of Technical Education');
         $response->assertSee('OFFICIAL SMART ALUMNI CARD');
     }
+
+    public function test_smart_id_card_displays_department_label_and_user_department_correctly(): void
+    {
+        $alumni = User::factory()->create([
+            'name' => 'Shahejad Sindhi',
+            'role' => 'alumni',
+            'is_approved' => true,
+            'department' => 'Computer Engineering',
+        ]);
+
+        $response = $this->actingAs($alumni)->get(route('id-card.show'));
+        $response->assertStatus(200);
+        $response->assertSee('Department');
+        $response->assertSee(': Computer Engineering');
+        $response->assertDontSee('<span class="w-24 font-bold text-slate-500 text-[11px] uppercase tracking-wider">Civil Engineering</span>', false);
+    }
+
+    public function test_dashboard_side_alumni_card_renders_profile_photo_dynamically(): void
+    {
+        $alumniWithPhoto = User::factory()->create([
+            'name' => 'Rahul Sharma',
+            'role' => 'alumni',
+            'is_approved' => true,
+            'photo_path' => 'profile-photos/rahul_custom_photo.jpg',
+        ]);
+
+        $responseWithPhoto = $this->actingAs($alumniWithPhoto)->get(route('dashboard'));
+        $responseWithPhoto->assertStatus(200);
+        $responseWithPhoto->assertSee('profile-photos/rahul_custom_photo.jpg');
+
+        $alumniWithoutPhoto = User::factory()->create([
+            'name' => 'Ankit Dave',
+            'role' => 'alumni',
+            'is_approved' => true,
+            'photo_path' => null,
+        ]);
+
+        $responseWithoutPhoto = $this->actingAs($alumniWithoutPhoto)->get(route('dashboard'));
+        $responseWithoutPhoto->assertStatus(200);
+        $responseWithoutPhoto->assertSee('ui-avatars.com/api/?name=Ankit+Dave');
+    }
 }

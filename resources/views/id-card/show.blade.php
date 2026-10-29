@@ -128,10 +128,8 @@
                     @endif
 
                     <div class="flex">
-                        <span class="w-24 font-bold text-slate-500 text-[11px] uppercase tracking-wider">Civil Engineering</span>
-                        <span class="hidden">: Civil Engineering</span>
-                        <span class="w-24 font-bold text-slate-500 text-[11px] uppercase tracking-wider hidden">Dept</span>
-                        <span class="font-semibold text-slate-900 truncate">: {{ $user->department ?? optional($user->profile)->department ?? 'Civil Engineering' }}</span>
+                        <span class="w-24 font-bold text-slate-500 text-[11px] uppercase tracking-wider">Department</span>
+                        <span class="font-semibold text-slate-900 truncate">: {{ $user->department ?? optional($user->profile)->department ?? 'Diploma Engineering' }}</span>
                     </div>
 
                     @php

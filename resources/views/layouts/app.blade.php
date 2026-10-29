@@ -477,13 +477,21 @@
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center gap-2 py-1.5 px-3 rounded-xl hover:bg-slate-100 text-slate-700 hover:text-[#1e3a8a] text-xs font-bold uppercase tracking-wider focus:outline-none cursor-pointer transition-colors border border-transparent hover:border-slate-200">
                                 <div class="relative shrink-0">
-                                    <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center text-xs font-black shrink-0">
-                                        @if(Auth::user()->isAdmin()) 👑
-                                        @elseif(Auth::user()->role === 'faculty') 🏛️
-                                        @elseif(Auth::user()->role === 'student') 🎒
-                                        @else 🎓
-                                        @endif
-                                    </span>
+                                    @php
+                                        $navUserPhoto = Auth::user()->photo_path ?? (optional(Auth::user()->profile)->photo_path ?? null);
+                                        $navPhotoUrl = $navUserPhoto ? (filter_var($navUserPhoto, FILTER_VALIDATE_URL) ? $navUserPhoto : asset('storage/' . $navUserPhoto)) : null;
+                                    @endphp
+                                    @if($navPhotoUrl)
+                                        <img src="{{ $navPhotoUrl }}" alt="{{ Auth::user()->name }}" class="w-6 h-6 rounded-full object-cover shrink-0 border border-slate-200 shadow-2xs">
+                                    @else
+                                        <span class="w-6 h-6 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center text-xs font-black shrink-0">
+                                            @if(Auth::user()->isAdmin()) 👑
+                                            @elseif(Auth::user()->role === 'faculty') 🏛️
+                                            @elseif(Auth::user()->role === 'student') 🎒
+                                            @else 🎓
+                                            @endif
+                                        </span>
+                                    @endif
                                     @if($globalUnreadMsgCount > 0)
                                         <span class="absolute -top-1.5 -right-1.5 flex h-3.5 min-w-3.5 px-0.5 items-center justify-center rounded-full bg-[#f97316] text-white text-[8px] font-black shadow-xs animate-pulse border border-white">
                                             {{ $globalUnreadMsgCount > 9 ? '9+' : $globalUnreadMsgCount }}
@@ -501,9 +509,22 @@
                                 <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                             <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-1.5 border border-slate-100 z-50 text-xs font-semibold">
-                                <div class="px-4 py-2 border-b border-slate-100 bg-slate-50/50">
-                                    <p class="text-[10px] text-slate-400 font-bold uppercase">Signed in as</p>
-                                    <p class="text-xs font-bold text-slate-800 truncate">{{ Auth::user()->email }}</p>
+                                <div class="px-4 py-2 border-b border-slate-100 bg-slate-50/50 flex items-center gap-2.5">
+                                    @if($navPhotoUrl)
+                                        <img src="{{ $navPhotoUrl }}" alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full object-cover shrink-0 border border-slate-200">
+                                    @else
+                                        <span class="w-8 h-8 rounded-full bg-blue-100 text-[#1e3a8a] flex items-center justify-center text-sm font-black shrink-0">
+                                            @if(Auth::user()->isAdmin()) 👑
+                                            @elseif(Auth::user()->role === 'faculty') 🏛️
+                                            @elseif(Auth::user()->role === 'student') 🎒
+                                            @else 🎓
+                                            @endif
+                                        </span>
+                                    @endif
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase">Signed in as</p>
+                                        <p class="text-xs font-bold text-slate-800 truncate">{{ Auth::user()->email }}</p>
+                                    </div>
                                 </div>
                                 @if(Auth::user()->isAdmin())
                                     <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a]">🛡️ Admin Dashboard</a>

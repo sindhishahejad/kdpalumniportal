@@ -201,6 +201,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/feed', [PostController::class, 'index'])->name('posts.index');
     Route::post('/feed', [PostController::class, 'store'])->name('posts.store');
+    Route::post('/posts/{post}/submit', [PostController::class, 'submitAnswer'])->name('posts.submit');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');

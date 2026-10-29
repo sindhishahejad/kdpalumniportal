@@ -58,6 +58,8 @@ class RoleDashboardTest extends TestCase
         $response->assertSee('GTU Winter Diploma Examination Schedule');
         $response->assertSee('Scientific Calculator fx-991ES Plus');
         $response->assertSee('Interactive Regional Chapter Map');
+        $response->assertSee('Knowledge &amp; Challenges', false);
+        $response->assertSee(route('posts.index'));
     }
 
     public function test_alumni_can_view_alumni_dashboard_with_service_cards_and_id_card(): void
@@ -81,6 +83,8 @@ class RoleDashboardTest extends TestCase
         $response->assertSee('Project Incubation');
         $response->assertSee('Awards &amp; Hall of Fame', false);
         $response->assertSee('Tool &amp; Book Bank', false);
+        $response->assertSee('Knowledge &amp; Challenges', false);
+        $response->assertSee(route('posts.index'));
         $response->assertSee('My Smart Alumni ID');
         $response->assertSee('Ask KDP Mitra AI');
     }

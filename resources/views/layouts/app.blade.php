@@ -426,6 +426,7 @@
                         <div class="absolute top-14 left-0 w-64 bg-white shadow-xl border-t-2 border-[#1e3a8a] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 rounded-b-xl border border-slate-100 overflow-hidden">
                             <ul class="py-2 text-xs font-semibold">
                                 <li><a href="{{ route('chatbot.index') }}" class="block px-4 py-2.5 text-[#1e3a8a] hover:bg-blue-50 transition-colors flex items-center gap-2 bg-blue-50/50 font-bold border-b border-slate-100"><span>🤖</span> KDP Mitra (AI Counselor)</a></li>
+                                <li><a href="{{ route('posts.index') }}" class="block px-4 py-2.5 text-amber-700 hover:bg-amber-50 transition-colors flex items-center gap-2 font-bold bg-amber-50/30 border-b border-slate-100"><span>⚡</span> Knowledge Feed &amp; Challenges</a></li>
                                 <li><a href="{{ route('id-card.show') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🪪</span> Digital Smart ID Card</a></li>
                                 <li><a href="{{ route('alumni.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>🎓</span> Alumni Directory</a></li>
                                 <li><a href="{{ route('jobs.index') }}" class="block px-4 py-2.5 text-slate-700 hover:bg-blue-50 hover:text-[#1e3a8a] transition-colors flex items-center gap-2"><span>💼</span> Engineering Job Board</a></li>
@@ -563,6 +564,7 @@
         <div x-show="mobileMenuOpen" x-cloak class="md:hidden bg-white border-t border-slate-100 shadow-xl absolute w-full z-40 font-heading">
             <div class="px-3 pt-2 pb-4 space-y-1 text-sm font-semibold">
                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">Home</a>
+                <a href="{{ route('posts.index') }}" class="block px-3 py-2 rounded-lg text-amber-700 bg-amber-50/50 hover:bg-amber-100 font-bold">⚡ Knowledge &amp; Challenges</a>
                 <a href="{{ route('id-card.show') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🪪 Smart I-Card</a>
                 <a href="{{ route('alumni.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">🎓 Alumni Directory</a>
                 <a href="{{ route('jobs.index') }}" class="block px-3 py-2 rounded-lg text-slate-800 hover:bg-blue-50 hover:text-[#1e3a8a]">💼 Job Board</a>

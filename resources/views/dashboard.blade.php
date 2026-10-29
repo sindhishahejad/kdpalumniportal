@@ -241,6 +241,22 @@
     </div>
 </a>
 
+<!-- Card 11: ⚡ Knowledge Feed & Challenge Board -->
+<a href="{{ route('posts.index') }}" class="group relative rounded-2xl shadow-md hover:shadow-2xl overflow-hidden h-72 flex flex-col justify-end transition-all duration-500 hover:-translate-y-2 border border-gray-100 cursor-pointer">
+    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" alt="Knowledge & Challenges" />
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#1e3a8a]/85 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+    <div class="relative z-20 p-6 flex flex-col justify-end h-full">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/40 text-amber-200 text-[10px] font-bold uppercase tracking-wider w-fit mb-2 font-heading">
+            ⚡ Interactive Challenges &amp; Feed
+        </div>
+        <h3 class="font-heading font-black text-xl mb-2 text-white uppercase tracking-wide transform group-hover:-translate-y-1 transition-transform duration-300">Knowledge &amp; Challenges</h3>
+        <p class="text-xs mb-5 text-blue-100 font-normal leading-relaxed opacity-95 transform group-hover:-translate-y-1 transition-transform duration-300">Share technical insights, post MCQs, fill-in-the-blanks, and algorithmic coding challenges for students.</p>
+        <div class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white group-hover:text-[#f97316] transition-colors font-heading">
+            EXPLORE FEED <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </div>
+    </div>
+</a>
+
 
         </div>
     </div>

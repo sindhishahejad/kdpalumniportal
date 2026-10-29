@@ -322,6 +322,25 @@
                 </div>
             </a>
 
+            <!-- Card 14: Knowledge Feed & Challenge Board -->
+            <a href="{{ route('posts.index') }}" class="group p-5 bg-white rounded-2xl border border-slate-100 hover:border-amber-500 hover:shadow-lg transition-all flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform"></div>
+                <div>
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 transition-transform text-xl">
+                        ⚡
+                    </div>
+                    <div class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider mb-2 font-heading">
+                        Interactive Challenges
+                    </div>
+                    <h3 class="text-[#0f2042] font-bold text-base mb-1 font-heading group-hover:text-amber-600 transition-colors">Knowledge &amp; Challenges</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Solve technical MCQs, algorithmic coding puzzles, and learn from senior alumni insights.</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-600 font-heading">
+                    <span>Solve Challenges</span>
+                    <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </div>
+            </a>
+
         </div>
     </div>
 

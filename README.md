@@ -1,72 +1,193 @@
-
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# K. D. Polytechnic, Patan — Alumni Association & Heritage Portal
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel 11">
 </p>
 
-## About Laravel
+<p align="center">
+  <strong>Government Polytechnic, Patan • Established 1961 • Affiliated to GTU & Approved by AICTE</strong><br>
+  <em>A modern, high-performance institutional portal connecting diploma students, alumni, faculty, and administrators.</em>
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel 11">
+  <img src="https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Alpine.js-3.x-8BC0D0?style=flat-square&logo=alpine.js&logoColor=white" alt="Alpine.js">
+  <img src="https://img.shields.io/badge/Tests-315%20Passed%20(1222%20Assertions)-success?style=flat-square&logo=checkmarx&logoColor=white" alt="Tests 315 Passed">
+  <img src="https://img.shields.io/badge/Database-MySQL%20%2F%20SQLite-00758F?style=flat-square&logo=mysql&logoColor=white" alt="Database">
+  <img src="https://img.shields.io/badge/Developer-Sindhi%20Shahejad-1e3a8a?style=flat-square" alt="Sole Lead Developer">
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 👨‍💻 Engineering Leadership & Authorship
 
-## Learning Laravel
+* **Sole Lead Architect & Full-Stack Developer:** **Sindhi Shahejad**
+* **Institution:** K. D. Polytechnic, Patan (Department of Computer Engineering)
+* **Project Status:** 100% Production Ready & Feature Complete
+* **Verification:** Comprehensive Automated Test Suite (315 Feature & Unit Tests, 1,222 Assertions)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🏛️ Project Vision & Purpose
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Founded in 1961, **Kilachand Devchand Polytechnic (K. D. Polytechnic), Patan** has produced thousands of engineers serving industry and academia across Gujarat and the globe. 
 
-## Laravel Sponsors
+This portal provides a unified digital backbone bridging the multi-decade alumni network with current diploma students:
+* **Diploma-to-Degree (D2D) Pathways:** Connecting diploma candidates with senior alumni pursuing B.E./B.Tech degrees at premier universities.
+* **GIDC Apprenticeship & Job Placement:** Direct hiring pipelines for mandatory 6-month industrial internships across Gujarat Industrial Development Corporation (GIDC) estates.
+* **SARTHI 1-on-1 Mentorship:** Structured guidance pairings between diploma students and industry alumni.
+* **Digital Heritage & Recognition:** Annual Alumni Awards with live community voting, Hall of Fame registry, and Campus Time-Machine.
+* **Tool & Drafter Donation Bank:** Senior alumni donating engineering instruments, drafters, calculators, and lab tools to juniors with statutory Section 80G tax receipts and instant WhatsApp delivery confirmation.
+* **Smart Alumni I-Card:** Cryptographically verified digital alumni ID cards featuring instant verification.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🚀 Key Feature Modules
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 1. Identity, Access & Dynamic Dashboards
+* **Multi-Role RBAC:** Dedicated dashboards and permission boundaries for **Students**, **Alumni**, **Faculty**, and **Administrators**.
+* **Smart Digital I-Card:** Instant photo, QR verification, dynamic branch resolution (CIVIL, COMPUTER, ELECTRICAL, MECHANICAL), and downloadable printable passes.
+* **Dev Quick Fill & Authentication:** Secure session-based authentication with dev-login helpers for seamless review.
 
-## Contributing
+### 2. Searchable Alumni Directory & Geographic Mapping
+* **Search & Filters:** Search by name, graduation batch year, engineering branch, employer, and city.
+* **Batchmates Shortcut:** One-click directory filtering for exact graduation cohort.
+* **Interactive Geographic Map:** Clean, high-performance Leaflet-powered maps plotting alumni distribution across Gujarat and global chapters without third-party watermarks.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Knowledge Feed & Interactive Challenge Board
+* **Algorithmic & Technical Discussions:** Threaded community feed supporting Markdown code formatting and rich media.
+* **Interactive Problem Types:**
+  * **MCQs (Multiple Choice Questions):** Configurable number of options with instant automated answer evaluation.
+  * **Fill-in-the-Blanks:** Automated keyword matching and precision answer checking.
+  * **Code Verification:** Coding challenges with expected output verification and student test runs.
+  * **Image & Diagram Attachments:** Faculty, alumni, and admins can attach technical schematics, lab photos, and problem diagrams.
+* **Content Moderation Hub:** Admin moderation pipeline to review discussions and prune inappropriate replies.
 
-## Code of Conduct
+### 4. Career & Industry Placement (GIDC Connect)
+* **Job Board & Apprenticeship Pipeline:** Full-time roles and 6-month mandatory diploma apprenticeships.
+* **Direct Alumni Referrals:** Students request internal referrals directly from alumni working at target firms.
+* **Candidate Tracking & WhatsApp Integration:** 1-click WhatsApp buttons in candidate review pipelines.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Multi-Channel Alert Center (Email & WhatsApp)
+* **Live Gmail SMTP Delivery:** Real-time email dispatch using Google SMTP with instant synchronous delivery mode (`QUEUE_CONNECTION=sync`).
+* **1-Click Smart Direct WhatsApp Dispatch (`wa.me`):** 100% free, zero-cost WhatsApp broadcast tool. Normalizes Indian phone numbers (`+91`), encodes institutional announcements, and opens WhatsApp Web/Mobile ready to send with 1 click.
+* **Audit Registry:** Every broadcast is permanently logged to the `whats_app_broadcast_logs` database table.
+* **Weekly Newsletter & Campus Digest:** Automated digest compiled every Monday at 8:00 AM featuring recent stories, job openings, and circulars.
 
-## Security Vulnerabilities
+### 6. AlumSmart & KDP Mitra AI Counselors
+* **AlumSmart (Ctrl+K):** Lightning-fast natural-language search indexing 24+ portal services, alumni profiles, jobs, notices, and tool items.
+* **KDP Mitra AI Universal Counselor:** Integrated AI assistant providing 24/7 academic counseling, GTU rules, D2D guidance, syllabus help, and general inquiries without restrictive guardrails.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 7. Giving Back & Section 80G Statutory Receipts
+* **Tool & Book Bank:** Peer-to-peer donation of engineering drafters, scientific calculators, and technical textbooks.
+* **Online Giving & Tax Deductible Receipts:** Razorpay payment gateway integration with instant downloadable Section 80G tax exemption receipts delivered automatically via WhatsApp and PDF.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🛠️ Technology Stack
 
-# kdpalumniportal
-at last updated at 29/07/2026
+| Layer | Technologies |
+| :--- | :--- |
+| **Backend Framework** | Laravel 11.x (PHP 8.2+) |
+| **Frontend UI** | Laravel Blade Engine, Tailwind CSS 3.x, Alpine.js 3.x |
+| **Database** | MySQL 8.0+ / SQLite (Configurable via `.env`) |
+| **Authentication** | Laravel Breeze with custom Role-Based Access Control (RBAC) |
+| **Styling & Theme** | Reverse-engineered official KDP Patan aesthetic (Navy Blue `#1e3a8a`, Saffron `#f97316`) |
+| **Email Protocol** | SMTP (Gmail TLS via port 587) & Laravel Mailable |
+| **Messaging** | Universal WhatsApp `wa.me` protocol + Meta Cloud API ready |
+| **Asset Pipeline** | Vite, PostCSS, Autoprefixer |
+| **Testing** | PHPUnit / Pest (315 passing automated test suites) |
 
-Last edited by Anas
+---
+
+## ⚙️ Installation & Local Setup
+
+### Prerequisites
+* PHP 8.2 or higher (with `pdo`, `mbstring`, `openssl`, `curl` extensions)
+* Composer 2.x
+* Node.js 18+ & NPM
+* MySQL or SQLite
+
+### Setup Steps
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/kdpalumniportal.git
+   cd kdpalumniportal
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Configure Environment:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Database Migration & Seeding:**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+5. **Configure Email (Gmail SMTP):**
+   In `.env`:
+   ```env
+   MAIL_MAILER=smtp
+   MAIL_HOST=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USERNAME=your-email@gmail.com
+   MAIL_PASSWORD=your-google-app-password
+   MAIL_FROM_ADDRESS="your-email@gmail.com"
+   MAIL_FROM_NAME="K. D. Polytechnic, Patan Alumni Association"
+   QUEUE_CONNECTION=sync
+   ```
+
+6. **Compile Assets & Start Local Server:**
+   ```bash
+   npm run build
+   php artisan serve
+   ```
+   Open your browser and navigate to **`http://localhost:8000`**.
+
+---
+
+## 🧪 Automated Testing Suite
+
+The portal includes an exhaustive test suite covering all security, controllers, authentication, business logic, and UI workflows.
+
+Run all tests:
+```bash
+php artisan test
+```
+
+### Verified Test Results:
+```text
+Tests:    315 passed (1222 assertions)
+Duration: ~30-40 seconds
+Status:   100% Green
+```
+
+---
+
+## 👨‍💻 Authorship & Technical Credits
+
+This portal was designed, architected, and engineered by:
+* **Sindhi Shahejad** — *Sole Lead Architect & Full-Stack Developer*
+* Technical credits are permanently embedded in:
+  * HTTP Response Headers (`X-Developer`, `X-Lead-Architect`, `X-Portal-Author`)
+  * Master Layout Metadata (`<meta name="author" content="Sindhi Shahejad">`)
+  * Web Standards Registry (`/humans.txt` & `robots.txt`)
+  * Browser Developer Console Signature (`F12 -> Console`)
+  * Screen-Reader DOM Microdata
+
+---
+
+## 📄 License
+
+Developed for **K. D. Polytechnic, Patan**. All rights reserved © 2026.

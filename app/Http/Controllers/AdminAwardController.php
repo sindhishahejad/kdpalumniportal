@@ -107,7 +107,7 @@ class AdminAwardController extends Controller
             'title' => 'required|string|max:255',
             'theme' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:draft,nominations_open,voting_open,concluded',
+            'status' => 'required|in:draft,jury_review,nominations_open,voting_open,concluded',
             'nominations_start_at' => 'nullable|date',
             'nominations_end_at' => 'nullable|date|after_or_equal:nominations_start_at',
             'voting_start_at' => 'nullable|date',
@@ -139,7 +139,7 @@ class AdminAwardController extends Controller
             'title' => 'required|string|max:255',
             'theme' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:draft,nominations_open,voting_open,concluded',
+            'status' => 'required|in:draft,jury_review,nominations_open,voting_open,concluded',
             'nominations_start_at' => 'nullable|date',
             'nominations_end_at' => 'nullable|date',
             'voting_start_at' => 'nullable|date',
@@ -167,12 +167,20 @@ class AdminAwardController extends Controller
     public function updateCycleStatus(Request $request, AwardCycle $cycle)
     {
         $validated = $request->validate([
-            'status' => 'required|in:draft,nominations_open,voting_open,concluded',
+            'status' => 'required|in:draft,jury_review,nominations_open,voting_open,concluded',
         ]);
 
         $cycle->update(['status' => $validated['status']]);
 
-        return back()->with('success', "Award cycle status updated to '{$validated['status']}'.");
+        $label = match ($validated['status']) {
+            'nominations_open' => 'Step 1: Open Nominations',
+            'draft', 'jury_review' => 'Step 2: Jury Shortlisting',
+            'voting_open' => 'Step 3: Live Community Voting',
+            'concluded' => 'Step 4: Convocation Enshrinement',
+            default => $validated['status'],
+        };
+
+        return back()->with('success', "Award cycle stage updated to '{$label}' successfully!");
     }
 
     /**

@@ -432,4 +432,64 @@ class AwardTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseMissing('hall_of_fame_inductees', ['id' => $inductee->id]);
     }
+
+    public function test_admin_can_update_award_cycle_stage_dynamically(): void
+    {
+        // 1. Advance to Step 1: Open Nominations
+        $res1 = $this->actingAs($this->admin)->patch(route('admin.awards.cycles.update-status', $this->activeCycle->id), [
+            'status' => 'nominations_open',
+        ]);
+        $res1->assertRedirect();
+        $this->assertEquals('nominations_open', $this->activeCycle->fresh()->status);
+
+        // 2. Advance to Step 2: Jury Shortlisting
+        $res2 = $this->actingAs($this->admin)->patch(route('admin.awards.cycles.update-status', $this->activeCycle->id), [
+            'status' => 'draft',
+        ]);
+        $res2->assertRedirect();
+        $this->assertEquals('draft', $this->activeCycle->fresh()->status);
+
+        // 3. Advance to Step 3: Live Community Voting
+        $res3 = $this->actingAs($this->admin)->patch(route('admin.awards.cycles.update-status', $this->activeCycle->id), [
+            'status' => 'voting_open',
+        ]);
+        $res3->assertRedirect();
+        $this->assertEquals('voting_open', $this->activeCycle->fresh()->status);
+
+        // 4. Advance to Step 4: Convocation Enshrinement
+        $res4 = $this->actingAs($this->admin)->patch(route('admin.awards.cycles.update-status', $this->activeCycle->id), [
+            'status' => 'concluded',
+        ]);
+        $res4->assertRedirect();
+        $this->assertEquals('concluded', $this->activeCycle->fresh()->status);
+    }
+
+    public function test_awards_hero_stepper_and_stage_pill_dynamically_highlight_active_step(): void
+    {
+        // When cycle is in Step 3: voting_open
+        $this->activeCycle->update(['status' => 'voting_open']);
+        $response = $this->actingAs($this->alumni)->get(route('awards.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Stage 3: Community Voting Active');
+        $response->assertDontSee('Stage 2: Community Voting Active');
+
+        // When cycle is in Step 2: draft / jury review
+        $this->activeCycle->update(['status' => 'draft']);
+        $response2 = $this->actingAs($this->alumni)->get(route('awards.index'));
+        $response2->assertStatus(200);
+        $response2->assertSee('Stage 2: Jury Review &amp; Shortlisting', false);
+
+        // When admin visits, admin 1-click stage activation controls are present
+        $adminResponse = $this->actingAs($this->admin)->get(route('awards.index'));
+        $adminResponse->assertStatus(200);
+        $adminResponse->assertSee('ADMIN CONTROLS: Click any stage below to dynamically advance');
+        $adminResponse->assertSee('Activate Step 1');
+        $adminResponse->assertSee('Activate Step 3');
+        $adminResponse->assertSee('Activate Step 4');
+
+        // When non-admin visits, admin buttons are hidden
+        $alumniResponse = $this->actingAs($this->alumni)->get(route('awards.index'));
+        $alumniResponse->assertDontSee('ADMIN CONTROLS: Click any stage below');
+        $alumniResponse->assertDontSee('Activate Step 1');
+    }
 }

@@ -58,6 +58,11 @@ class AwardCycle extends Model
         return $this->status === 'nominations_open';
     }
 
+    public function isJuryReview(): bool
+    {
+        return in_array($this->status, ['draft', 'jury_review']);
+    }
+
     public function isVotingOpen(): bool
     {
         return $this->status === 'voting_open';
@@ -68,13 +73,24 @@ class AwardCycle extends Model
         return $this->status === 'concluded';
     }
 
+    public function currentStepNumber(): int
+    {
+        return match ($this->status) {
+            'nominations_open' => 1,
+            'draft', 'jury_review' => 2,
+            'voting_open' => 3,
+            'concluded' => 4,
+            default => 1,
+        };
+    }
+
     public function stageLabel(): string
     {
         return match ($this->status) {
             'nominations_open' => 'Stage 1: Open Nominations',
-            'draft' => 'Stage 2: Jury Review & Shortlisting',
+            'draft', 'jury_review' => 'Stage 2: Jury Review & Shortlisting',
             'voting_open' => 'Stage 3: Community Voting Active',
-            'concluded' => 'Stage 4: Concluded & Inducted',
+            'concluded' => 'Stage 4: Concluded & Hall of Fame Enshrined',
             default => ucfirst(str_replace('_', ' ', $this->status)),
         };
     }

@@ -55,16 +55,21 @@
                             @if($cycle->isNominationsOpen())
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-heading">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    Stage 1: Nominations Open
+                                    Stage 1: Open Nominations Active
+                                </span>
+                            @elseif($cycle->isJuryReview())
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/40 font-heading">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+                                    Stage 2: Jury Review &amp; Shortlisting
                                 </span>
                             @elseif($cycle->isVotingOpen())
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 font-heading">
                                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
-                                    Stage 2: Community Voting Active
+                                    Stage 3: Community Voting Active
                                 </span>
                             @elseif($cycle->isConcluded())
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 font-heading">
-                                    ✓ Concluded &amp; Hall of Fame Inducted
+                                    ✓ Stage 4: Concluded &amp; Hall of Fame Enshrined
                                 </span>
                             @endif
 
@@ -92,26 +97,149 @@
 
             <!-- Stage Tracker Progress Bar -->
             <div class="mt-10 pt-6 border-t border-white/15">
+                @if(Auth::check() && Auth::user()->isAdmin() && $cycle)
+                    <div class="mb-3 px-3 py-2 bg-amber-400/10 border border-amber-400/30 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs text-amber-300 font-bold">
+                        <span class="flex items-center gap-2">
+                            <span>🛡️</span>
+                            <span>ADMIN CONTROLS: Click any stage below to dynamically advance or switch the active awards step in real-time</span>
+                        </span>
+                        <a href="{{ route('admin.awards.index', ['tab' => 'cycles']) }}" class="text-[11px] underline text-blue-200 hover:text-white transition-colors">
+                            Manage All Cycles &rarr;
+                        </a>
+                    </div>
+                @endif
+
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-                    <div class="p-3 rounded-2xl transition-all {{ $cycle && $cycle->status === 'nominations_open' ? 'bg-amber-500/20 border border-amber-400/50 shadow-xs' : 'bg-white/5 border border-white/10' }}">
-                        <div class="text-[10px] font-bold text-orange-300 uppercase font-heading">Step 1</div>
-                        <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Open Nominations</div>
-                        <div class="text-[10px] text-blue-200/80 mt-0.5">Community Submissions</div>
+                    <!-- Step 1: Open Nominations -->
+                    <div class="p-3.5 rounded-2xl transition-all relative flex flex-col justify-between {{ $cycle && $cycle->status === 'nominations_open' ? 'bg-amber-500/25 border-2 border-amber-400 shadow-lg ring-2 ring-amber-400/30' : 'bg-white/5 border border-white/10 hover:bg-white/10' }}">
+                        <div>
+                            <div class="flex items-center justify-center gap-1.5">
+                                <span class="text-[10px] font-black {{ $cycle && $cycle->status === 'nominations_open' ? 'text-amber-300' : 'text-orange-300' }} uppercase font-heading">Step 1</span>
+                                @if($cycle && $cycle->status === 'nominations_open')
+                                    <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                @endif
+                            </div>
+                            <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Open Nominations</div>
+                            <div class="text-[10px] text-blue-200/80 mt-0.5">Community Submissions</div>
+                        </div>
+
+                        @if(Auth::check() && Auth::user()->isAdmin() && $cycle)
+                            <div class="mt-2.5 pt-2 border-t border-white/10">
+                                @if($cycle->status === 'nominations_open')
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-wider font-heading">
+                                        ● Active Stage
+                                    </span>
+                                @else
+                                    <form action="{{ route('admin.awards.cycles.update-status', $cycle->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="nominations_open">
+                                        <button type="submit" class="w-full py-1 px-2 rounded-lg bg-white/15 hover:bg-amber-500 text-white hover:text-slate-950 text-[10px] font-black uppercase tracking-wider transition-all font-heading cursor-pointer shadow-xs">
+                                            Activate Step 1
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        @endif
                     </div>
-                    <div class="p-3 rounded-2xl transition-all {{ $cycle && $cycle->status === 'draft' ? 'bg-amber-500/20 border border-amber-400/50 shadow-xs' : 'bg-white/5 border border-white/10' }}">
-                        <div class="text-[10px] font-bold text-orange-300 uppercase font-heading">Step 2</div>
-                        <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Jury Shortlisting</div>
-                        <div class="text-[10px] text-blue-200/80 mt-0.5">Faculty &amp; Admin Review</div>
+
+                    <!-- Step 2: Jury Shortlisting -->
+                    <div class="p-3.5 rounded-2xl transition-all relative flex flex-col justify-between {{ $cycle && $cycle->isJuryReview() ? 'bg-amber-500/25 border-2 border-amber-400 shadow-lg ring-2 ring-amber-400/30' : 'bg-white/5 border border-white/10 hover:bg-white/10' }}">
+                        <div>
+                            <div class="flex items-center justify-center gap-1.5">
+                                <span class="text-[10px] font-black {{ $cycle && $cycle->isJuryReview() ? 'text-amber-300' : 'text-orange-300' }} uppercase font-heading">Step 2</span>
+                                @if($cycle && $cycle->isJuryReview())
+                                    <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                @endif
+                            </div>
+                            <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Jury Shortlisting</div>
+                            <div class="text-[10px] text-blue-200/80 mt-0.5">Faculty &amp; Admin Review</div>
+                        </div>
+
+                        @if(Auth::check() && Auth::user()->isAdmin() && $cycle)
+                            <div class="mt-2.5 pt-2 border-t border-white/10">
+                                @if($cycle->isJuryReview())
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-wider font-heading">
+                                        ● Active Stage
+                                    </span>
+                                @else
+                                    <form action="{{ route('admin.awards.cycles.update-status', $cycle->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="draft">
+                                        <button type="submit" class="w-full py-1 px-2 rounded-lg bg-white/15 hover:bg-amber-500 text-white hover:text-slate-950 text-[10px] font-black uppercase tracking-wider transition-all font-heading cursor-pointer shadow-xs">
+                                            Activate Step 2
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        @endif
                     </div>
-                    <div class="p-3 rounded-2xl transition-all {{ $cycle && $cycle->status === 'voting_open' ? 'bg-amber-500/20 border border-amber-400/50 shadow-xs' : 'bg-white/5 border border-white/10' }}">
-                        <div class="text-[10px] font-bold text-orange-300 uppercase font-heading">Step 3</div>
-                        <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Live Voting</div>
-                        <div class="text-[10px] text-blue-200/80 mt-0.5">1 Vote Per Category</div>
+
+                    <!-- Step 3: Live Voting -->
+                    <div class="p-3.5 rounded-2xl transition-all relative flex flex-col justify-between {{ $cycle && $cycle->status === 'voting_open' ? 'bg-amber-500/25 border-2 border-amber-400 shadow-lg ring-2 ring-amber-400/30' : 'bg-white/5 border border-white/10 hover:bg-white/10' }}">
+                        <div>
+                            <div class="flex items-center justify-center gap-1.5">
+                                <span class="text-[10px] font-black {{ $cycle && $cycle->status === 'voting_open' ? 'text-amber-300' : 'text-orange-300' }} uppercase font-heading">Step 3</span>
+                                @if($cycle && $cycle->status === 'voting_open')
+                                    <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                @endif
+                            </div>
+                            <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Live Voting</div>
+                            <div class="text-[10px] text-blue-200/80 mt-0.5">1 Vote Per Category</div>
+                        </div>
+
+                        @if(Auth::check() && Auth::user()->isAdmin() && $cycle)
+                            <div class="mt-2.5 pt-2 border-t border-white/10">
+                                @if($cycle->status === 'voting_open')
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-wider font-heading">
+                                        ● Active Stage
+                                    </span>
+                                @else
+                                    <form action="{{ route('admin.awards.cycles.update-status', $cycle->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="voting_open">
+                                        <button type="submit" class="w-full py-1 px-2 rounded-lg bg-white/15 hover:bg-amber-500 text-white hover:text-slate-950 text-[10px] font-black uppercase tracking-wider transition-all font-heading cursor-pointer shadow-xs">
+                                            Activate Step 3
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        @endif
                     </div>
-                    <div class="p-3 rounded-2xl transition-all {{ $cycle && $cycle->status === 'concluded' ? 'bg-amber-500/20 border border-amber-400/50 shadow-xs' : 'bg-white/5 border border-white/10' }}">
-                        <div class="text-[10px] font-bold text-orange-300 uppercase font-heading">Step 4</div>
-                        <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Convocation Enshrinement</div>
-                        <div class="text-[10px] text-blue-200/80 mt-0.5">Hall of Fame Permanence</div>
+
+                    <!-- Step 4: Convocation Enshrinement -->
+                    <div class="p-3.5 rounded-2xl transition-all relative flex flex-col justify-between {{ $cycle && $cycle->status === 'concluded' ? 'bg-amber-500/25 border-2 border-amber-400 shadow-lg ring-2 ring-amber-400/30' : 'bg-white/5 border border-white/10 hover:bg-white/10' }}">
+                        <div>
+                            <div class="flex items-center justify-center gap-1.5">
+                                <span class="text-[10px] font-black {{ $cycle && $cycle->status === 'concluded' ? 'text-amber-300' : 'text-orange-300' }} uppercase font-heading">Step 4</span>
+                                @if($cycle && $cycle->status === 'concluded')
+                                    <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                @endif
+                            </div>
+                            <div class="text-xs sm:text-sm font-bold text-white mt-0.5 font-heading">Convocation Enshrinement</div>
+                            <div class="text-[10px] text-blue-200/80 mt-0.5">Hall of Fame Permanence</div>
+                        </div>
+
+                        @if(Auth::check() && Auth::user()->isAdmin() && $cycle)
+                            <div class="mt-2.5 pt-2 border-t border-white/10">
+                                @if($cycle->status === 'concluded')
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-wider font-heading">
+                                        ● Active Stage
+                                    </span>
+                                @else
+                                    <form action="{{ route('admin.awards.cycles.update-status', $cycle->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="concluded">
+                                        <button type="submit" class="w-full py-1 px-2 rounded-lg bg-white/15 hover:bg-amber-500 text-white hover:text-slate-950 text-[10px] font-black uppercase tracking-wider transition-all font-heading cursor-pointer shadow-xs">
+                                            Activate Step 4
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

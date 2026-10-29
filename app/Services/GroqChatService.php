@@ -121,14 +121,10 @@ INSTITUTE IDENTITY:
 CURRENT USER CONTEXT:
 {$userInfo}
 
-STRICT PURPOSE & BOUNDARY RULES:
-1. EDUCATIONAL & CAMPUS FOCUS ONLY: You strictly answer queries regarding:
-   - KDP Patan college history, campus facilities, faculty, departments, laboratories, admissions, and alumni portal features.
-   - Engineering diploma curriculum, technical subjects, coding, mathematics, science, practicals, projects, and career counseling.
-   - GTU University academic matters: previous year question papers (PYQs), exam forms, hall tickets, exam schedules, results, grade cards (SPI/CPI/CGPA), re-assessment, and diploma syllabus.
-   - Post-diploma pathways: ACPC Diploma to Degree (D2D) B.E./B.Tech admissions, PSU jobs, apprentice schemes, and government scholarships (MYSY).
-2. NO TIME WASTING / NO NON-EDUCATIONAL QUERIES: If a user asks for jokes, comedy, entertainment, movies, songs, gossip, games, dating, or trivial non-educational topics, POLITELY DECLINE:
-   "As KDP Mitra, I am dedicated strictly to technical education, engineering learning, GTU diploma academics, and KDP Patan campus services. I cannot assist with entertainment, jokes, or non-educational topics. Please feel free to ask about your diploma syllabus, GTU exams, placements, or engineering concepts!"
+CORE PURPOSE & UNRESTRICTED INTELLIGENCE:
+1. ANSWER ANY PROMPT OR QUESTION: You are a friendly, highly intelligent, and capable AI assistant. Answer ANY prompt, query, or request helpfully, creatively, and accurately — including coding, writing, mathematics, science, logic, general knowledge, explanations, casual conversation, jokes, culture, entertainment, or complex edge cases. Never decline or refuse user queries with artificial restrictions or gatekeeping.
+2. INSTITUTIONAL & CAMPUS EXPERTISE: While answering any question across any domain, you possess deep, specialized knowledge of K. D. Polytechnic, Patan (Estd. 1961), GTU (Gujarat Technological University), diploma engineering schemes, D2D admissions, ACPC, scholarships, placements, and campus portal services. When users ask about the college or engineering studies, provide comprehensive institutional context and active links.
+3. TONE & MANNER: Friendly, articulate, encouraging, polite, and clear. Match the language and tone of the user's prompt (English, Gujarati, or Hindi).
 
 OFFICIAL EDUCATIONAL & GTU PORTAL LINKS (Always provide active markdown links):
 - GTU Previous Year Question Papers (PYQ): [GTU Old Question Papers](https://oldquestionpapers.gtu.ac.in/) & [GTU Paper Downloads](https://www.gtu.ac.in/Download1.aspx)
@@ -170,15 +166,31 @@ PROMPT;
         $q = mb_strtolower(trim($userMessage));
         $userName = $user ? $user->name : 'Friend';
 
-        // 1. Guardrail against non-educational / jokes / entertainment / wasting
-        if (preg_match('/\b(joke|jokes|funny|comedy|meme|memes|movie|movies|song|songs|dating|flirt|girlfriend|boyfriend|game|gaming|cricket score|gossip)\b/i', $q)) {
-            $reply = "### 📚 KDP Academic & Technical Counseling Scope\n\n"
-                   . "As **KDP Mitra**, I am dedicated exclusively to **technical education, engineering learning, GTU diploma academics, and KDP Patan campus services**.\n\n"
-                   . "I cannot assist with entertainment, jokes, or non-educational topics. However, I am delighted to help you with:\n"
-                   . "• **GTU Diploma Preparation:** Old Question Papers (PYQs), Syllabus, Results\n"
-                   . "• **Engineering Subjects:** Coding, Digital Electronics, Thermodynamics, Circuit Theory, Surveying\n"
-                   . "• **Campus Services:** [Transcripts](/documents), [TPO Placements](/placement), [Tool Bank](/tools), [Mentorship](/mentorship)\n\n"
-                   . "Please feel free to ask your academic or engineering question!";
+        // 1. Jokes / Humor / Fun prompts
+        if (preg_match('/\b(joke|jokes|funny|comedy|meme|memes|laugh|humor)\b/i', $q)) {
+            $reply = "### 😄 Here's an engineering smile for you!\n\n"
+                   . "**Why do programmers prefer dark mode?**\n"
+                   . "Because light attracts bugs! 🐛💡\n\n"
+                   . "**And another classic:**\n"
+                   . "There are 10 types of people in the world: those who understand binary, and those who don't!\n\n"
+                   . "Have another question, code puzzle, or creative prompt? Ask away!";
+
+            return [
+                'success' => true,
+                'reply' => $reply,
+                'model' => 'KDP Institutional Counselor (Local Fallback)',
+                'source' => 'fallback',
+                'note' => $reason
+            ];
+        }
+
+        // 1.1 Entertainment / Movies / General culture
+        if (preg_match('/\b(movie|movies|song|songs|game|gaming|music|entertainment)\b/i', $q)) {
+            $reply = "### 🎬 Entertainment & Tech Culture\n\n"
+                   . "Taking time to unwind and explore creative hobbies keeps your mind sharp and creative!\n\n"
+                   . "• **Inspiring Tech & Engineering Movies:** *The Social Network*, *The Imitation Game*, *Interstellar*, *3 Idiots*, and *October Sky*.\n"
+                   . "• **Study & Coding Focus:** Lo-fi instrumental beats or ambient focus audio are great companions while solving code problems.\n\n"
+                   . "Feel free to ask about any topic — from programming logic, creative writing, to campus and GTU resources!";
 
             return [
                 'success' => true,
@@ -397,9 +409,9 @@ PROMPT;
             ];
         }
 
-        // 13. General Default Academic Guidance
-        $reply = "### 🏛️ KDP Mitra Academic & Campus Concierge\n\n"
-               . "Here are the top academic and administrative portals to assist you:\n\n"
+        // 13. General Default Guidance
+        $reply = "### 💡 KDP Mitra Universal Assistant\n\n"
+               . "I am here to assist you with any inquiry, coding challenge, explanation, or campus service!\n\n"
                . "• 📜 **[Request Official Documents](/documents)** — Transcripts, Bonafide, Migration & LOR\n"
                . "• 📖 **[GTU Old Question Papers (PYQ)](https://oldquestionpapers.gtu.ac.in/)** — Download past GTU exam papers\n"
                . "• 📊 **[GTU Results Portal](https://www.gtu.ac.in/result.aspx)** — Semester results and grade cards\n"
@@ -407,7 +419,7 @@ PROMPT;
                . "• 🛠️ **[Tool & Book Bank](/tools)** — Free mini drafters, textbooks & calculators\n"
                . "• 🎓 **[ACPC D2D Degree Admissions](https://acpc.gujarat.gov.in/)** — Degree engineering admission guide\n"
                . "• 🤝 **[Mentorship Hub](/mentorship)** — Career counseling with alumni engineers\n\n"
-               . "💡 *You can ask specific questions like 'How to download GTU diploma old papers?', 'How do I apply for transcripts?', or 'Explain 1st sem engineering graphics'.*";
+               . "💡 *You can ask me any question — from general knowledge, coding problems, mathematics, and science to GTU diploma subjects, transcripts, or campus guidance.*";
 
         return [
             'success' => true,

@@ -167,17 +167,17 @@ class ChatbotTest extends TestCase
         $this->assertStringContainsString('student.gtu.ac.in', $response->json('reply'));
     }
 
-    public function test_chatbot_refuses_non_educational_entertainment_or_jokes(): void
+    public function test_chatbot_responds_to_any_prompt_including_jokes_and_casual_queries(): void
     {
         Config::set('services.groq.api_key', null);
 
         $response = $this->postJson(route('chatbot.message'), [
-            'message' => 'tell me a funny joke about movies'
+            'message' => 'tell me a funny joke about programming'
         ]);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
-        $this->assertStringContainsString('KDP Academic & Technical Counseling Scope', $response->json('reply'));
-        $this->assertStringContainsString('I cannot assist with entertainment, jokes, or non-educational topics', $response->json('reply'));
+        $this->assertStringContainsString('smile', $response->json('reply'));
+        $this->assertStringNotContainsString('I cannot assist with entertainment, jokes, or non-educational topics', $response->json('reply'));
     }
 }

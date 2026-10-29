@@ -45,7 +45,7 @@
                 <div class="leading-tight">
                     <div class="flex items-center gap-1.5">
                         <h3 class="font-heading font-black text-sm text-white tracking-wide">KDP Mitra</h3>
-                        <span class="px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">AI Academic Counselor</span>
+                        <span class="px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">AI Universal Counselor</span>
                     </div>
                     <p class="text-[10px] text-blue-200 font-medium">કિલાચંદ એઆઈ મિત્ર • K. D. Polytechnic, Patan</p>
                 </div>
@@ -86,12 +86,12 @@
                     <span class="text-base">🏛️</span>
                 </div>
                 <div class="font-heading font-bold text-slate-900 text-xs">
-                    Welcome to KDP Mitra Academic Counselor!
+                    Welcome to KDP Mitra AI Counselor!
                 </div>
                 <p class="text-slate-600 leading-relaxed text-xs">
-                    Ask me about **Official Transcripts**, **GTU Old Papers (PYQs)**, **GTU Results**, **TPO Placements**, **D2D Admissions**, or **Book &amp; Tool Bank**.
+                    Ask me anything — coding problems, engineering subjects, GTU old papers &amp; results, official transcripts, general knowledge, or campus guidance.
                 </p>
-                <div class="text-[10px] text-slate-400 font-medium">Quick academic inquiries:</div>
+                <div class="text-[10px] text-slate-400 font-medium">Quick suggestions &amp; shortcuts:</div>
             </div>
 
             <!-- Quick Starter Chips (Visible initially or when conversation is short) -->
@@ -174,7 +174,7 @@
                        x-ref="messageInput"
                        x-model="inputMessage" 
                        :disabled="isLoading"
-                       placeholder="Ask about GTU papers, results, transcripts, subjects... (English/ગુજરાતી)" 
+                       placeholder="Ask anything... engineering, coding, general questions, or campus queries (English/ગુજરાતી)" 
                        class="flex-1 px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:border-[#1e3a8a] focus:ring-[#1e3a8a] focus:bg-white text-slate-800 disabled:opacity-60 transition-colors">
                 
                 <button type="submit" 
@@ -188,7 +188,7 @@
                 <span>⚡ Powered by <strong>Groq API</strong></span>
                 <span class="text-emerald-600 font-bold flex items-center gap-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Academic Counselor
+                    Universal Counselor
                 </span>
             </div>
         </div>

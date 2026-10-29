@@ -14,7 +14,7 @@
             <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                    Groq AI Active • Academic Guardrails On
+                    Groq AI Active • Universal Assistant Ready
                 </span>
             </div>
         </div>
@@ -37,16 +37,16 @@
                         કિલાચંદ દેવચંદ પોલિટેકનિક, પાટણ • Estd. 1961
                     </span>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold uppercase tracking-wider border border-white/20">
-                        🤖 AI Academic Counselor &amp; Concierge
+                        🤖 AI Universal Counselor &amp; Concierge
                     </span>
                 </div>
 
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight leading-tight text-white">
-                    KDP Mitra • AI Academic Guide
+                    KDP Mitra • AI Universal Guide
                 </h1>
 
                 <p class="text-blue-100 text-sm sm:text-base leading-relaxed max-w-2xl font-light">
-                    Your dedicated guide for diploma engineering studies, GTU previous year question papers (PYQs), exam results, ACPC D2D admissions, official transcripts, and campus placements.
+                    Your universal AI companion for any inquiry, coding assistance, general knowledge, diploma engineering, GTU exams, official transcripts, and campus placements.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-blue-200">
@@ -251,7 +251,7 @@
                                x-ref="pageInput"
                                x-model="currentInput" 
                                :disabled="isLoading"
-                               placeholder="Ask about GTU papers, results, transcripts, subjects... (English, ગુજરાતી, हिन्दी)" 
+                               placeholder="Ask anything... engineering, coding, general questions, or campus queries (English, ગુજરાતી, हिन्दी)" 
                                class="flex-1 px-4 py-3 text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-xl focus:border-[#1e3a8a] focus:ring-[#1e3a8a] focus:bg-white text-slate-800 transition-colors">
                         
                         <button type="submit" 
@@ -263,7 +263,7 @@
                     </form>
 
                     <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
-                        <span>⚡ Powered by <strong>Groq API</strong> • Academic Counseling Engine</span>
+                        <span>⚡ Powered by <strong>Groq API</strong> • Universal AI Engine</span>
                         <span>K. D. Polytechnic, Patan</span>
                     </div>
                 </div>

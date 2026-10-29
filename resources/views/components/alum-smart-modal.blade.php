@@ -107,6 +107,38 @@
                         class="px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer">
                     🤝 Mentorship (<span x-text="(results.mentorships || []).length"></span>)
                 </button>
+
+                <button type="button" 
+                        x-show="(results.elibrary || []).length > 0"
+                        @click="activeFilter = 'elibrary'" 
+                        :class="activeFilter === 'elibrary' ? 'bg-[#1c3272] text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-200/60'"
+                        class="px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer">
+                    📖 E-Library (<span x-text="(results.elibrary || []).length"></span>)
+                </button>
+
+                <button type="button" 
+                        x-show="(results.faculty || []).length > 0"
+                        @click="activeFilter = 'faculty'" 
+                        :class="activeFilter === 'faculty' ? 'bg-[#1c3272] text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-200/60'"
+                        class="px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer">
+                    👥 Faculty (<span x-text="(results.faculty || []).length"></span>)
+                </button>
+
+                <button type="button" 
+                        x-show="(results.placements || []).length > 0"
+                        @click="activeFilter = 'placements'" 
+                        :class="activeFilter === 'placements' ? 'bg-[#1c3272] text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-200/60'"
+                        class="px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer">
+                    🏢 Placements (<span x-text="(results.placements || []).length"></span>)
+                </button>
+
+                <button type="button" 
+                        x-show="(results.calendar || []).length > 0"
+                        @click="activeFilter = 'calendar'" 
+                        :class="activeFilter === 'calendar' ? 'bg-[#1c3272] text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-200/60'"
+                        class="px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer">
+                    🗓️ Calendar (<span x-text="(results.calendar || []).length"></span>)
+                </button>
             </div>
 
             <!-- Scrollable Body Content -->
@@ -395,7 +427,131 @@
                         </div>
                     </div>
 
-                    <!-- 9. NO RESULTS FALLBACK -->
+                    <!-- 9. DIGITAL E-LIBRARY & CAPSTONE VAULT -->
+                    <div x-show="(activeFilter === 'all' || activeFilter === 'elibrary') && (results.elibrary || []).length > 0" class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                                <span>📖</span> E-Library &amp; Capstone Project Vault (<span x-text="(results.elibrary || []).length"></span>)
+                            </h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="item in results.elibrary" :key="item.id">
+                                <div class="p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-blue-400 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                                    <div>
+                                        <div class="flex items-center justify-between gap-1.5">
+                                            <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-amber-50 text-amber-800 border border-amber-200" x-text="item.category"></span>
+                                            <span class="text-[9px] font-bold text-slate-400" x-text="item.format"></span>
+                                        </div>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm mt-1" x-text="item.title"></h4>
+                                        <p class="text-[11px] text-[#1c3272] font-medium" x-text="item.department + ' • ' + item.semester"></p>
+                                        <p class="text-[10px] text-slate-500" x-text="'By: ' + item.author"></p>
+                                    </div>
+                                    <div class="pt-1 flex items-center justify-between border-t border-slate-50 text-xs">
+                                        <span class="text-[10px] text-slate-400 font-semibold" x-text="item.downloads + ' downloads'"></span>
+                                        <a :href="item.url" class="font-bold text-[#1e3a8a] hover:underline flex items-center gap-1">
+                                            <span>Open / Download</span>
+                                            <span>&rarr;</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- 10. DEPARTMENT FACULTY & HOD DIRECTORY -->
+                    <div x-show="(activeFilter === 'all' || activeFilter === 'faculty') && (results.faculty || []).length > 0" class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                                <span>👥</span> Academic Faculty &amp; HODs (<span x-text="(results.faculty || []).length"></span>)
+                            </h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="f in results.faculty" :key="f.id">
+                                <div class="p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                                    <div>
+                                        <div class="flex items-center justify-between gap-1">
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-[#1e3a8a]" x-text="f.department"></span>
+                                            <template x-if="f.is_hod">
+                                                <span class="px-2 py-0.5 text-[9px] font-black uppercase rounded-full bg-amber-100 text-amber-900 border border-amber-200">👑 HOD</span>
+                                            </template>
+                                        </div>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm mt-1" x-text="f.name"></h4>
+                                        <p class="text-[11px] text-[#f97316] font-semibold" x-text="f.designation"></p>
+                                        <p class="text-[10px] text-slate-500 mt-0.5 line-clamp-1" x-text="'Qualification: ' + f.qualification"></p>
+                                    </div>
+                                    <div class="pt-1 flex items-center justify-between border-t border-slate-50 text-xs">
+                                        <template x-if="f.email">
+                                            <a :href="'mailto:' + f.email" class="text-slate-500 hover:text-[#1e3a8a] text-[10px] truncate max-w-[160px]" x-text="f.email"></a>
+                                        </template>
+                                        <a :href="f.url" class="font-bold text-[#1e3a8a] hover:underline shrink-0">View Profile &rarr;</a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- 11. TPO CORPORATE HIRING PARTNERS -->
+                    <div x-show="(activeFilter === 'all' || activeFilter === 'placements') && (results.placements || []).length > 0" class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                                <span>🏢</span> Corporate Placement Partners (<span x-text="(results.placements || []).length"></span>)
+                            </h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="p in results.placements" :key="p.id">
+                                <div class="p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                                    <div>
+                                        <div class="flex items-center justify-between gap-1">
+                                            <h4 class="font-bold text-slate-900 text-xs sm:text-sm" x-text="p.name"></h4>
+                                            <template x-if="p.package_range">
+                                                <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200" x-text="p.package_range"></span>
+                                            </template>
+                                        </div>
+                                        <p class="text-[11px] text-slate-500" x-text="p.sector"></p>
+                                        <p class="text-[10px] text-[#1c3272] font-medium mt-0.5" x-text="'Roles: ' + (p.roles || 'Diploma Trainee')"></p>
+                                    </div>
+                                    <div class="pt-1 flex items-center justify-between border-t border-slate-50 text-xs">
+                                        <a :href="p.url" class="font-bold text-[#1e3a8a] hover:underline">Placement Highlights &rarr;</a>
+                                        <template x-if="p.website">
+                                            <a :href="p.website" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-slate-600 text-[10px]">Official Site ↗</a>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- 12. GTU ACADEMIC CALENDAR & CIRCULARS -->
+                    <div x-show="(activeFilter === 'all' || activeFilter === 'calendar') && (results.calendar || []).length > 0" class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                                <span>🗓️</span> GTU Academic Calendar &amp; Circulars (<span x-text="(results.calendar || []).length"></span>)
+                            </h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="c in results.calendar" :key="c.id">
+                                <div class="p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-all flex flex-col justify-between space-y-2 shadow-2xs">
+                                    <div>
+                                        <div class="flex items-center justify-between gap-1">
+                                            <span class="text-xs font-bold" x-text="c.icon + ' ' + c.category"></span>
+                                            <span class="text-[9px] font-semibold text-slate-400" x-text="c.semester_scope"></span>
+                                        </div>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm mt-1" x-text="c.title"></h4>
+                                        <p class="text-[11px] text-[#1c3272] font-semibold mt-0.5" x-text="c.date_range"></p>
+                                    </div>
+                                    <div class="pt-1 flex justify-end border-t border-slate-50">
+                                        <a :href="c.url" class="text-xs font-bold text-indigo-700 hover:underline">View in Calendar &rarr;</a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- 13. NO RESULTS FALLBACK -->
                     <div x-show="totalResults === 0" class="py-12 text-center space-y-3">
                         <div class="w-12 h-12 mx-auto bg-slate-100 rounded-full flex items-center justify-center text-slate-400 text-xl">
                             🔍
@@ -421,7 +577,7 @@
                     <span class="text-amber-500 font-bold">⚡</span>
                     <span><strong>AlumSmart Universal Concierge:</strong> Instant Search &amp; Service Navigation</span>
                 </div>
-                <span class="hidden sm:inline text-slate-400">Search 20+ KDP Portal Services &amp; Live Records</span>
+                <span class="hidden sm:inline text-slate-400">Search 24+ KDP Portal Services &amp; Live Records</span>
             </div>
 
         </div>
@@ -453,6 +609,10 @@
                 pitches: [],
                 landmarks: [],
                 notices: [],
+                elibrary: [],
+                faculty: [],
+                placements: [],
+                calendar: [],
                 quick_actions: []
             },
 

@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicSchedule;
 use App\Models\BatchReunion;
 use App\Models\CampusMemorySpot;
 use App\Models\DocumentRequest;
+use App\Models\ELibraryItem;
 use App\Models\Event;
+use App\Models\FacultyMember;
 use App\Models\JobPosting;
 use App\Models\Lab;
 use App\Models\MentorshipListing;
 use App\Models\Notice;
+use App\Models\PlacementPartner;
 use App\Models\ProjectPitch;
 use App\Models\RegionalChapter;
 use App\Models\ToolDonation;
@@ -43,6 +47,10 @@ class AlumSmartController extends Controller
                 'pitches' => [],
                 'landmarks' => [],
                 'notices' => [],
+                'elibrary' => [],
+                'faculty' => [],
+                'placements' => [],
+                'calendar' => [],
                 'quick_actions' => $this->getDefaultQuickActions(),
                 'suggestions' => $this->getSuggestedQueries(),
             ]);
@@ -389,6 +397,140 @@ class AlumSmartController extends Controller
             \Log::warning('AlumSmart notice search error: ' . $e->getMessage());
         }
 
+        // 11. MATCH E-LIBRARY RESOURCES & CAPSTONE VAULT
+        $elibraryResults = [];
+        try {
+            $elibQuery = ELibraryItem::where('is_approved', true);
+            $elibQuery->where(function($q) use ($pattern, $tokens, $qLen) {
+                $q->where('title', 'like', $pattern)
+                  ->orWhere('department', 'like', $pattern)
+                  ->orWhere('category', 'like', $pattern)
+                  ->orWhere('author_or_team', 'like', $pattern)
+                  ->orWhere('subject_name', 'like', $pattern)
+                  ->orWhere('tech_stack', 'like', $pattern)
+                  ->orWhere('description', 'like', $pattern);
+
+                foreach ($tokens as $token) {
+                    $tokenPattern = ($qLen === 1) ? "{$token}%" : "%{$token}%";
+                    $q->orWhere('title', 'like', $tokenPattern)
+                      ->orWhere('subject_name', 'like', $tokenPattern)
+                      ->orWhere('category', 'like', $tokenPattern);
+                }
+            });
+
+            $elibraryResults = $elibQuery->take(4)->get()->map(fn($item) => [
+                'id' => $item->id,
+                'title' => $item->title,
+                'category' => $item->category_label ?? ucfirst(str_replace('_', ' ', $item->category)),
+                'department' => $item->department,
+                'semester' => $item->semester ? "Sem {$item->semester}" : 'All Semesters',
+                'author' => $item->author_or_team,
+                'format' => strtoupper($item->file_format ?? 'PDF'),
+                'downloads' => $item->downloads_count,
+                'url' => route('elibrary.show', $item->slug),
+                'download_url' => route('elibrary.download', $item->id),
+            ])->toArray();
+        } catch (\Throwable $e) {
+            \Log::warning('AlumSmart elibrary search error: ' . $e->getMessage());
+        }
+
+        // 12. MATCH FACULTY & HOD DIRECTORY
+        $facultyResults = [];
+        try {
+            $facultyQuery = FacultyMember::query();
+            $facultyQuery->where(function($q) use ($pattern, $tokens, $qLen) {
+                $q->where('name', 'like', $pattern)
+                  ->orWhere('designation', 'like', $pattern)
+                  ->orWhere('department', 'like', $pattern)
+                  ->orWhere('qualification', 'like', $pattern)
+                  ->orWhere('specialization', 'like', $pattern)
+                  ->orWhere('email', 'like', $pattern);
+
+                foreach ($tokens as $token) {
+                    $tokenPattern = ($qLen === 1) ? "{$token}%" : "%{$token}%";
+                    $q->orWhere('name', 'like', $tokenPattern)
+                      ->orWhere('department', 'like', $tokenPattern)
+                      ->orWhere('specialization', 'like', $tokenPattern);
+                }
+            });
+
+            $facultyResults = $facultyQuery->orderBy('is_hod', 'desc')->take(4)->get()->map(fn($f) => [
+                'id' => $f->id,
+                'name' => $f->name,
+                'designation' => $f->designation,
+                'department' => $f->department,
+                'qualification' => $f->qualification,
+                'specialization' => $f->specialization,
+                'is_hod' => (bool) $f->is_hod,
+                'email' => $f->email,
+                'url' => route('faculty.index', ['search' => $f->name]),
+            ])->toArray();
+        } catch (\Throwable $e) {
+            \Log::warning('AlumSmart faculty search error: ' . $e->getMessage());
+        }
+
+        // 13. MATCH TPO CORPORATE HIRING PARTNERS
+        $placementResults = [];
+        try {
+            $placementQuery = PlacementPartner::where('is_active', true);
+            $placementQuery->where(function($q) use ($pattern, $tokens, $qLen) {
+                $q->where('name', 'like', $pattern)
+                  ->orWhere('sector', 'like', $pattern)
+                  ->orWhere('roles_offered', 'like', $pattern)
+                  ->orWhere('hiring_departments', 'like', $pattern);
+
+                foreach ($tokens as $token) {
+                    $tokenPattern = ($qLen === 1) ? "{$token}%" : "%{$token}%";
+                    $q->orWhere('name', 'like', $tokenPattern)
+                      ->orWhere('sector', 'like', $tokenPattern);
+                }
+            });
+
+            $placementResults = $placementQuery->take(4)->get()->map(fn($p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'sector' => $p->sector,
+                'package_range' => $p->package_range,
+                'roles' => $p->roles_offered,
+                'departments' => $p->departments_list,
+                'website' => $p->website_url,
+                'url' => route('placement.index', ['search' => $p->name]),
+            ])->toArray();
+        } catch (\Throwable $e) {
+            \Log::warning('AlumSmart placement search error: ' . $e->getMessage());
+        }
+
+        // 14. MATCH GTU ACADEMIC CALENDAR & CIRCULARS
+        $calendarResults = [];
+        try {
+            $calendarQuery = AcademicSchedule::where('is_active', true);
+            $calendarQuery->where(function($q) use ($pattern, $tokens, $qLen) {
+                $q->where('title', 'like', $pattern)
+                  ->orWhere('description', 'like', $pattern)
+                  ->orWhere('category', 'like', $pattern)
+                  ->orWhere('semester_scope', 'like', $pattern);
+
+                foreach ($tokens as $token) {
+                    $tokenPattern = ($qLen === 1) ? "{$token}%" : "%{$token}%";
+                    $q->orWhere('title', 'like', $tokenPattern)
+                      ->orWhere('category', 'like', $tokenPattern);
+                }
+            });
+
+            $calendarResults = $calendarQuery->take(4)->get()->map(fn($c) => [
+                'id' => $c->id,
+                'title' => $c->title,
+                'category' => $c->category_badge['label'] ?? ucfirst($c->category),
+                'icon' => $c->category_badge['icon'] ?? '🗓️',
+                'semester_scope' => $c->semester_scope,
+                'date_range' => $c->start_date ? $c->start_date->format('M d, Y') . ($c->end_date ? ' - ' . $c->end_date->format('M d, Y') : '') : 'Scheduled',
+                'is_important' => (bool) $c->is_important,
+                'url' => route('calendar.index', ['search' => $c->title]),
+            ])->toArray();
+        } catch (\Throwable $e) {
+            \Log::warning('AlumSmart calendar search error: ' . $e->getMessage());
+        }
+
         // Map matched services into quick_actions for backwards test compatibility
         $quickActions = array_map(fn($s) => [
             'title' => $s['title'],
@@ -411,7 +553,11 @@ class AlumSmartController extends Controller
             + count($mentorshipResults) 
             + count($pitchResults) 
             + count($landmarkResults) 
-            + count($noticeResults);
+            + count($noticeResults)
+            + count($elibraryResults)
+            + count($facultyResults)
+            + count($placementResults)
+            + count($calendarResults);
 
         return response()->json([
             'query' => $rawQuery,
@@ -427,6 +573,10 @@ class AlumSmartController extends Controller
             'pitches' => $pitchResults,
             'landmarks' => $landmarkResults,
             'notices' => $noticeResults,
+            'elibrary' => $elibraryResults,
+            'faculty' => $facultyResults,
+            'placements' => $placementResults,
+            'calendar' => $calendarResults,
             'quick_actions' => $quickActions,
             'suggestions' => $this->getSuggestedQueries(),
         ]);
@@ -882,6 +1032,102 @@ class AlumSmartController extends Controller
                 'badge' => 'Official Desk',
                 'spotlight_tip' => 'Opp. T. B. Hospital, H.N.G.U. University Road, Patan - 384265. Tel: 02766-220419.',
             ],
+            [
+                'id' => 'elibrary-vault',
+                'title' => 'Digital E-Library & Capstone Project Vault',
+                'category' => 'Academic Resources & Projects',
+                'icon' => '📖',
+                'description' => 'Download GTU diploma engineering textbooks, previous final-year capstone project synopses, and lab reference sheets.',
+                'keywords' => [
+                    'elibrary', 'e-library', 'ebook', 'ebooks', 'book', 'books', 'capstone', 'synopsis', 'project report', 'gtu books', 'reference books', 'lab manual', 'previous papers', 'question papers', 'study', 'notes', 'library', 'vault',
+                    'ઈ-લાઈબ્રેરી', 'પુસ્તકાલય', 'પ્રોજેક્ટ', 'પુસ્તકો', 'ચોપડી',
+                    'किताबें', 'ई-लाइब्रेरी', 'प्रोजेक्ट रिपोर्ट', 'पुस्तकालय'
+                ],
+                'url' => route('elibrary.index'),
+                'action_label' => 'Browse E-Library',
+                'badge' => 'Downloadable Vault',
+                'spotlight_tip' => 'Instant downloadable repository of GTU curriculum e-books, lab reference manuals, and previous year capstone project synopses.',
+            ],
+            [
+                'id' => 'faculty-directory',
+                'title' => 'Department Faculty & HOD Directory',
+                'category' => 'Academic Faculty & Staff',
+                'icon' => '👥',
+                'description' => 'Distinguished professors, lecturers, and Heads of Departments mentoring future diploma engineers across all disciplines.',
+                'keywords' => [
+                    'faculty', 'prof', 'professor', 'hod', 'head of department', 'lecturer', 'teachers', 'staff', 'shahejad sindhi', 'computer faculty', 'mechanical faculty', 'electrical faculty', 'civil faculty', 'department heads',
+                    'શિક્ષકો', 'પ્રોફેસર', 'અધ્યાપક', 'એચઓડી', 'ફેકલ્ટી',
+                    'शिक्षक', 'प्रोफेसर', 'एचओडी', 'फैकल्टी'
+                ],
+                'url' => route('faculty.index'),
+                'action_label' => 'View Faculty Directory',
+                'badge' => 'Verified Faculty',
+                'spotlight_tip' => 'Connect with HODs and teaching faculty across Civil, Mechanical, Electrical, Computer, and Applied Mechanics for academic mentoring.',
+            ],
+            [
+                'id' => 'placement-cell',
+                'title' => 'Training & Placement (TPO) Partner Cell',
+                'category' => 'Career & Placements',
+                'icon' => '🏢',
+                'description' => 'Corporate recruitment partners, salary benchmarks, GTU diploma placement records, and NATS apprenticeship programs.',
+                'keywords' => [
+                    'placement', 'tpo', 'recruiter', 'recruiters', 'campus drive', 'companies', 'l&t', 'adani', 'tata', 'siemens', 'getco', 'package', 'highest package', 'salary', 'nats', 'apprenticeship', 'corporate hiring',
+                    'પ્લેસમેન્ટ', 'નોકરી મેળો', 'કંપનીઓ',
+                    'प्लेसमेंट', 'टीपीओ', 'कंपनी', 'भर्ती'
+                ],
+                'url' => route('placement.index'),
+                'action_label' => 'Explore Placement Cell',
+                'badge' => 'Corporate Partners',
+                'spotlight_tip' => 'Connecting K. D. Polytechnic diploma engineers with premier corporate recruiters including L&T, Adani, Tata Motors, Siemens, and GETCO.',
+            ],
+            [
+                'id' => 'academic-calendar',
+                'title' => 'GTU Academic Calendar & Circulars Hub',
+                'category' => 'University Schedules',
+                'icon' => '🗓️',
+                'description' => 'Official GTU term start dates, mid-semester exam timetables, practical submission deadlines, and university circulars.',
+                'keywords' => [
+                    'calendar', 'academic calendar', 'exam dates', 'mid sem', 'term', 'semester schedule', 'submission', 'gtu schedule', 'circular', 'dates', 'exam', 'exams', 'time table',
+                    'શેડ્યુલ', 'કેલેન્ડર', 'પરીક્ષા', 'પરીક્ષા તારીખો',
+                    'कैलेंडर', 'परीक्षा', 'टाइम टेबल'
+                ],
+                'url' => route('calendar.index'),
+                'action_label' => 'Inspect GTU Calendar',
+                'badge' => 'Official GTU Schedule',
+                'spotlight_tip' => 'Keep track of key GTU semester term milestones, examination phases, and official circular announcements.',
+            ],
+            [
+                'id' => 'kdp-mitra-ai',
+                'title' => 'KDP Mitra (AI Counselor & Academic Assistant)',
+                'category' => 'AI Guidance & Helpdesk',
+                'icon' => '🤖',
+                'description' => '24/7 intelligent college AI counselor powered by Groq LLaMA 3.3 for admissions, syllabus queries, GTU rules, and D2D guidance.',
+                'keywords' => [
+                    'ai', 'chatbot', 'counselor', 'kdp mitra', 'mitra', 'ask ai', 'llama', 'guidance', 'virtual assistant', 'help bot', 'bot', 'chat with ai',
+                    'આઈ કાઉન્સિલર', 'મિત્ર', 'હેલ્પબોટ',
+                    'एआई', 'काउंसलर', 'मित्र', 'बॉट'
+                ],
+                'url' => route('chatbot.index'),
+                'action_label' => 'Chat with KDP Mitra',
+                'badge' => 'AI Powered',
+                'spotlight_tip' => 'Ask in English, Gujarati, or Hindi about GTU diploma engineering courses, D2D merit calculations, and campus facilities.',
+            ],
+            [
+                'id' => 'campus-messenger',
+                'title' => 'Campus Messenger & Direct Inbox',
+                'category' => 'Community & Messaging',
+                'icon' => '💬',
+                'description' => 'Direct real-time 1-on-1 private messaging hub to connect and chat with alumni mentors, faculty professors, and classmates.',
+                'keywords' => [
+                    'message', 'messages', 'inbox', 'chat', 'direct message', 'messenger', 'dm', 'talk', 'conversation', 'chatting',
+                    'મેસેજ', 'ઈનબોક્સ', 'વાતચીત', 'સંદેશ',
+                    'इनबॉक्स', 'मैसेज', 'चैट'
+                ],
+                'url' => route('messages.inbox'),
+                'action_label' => 'Open Messenger',
+                'badge' => 'Real-time Chat',
+                'spotlight_tip' => 'Message alumni mentors directly regarding project advice, job referrals, or GTU D2D admission tips.',
+            ],
         ];
     }
 
@@ -894,6 +1140,20 @@ class AlumSmartController extends Controller
                 'icon' => '🏛️',
                 'url' => route('documents.index'),
                 'action_label' => 'Apply Online',
+            ],
+            [
+                'title' => 'Digital E-Library & Capstone Vault',
+                'subtitle' => 'Download GTU e-books, capstone synopses, and lab manuals',
+                'icon' => '📖',
+                'url' => route('elibrary.index'),
+                'action_label' => 'Browse Vault',
+            ],
+            [
+                'title' => 'Faculty & HOD Directory',
+                'subtitle' => 'Connect with professors, lecturers, and department heads',
+                'icon' => '👥',
+                'url' => route('faculty.index'),
+                'action_label' => 'View Faculty',
             ],
             [
                 'title' => 'Campus Time-Machine (Then vs Now)',
@@ -910,11 +1170,11 @@ class AlumSmartController extends Controller
                 'action_label' => 'Browse Items',
             ],
             [
-                'title' => 'Virtual Hall of Fame',
-                'subtitle' => 'Explore distinguished KDP alumni and annual award winners',
-                'icon' => '🏆',
-                'url' => route('awards.hall-of-fame'),
-                'action_label' => 'Explore Legends',
+                'title' => 'Corporate Placement Partners (TPO)',
+                'subtitle' => 'Explore campus recruitment partners, packages, and hiring drives',
+                'icon' => '🏢',
+                'url' => route('placement.index'),
+                'action_label' => 'View Placements',
             ],
         ];
     }
@@ -923,6 +1183,11 @@ class AlumSmartController extends Controller
     {
         return [
             'Digital Alumni Smart ID Card',
+            'GTU Diploma E-Books & Capstone Synopses',
+            'Department Faculty & HOD Directory',
+            'L&T & Adani Campus Placement Drives',
+            'GTU Academic Calendar & Exam Dates',
+            'Ask KDP Mitra AI Counselor',
             'Mechanical Alumni in Adani',
             'Apply for Official Transcript',
             'Vernier Caliper in Tool Bank',

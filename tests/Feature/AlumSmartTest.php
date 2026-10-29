@@ -227,4 +227,79 @@ class AlumSmartTest extends TestCase
         $serviceIds = collect($response->json('services'))->pluck('id')->toArray();
         $this->assertContains('job-board', $serviceIds);
     }
+
+    public function test_empty_query_returns_twenty_four_services_catalog_including_new_features(): void
+    {
+        $response = $this->getJson(route('alum-smart.search'));
+
+        $response->assertStatus(200);
+        $services = collect($response->json('services'));
+        $this->assertGreaterThanOrEqual(24, $services->count());
+
+        $serviceIds = $services->pluck('id')->toArray();
+        $this->assertContains('elibrary-vault', $serviceIds);
+        $this->assertContains('faculty-directory', $serviceIds);
+        $this->assertContains('placement-cell', $serviceIds);
+        $this->assertContains('academic-calendar', $serviceIds);
+        $this->assertContains('kdp-mitra-ai', $serviceIds);
+        $this->assertContains('campus-messenger', $serviceIds);
+    }
+
+    public function test_query_matches_elibrary_resources_and_service(): void
+    {
+        $user = User::factory()->create(['is_approved' => true]);
+
+        \App\Models\ELibraryItem::create([
+            'user_id' => $user->id,
+            'title' => 'Advanced Python for GTU Diploma',
+            'slug' => 'advanced-python-gtu-diploma',
+            'category' => 'textbook',
+            'department' => 'Computer Engineering',
+            'semester' => 4,
+            'academic_year' => '2025-26',
+            'author_or_team' => 'Prof. Shahejad Sindhi',
+            'description' => 'Comprehensive Python programming textbook.',
+            'is_approved' => true,
+        ]);
+
+        $response = $this->getJson(route('alum-smart.search', ['q' => 'python']));
+
+        $response->assertStatus(200);
+        $this->assertNotEmpty($response->json('elibrary'));
+        $this->assertEquals('Advanced Python for GTU Diploma', $response->json('elibrary.0.title'));
+    }
+
+    public function test_query_matches_faculty_and_placement_partners(): void
+    {
+        \App\Models\FacultyMember::create([
+            'name' => 'Prof. Shahejad Sindhi',
+            'designation' => 'Lecturer in Computer Engineering',
+            'department' => 'Computer Engineering',
+            'qualification' => 'M.E.',
+            'specialization' => 'Cloud Computing & Python',
+            'email' => 'shahejadsindhi2008@gmail.com',
+            'is_hod' => false,
+        ]);
+
+        \App\Models\PlacementPartner::create([
+            'name' => 'Larsen & Toubro (L&T)',
+            'sector' => 'EPC & Heavy Infrastructure',
+            'package_range' => '₹3.2 - 4.5 LPA',
+            'roles_offered' => 'Diploma Engineer Trainee (DET)',
+            'hiring_departments' => 'Civil, Mechanical, Electrical',
+            'is_active' => true,
+        ]);
+
+        // Search faculty by name
+        $resFaculty = $this->getJson(route('alum-smart.search', ['q' => 'Shahejad']));
+        $resFaculty->assertStatus(200);
+        $this->assertNotEmpty($resFaculty->json('faculty'));
+        $this->assertEquals('Prof. Shahejad Sindhi', $resFaculty->json('faculty.0.name'));
+
+        // Search placement recruiter
+        $resPlacement = $this->getJson(route('alum-smart.search', ['q' => 'Larsen']));
+        $resPlacement->assertStatus(200);
+        $this->assertNotEmpty($resPlacement->json('placements'));
+        $this->assertEquals('Larsen & Toubro (L&T)', $resPlacement->json('placements.0.name'));
+    }
 }

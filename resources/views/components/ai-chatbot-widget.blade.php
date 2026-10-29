@@ -184,8 +184,7 @@
                 </button>
             </form>
             
-            <div class="flex items-center justify-between text-[10px] text-slate-400 px-1">
-                <span>⚡ Powered by <strong>Groq API</strong></span>
+            <div class="flex items-center justify-end text-[10px] text-slate-400 px-1">
                 <span class="text-emerald-600 font-bold flex items-center gap-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Universal Counselor

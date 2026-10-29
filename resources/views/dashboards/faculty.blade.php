@@ -367,11 +367,11 @@
         var mapEl = document.getElementById('facultyDashboardMap');
         if (!mapEl) return;
 
-        var map = L.map('facultyDashboardMap').setView([22.8, 72.5], 7);
+        var map = L.map('facultyDashboardMap', { attributionControl: false }).setView([22.8, 72.5], 7);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: ''
         }).addTo(map);
 
         var pins = @json($mapPins ?? []);

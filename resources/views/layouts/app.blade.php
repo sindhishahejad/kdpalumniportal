@@ -48,6 +48,11 @@
     <style>
         [x-cloak] { display: none !important; }
 
+        /* Remove Leaflet attribution watermark globally */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+
         /* Signature Nav-link underline indicator from kdppatan.ac.in */
         .kdp-nav-link {
             position: relative;
@@ -813,6 +818,11 @@
 
     <style>
         [x-cloak] { display: none !important; }
+
+        /* Remove Leaflet attribution watermark globally */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
 
         /* Completely suppress all Google Translate banners, iframes, tooltips, and toolbars */
         .goog-te-banner-frame,

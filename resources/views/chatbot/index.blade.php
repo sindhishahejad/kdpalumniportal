@@ -14,7 +14,7 @@
             <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                    Groq AI Active • Universal Assistant Ready
+                    AI Active • Universal Assistant Ready
                 </span>
             </div>
         </div>
@@ -51,7 +51,7 @@
 
                 <div class="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-blue-200">
                     <span class="flex items-center gap-1.5 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/10">
-                        <span>⚡</span> Ultra-Fast Groq Inference
+                        <span>⚡</span> Instant Real-Time AI
                     </span>
                     <span class="flex items-center gap-1.5 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/10">
                         <span>🌐</span> Multilingual: English, ગુજરાતી &amp; हिन्दी
@@ -262,8 +262,7 @@
                         </button>
                     </form>
 
-                    <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
-                        <span>⚡ Powered by <strong>Groq API</strong> • Universal AI Engine</span>
+                    <div class="flex items-center justify-end text-[11px] text-slate-400 px-1">
                         <span>K. D. Polytechnic, Patan</span>
                     </div>
                 </div>

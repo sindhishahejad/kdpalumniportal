@@ -566,7 +566,7 @@
     <!-- ============================================================== -->
     <!-- PIN A THROWBACK MEMORY MODAL                                   -->
     <!-- ============================================================== -->
-    <div x-show="storyModalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+    <div x-show="storyModalOpen" x-cloak style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
         <div @click.away="storyModalOpen = false" class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-200">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div class="flex items-center gap-2">
@@ -636,7 +636,7 @@
     <!-- ============================================================== -->
     <!-- LIGHTBOX FULLSCREEN MODAL (FOR ALBUMS)                         -->
     <!-- ============================================================== -->
-    <div x-show="lightboxOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/95">
+    <div x-show="lightboxOpen" x-cloak style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95">
         <button @click="closeLightbox()" class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors focus:outline-none z-[60]">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>

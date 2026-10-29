@@ -545,6 +545,7 @@
             <!-- CREATE NOTICE MODAL -->
             <div x-show="showCreateModal" 
                  x-cloak 
+                 style="display: none;"
                  x-transition:enter="transition ease-out duration-150"
                  x-transition:enter-start="opacity-0"
                  x-transition:enter-end="opacity-100"
@@ -616,6 +617,7 @@
             <!-- EDIT NOTICE MODAL -->
             <div x-show="editNotice" 
                  x-cloak 
+                 style="display: none;"
                  x-transition:enter="transition ease-out duration-150"
                  x-transition:enter-start="opacity-0"
                  x-transition:enter-end="opacity-100"
@@ -1227,6 +1229,7 @@
             <!-- Edit Event Modal -->
             <div x-show="editEvent !== null" 
                  x-cloak 
+                 style="display: none;"
                  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0"

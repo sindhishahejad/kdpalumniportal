@@ -51,7 +51,7 @@
                 <!-- Scrollable Notices Feed -->
                 <div class="overflow-y-auto space-y-3 pr-2 flex-1 scrollbar-thin scrollbar-thumb-slate-200">
                     @forelse($notices as $notice)
-                        <div @click="selectedNotice = {{ json_encode($notice) }}"
+                        <div @click="selectedNotice = {{ Js::from($notice) }}"
                              class="group bg-slate-50/70 hover:bg-white p-3.5 rounded-xl border-l-4 border-[#f97316] border-t border-r border-b border-slate-200/60 transition-all duration-200 hover:shadow-md hover:translate-x-1 cursor-pointer">
                             <div class="text-[13px] sm:text-sm font-bold text-[#1e3a8a] group-hover:text-blue-700 leading-snug line-clamp-2">
                                 {{ $notice->title }}
@@ -148,6 +148,7 @@
     <!-- Notice Quick View Modal (Alpine) -->
     <div x-show="selectedNotice" 
          x-cloak
+         style="display: none;"
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
@@ -156,7 +157,7 @@
          x-transition:leave-end="opacity-0"
          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
         
-        <div @click.away="selectedNotice = null"
+        <div @click.outside="selectedNotice = null"
              class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
             <div class="bg-gradient-to-r from-[#1e3a8a] to-[#2563eb] text-white p-5 flex items-center justify-between">
                 <div class="flex items-center gap-2">

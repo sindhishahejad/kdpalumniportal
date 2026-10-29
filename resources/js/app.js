@@ -1,8 +1,10 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-window.Alpine = Alpine;
-Alpine.start();
+if (!window.Alpine) {
+    window.Alpine = Alpine;
+    Alpine.start();
+}
 
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';

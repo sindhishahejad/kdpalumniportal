@@ -46,6 +46,8 @@
     </script>
 
     <style>
+        [x-cloak] { display: none !important; }
+
         /* Signature Nav-link underline indicator from kdppatan.ac.in */
         .kdp-nav-link {
             position: relative;
